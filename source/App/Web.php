@@ -24,46 +24,6 @@ class Web extends Controller
     }
 
     /**
-     * SITE HOME
-     */
-    public function home(): void
-    {
-        $head = $this->seo->render(
-            CONF_SITE_NAME . " - " . CONF_SITE_TITLE,
-            CONF_SITE_DESC,
-            url(),
-            theme("/assets/images/share.jpg")
-        );
-
-        echo $this->view->render("home", [
-            "head" => $head,
-            "video" => "2Hbd8BoFNJs"
-        ]);
-    }
-
-    /**
-     * SITE ABOUT
-     */
-    public function about(): void
-    {
-        $head = $this->seo->render(
-            "Descubra o " . CONF_SITE_NAME . " - " . CONF_SITE_DESC,
-            CONF_SITE_DESC,
-            url("/sobre"),
-            theme("/assets/images/share.jpg")
-        );
-
-        echo $this->view->render("about", [
-            "head" => $head,
-            "video" => "lDZGl9Wdc7Y",
-            "faq" => (new Question())
-                ->find("channel_id = :id", "id=1", "question, response")
-                ->order("order_by")
-                ->fetch(true)
-        ]);
-    }
-
-    /**
      * SITE LOGIN
      * @param null|array $data
      */
@@ -106,23 +66,6 @@ class Web extends Controller
         echo $this->view->render("auth-login", [
             "head" => $head,
             "cookie" => filter_input(INPUT_COOKIE, "authEmail")
-        ]);
-    }
-
-    /**
-     * SITE TERMS
-     */
-    public function terms(): void
-    {
-        $head = $this->seo->render(
-            CONF_SITE_NAME . " - Termos de uso",
-            CONF_SITE_DESC,
-            url("/termos"),
-            theme("/assets/images/share.jpg")
-        );
-
-        echo $this->view->render("terms", [
-            "head" => $head
         ]);
     }
 

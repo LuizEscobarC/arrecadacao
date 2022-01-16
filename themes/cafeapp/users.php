@@ -30,10 +30,10 @@
         <button class="filter radius transition icon-filter icon-notext"></button>
     </form>
 
-    <div class="app_launch_btn expense radius transition icon-plus-circle" data-modalopen=".app_modal_expense">
+    <!--<div class="app_launch_btn expense radius transition icon-plus-circle" data-modalopen=".app_modal_expense">
         Botão sem função
-    </div>
-    <div class="app_launch_btn expense radius transition icon-plus-circle" data-modalopen=".app_modal_user">
+    </div>-->
+    <div class="app_launch_btn income radius transition icon-plus-circle" data-modalopen=".app_modal_user">
         Novo usuário
     </div>
 </div>
@@ -59,8 +59,8 @@
                 <!--03 de 12-->
                 <!--<span class="icon-exchange">Fixa</span>-->
             </p>
-            <p class="price">
-                <a class="btn transition " href="<?= url("/app/perfil/{$user->id}")?>">Editar</a>
+            <p class="price app_invoice_link transition">
+                <a class="icon-user" style="text-decoration: none;" href="<?= url("/app/perfil/{$user->id}")?>">Editar</a>
             </p>
         </article>
     <?php endforeach; ?>

@@ -138,6 +138,7 @@ class App extends Controller
 
     /**
      * APP PROFILE (Perfil)
+     * @param array $data
      */
     public function profile(array $data)
     {
@@ -163,23 +164,30 @@ class App extends Controller
         ]);
     }
 
+
+    /**
+     * APP REGISTER USER
+     * @param array|null $data
+     */
     public function register(?array $data): void
     {
-        if (!empty($data['csrf'])) {
-            if (!csrf_verify($data)) {
-                $json['message'] = $this->message->error("Erro ao enviar, favor use o formulário")->render();
+        if (!empty($data)) {
+            if (in_array("", $data)) {
+                $json['message'] = $this->message->info("Informe seus dados para editar o usuário.")->render();
                 echo json_encode($json);
                 return;
             }
 
-            if (in_array("", $data)) {
-                $json['message'] = $this->message->info("Informe seus dados para criar sua conta.")->render();
+            if ($data['password'] != $data['password_re']) {
+                $json['message'] = $this->message->warning("Informe senhas iguais.")->render();
                 echo json_encode($json);
                 return;
             }
 
             $auth = new Auth();
             $user = new User();
+            $user = $user->findByEmail($data['email']);
+
             $user->bootstrap(
                 $data["first_name"],
                 $data["last_name"],
@@ -188,7 +196,7 @@ class App extends Controller
             );
 
             if ($auth->register($user)) {
-                $json['message'] = $auth->message()->success("Usuário cadastrado com sucesso!")->render();
+                $json['message'] = $auth->message()->success("Usuário editado com sucesso!")->render();
             } else {
                 $json['message'] = $auth->message()->render();
             }
