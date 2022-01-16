@@ -139,7 +139,7 @@ class App extends Controller
     /**
      * APP PROFILE (Perfil)
      */
-    public function profile()
+    public function profile(array $data)
     {
         $head = $this->seo->render(
             "Meu perfil - " . CONF_SITE_NAME,
@@ -149,8 +149,17 @@ class App extends Controller
             false
         );
 
+        $id = (filter_var($data['id'], FILTER_VALIDATE_INT) ? $data['id'] : null);
+
+        if (empty($id) || !$id) {
+            $this->message->error('Erro ao tentar acessar o usuário, por favor entre em contato com o desenvolvedor.')
+                ->flash();
+            redirect('/app/usuarios');
+        }
+
         echo $this->view->render("profile", [
-            "head" => $head
+            "head" => $head,
+            'user' => (new User())->findById($data['id'])
         ]);
     }
 

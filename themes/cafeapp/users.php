@@ -37,6 +37,7 @@
         Novo usuário
     </div>
 </div>
+<div class="ajax_response"><?= flash(); ?></div>
 
 <section class="app_launch_box">
     <div class="app_launch_item header">
@@ -59,7 +60,7 @@
                 <!--<span class="icon-exchange">Fixa</span>-->
             </p>
             <p class="price">
-                <a class="btn transition " href="<?= url('/app/perfil/1')?>">Editar</a>
+                <a class="btn transition " href="<?= url("/app/perfil/{$user->id}")?>">Editar</a>
             </p>
         </article>
     <?php endforeach; ?>
