@@ -1,6 +1,5 @@
 <?php
 ob_start();
-
 require __DIR__ . "/vendor/autoload.php";
 
 /**
@@ -21,40 +20,33 @@ $route->group(null);
 $route->get("/", "Web:home");
 $route->get("/sobre", "Web:about");
 
-//blog
-$route->group("/blog");
-$route->get("/", "Web:blog");
-$route->get("/p/{page}", "Web:blog");
-$route->get("/{uri}", "Web:blogPost");
-$route->post("/buscar", "Web:blogSearch");
-$route->get("/buscar/{terms}/{page}", "Web:blogSearch");
-
 //auth
 $route->group(null);
 $route->get("/entrar", "Web:login");
 $route->post("/entrar", "Web:login");
-$route->get("/cadastrar", "Web:register");
-$route->post("/cadastrar", "Web:register");
-$route->get("/recuperar", "Web:forget");
-$route->post("/recuperar", "Web:forget");
-$route->get("/recuperar/{code}", "Web:reset");
-$route->post("/recuperar/resetar", "Web:reset");
-
-//optin
-$route->group(null);
-$route->get("/confirma", "Web:confirm");
-$route->get("/obrigado/{email}", "Web:success");
 
 //services
 $route->group(null);
 $route->get("/termos", "Web:terms");
 
-/*
+/**
  * APP
  */
 $route->group("/app");
 $route->get("/", "App:home");
+$route->get("/receber", "App:income");
+$route->get("/pagar", "App:expense");
+$route->get("/fatura/{invoice_id}", "App:invoice");
+
+$route->get("/perfil/{id}", "App:profile");
+$route->get("/usuarios", "App:users");
+$route->get("/usuarios/{page}", "App:users");
+$route->post("/cadastrar", "App:register");
 $route->get("/sair", "App:logout");
+
+/** OPTIN */
+$route->get("/obrigado/{email}", "App:success");
+
 
 /*
  * ERROR ROUTES

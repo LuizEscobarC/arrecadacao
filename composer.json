@@ -1,12 +1,12 @@
 {
-  "name": "upinside/fsphp",
-  "description": "Formação Full Stack PHP Developer",
+  "name": "jogodobicho/bicho",
+  "description": "Site teste",
   "minimum-stability": "stable",
   "authors": [
     {
-      "name": "Robson V. Leite",
-      "email": "cursos@upinside.com.br",
-      "homepage": "https://www.upinside.com.br",
+      "name": "Luiz Paulo",
+      "email": "luiz_escobar11@hotmail.com",
+      "homepage": "hhtps://jogodobicho.com",
       "role": "Developer"
     }
   ],
@@ -20,7 +20,8 @@
     "files": [
       "source/Boot/Config.php",
       "source/Boot/Helpers.php",
-      "source/Boot/Minify.php"
+      "source/Boot/Mini/Web.php",
+      "source/Boot/Mini/App.php"
     ]
   },
   "require": {

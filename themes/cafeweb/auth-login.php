@@ -1,5 +1,9 @@
 <?php $v->layout("_theme"); ?>
 
+<?php if (\Source\Models\Auth::user()):
+    redirect('/app');
+endif; ?>
+
 <article class="auth">
     <div class="auth_content container content">
         <header class="auth_header">
@@ -20,7 +24,6 @@
             <label>
                 <div>
                     <span class="icon-unlock-alt">Senha:</span>
-                    <span><a title="Esqueceu a senha?" href="<?= url("/recuperar"); ?>">Esqueceu a senha?</a></span>
                 </div>
                 <input type="password" name="password" placeholder="Informe sua senha:" required/>
             </label>

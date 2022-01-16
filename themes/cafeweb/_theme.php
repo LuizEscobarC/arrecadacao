@@ -23,7 +23,7 @@
 <header class="main_header gradient gradient-green">
     <div class="container">
         <div class="main_header_logo">
-            <h1><a class="icon-coffee transition" title="Home" href="<?= url(); ?>">Cafe<b>Control</b></a></h1>
+            <h1><a class="icon-bar-chart transition" title="Home" href="<?= url(); ?>">Jogo do<b> Bicho</b></a></h1>
         </div>
 
         <nav class="main_header_nav">
@@ -32,9 +32,13 @@
                 <span class="main_header_nav_mobile_close j_menu_mobile_close icon-error icon-notext transition"></span>
                 <a class="link transition radius" title="Home" href="<?= url(); ?>">Home</a>
                 <a class="link transition radius" title="Sobre" href="<?= url("/sobre"); ?>">Sobre</a>
-                <a class="link transition radius" title="Blog" href="<?= url("/blog"); ?>">Blog</a>
-                <a class="link login transition radius icon-sign-in" title="Entrar"
-                   href="<?= url("/entrar"); ?>">Entrar</a>
+                <?php if (!\Source\Models\Auth::user()): ?>
+                    <a class="link login transition radius icon-sign-in" title="Entrar"
+                       href="<?= url("/entrar"); ?>">Entrar</a>
+                <?php else: ?>
+                    <a class="link login transition radius icon-sign-in" title="Entrar"
+                       href="<?= url("/app"); ?>">Controlar</a>
+                <?php endif;?>
             </div>
         </nav>
     </div>
@@ -51,7 +55,7 @@
     <article class="footer_optout">
         <div class="footer_optout_content content">
             <span class="icon icon-coffee icon-notext"></span>
-            <h2>Comece a controlar suas contas agora mesmo</h2>
+            <h2>Comece suas contas agora mesmo</h2>
             <p>É rápido, simples e gratuito!</p>
             <a href="<?= url("/cadastrar"); ?>"
                class="footer_optout_btn gradient gradient-green gradient-hover radius icon-check-square-o">Quero
@@ -66,7 +70,7 @@
         <section class="main_footer_content">
             <article class="main_footer_content_item">
                 <h2>Sobre:</h2>
-                <p>O CafeControl é um gerenciador de contas simples, poderoso e gratuito. O prazer de tomar um café e
+                <p> poderoso e gratuito. O prazer de tomar um café e
                     ter o controle total de suas contas.</p>
                 <a title="Termos de uso" href="<?= url("/termos"); ?>">Termos de uso</a>
             </article>
@@ -75,14 +79,13 @@
                 <h2>Mais:</h2>
                 <a class="link transition radius" title="Home" href="<?= url(); ?>">Home</a>
                 <a class="link transition radius" title="Sobre" href="<?= url("/sobre"); ?>">Sobre</a>
-                <a class="link transition radius" title="Blog" href="<?= url("/blog"); ?>">Blog</a>
                 <a class="link transition radius" title="Entrar" href="<?= url("/entrar"); ?>">Entrar</a>
             </article>
 
             <article class="main_footer_content_item">
                 <h2>Contato:</h2>
                 <p class="icon-phone"><b>Telefone:</b><br> +55 55 5555.5555</p>
-                <p class="icon-envelope"><b>Email:</b><br> cafe@cafecontrol.com</p>
+                <p class="icon-envelope"><b>Email:</b><br> exemplo@email.com</p>
                 <p class="icon-map-marker"><b>Endereço:</b><br> Fpolis, SC/Brasil</p>
             </article>
 

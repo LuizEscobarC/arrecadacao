@@ -5,20 +5,20 @@
 define("CONF_DB_HOST", "localhost");
 define("CONF_DB_USER", "root");
 define("CONF_DB_PASS", "");
-define("CONF_DB_NAME", "fullstackphp");
+define("CONF_DB_NAME", "arrecadacao");
 
 /**
  * PROJECT URLs
  */
-define("CONF_URL_BASE", "https://www.cafecontrol.com.br");
-define("CONF_URL_TEST", "https://www.localhost/fsphp");
+define("CONF_URL_BASE", "http://www.localhost/arrecadacao");
+define("CONF_URL_TEST", "http://www.localhost/arrecadacao");
 define("CONF_URL_ADMIN", "/admin");
 
 /**
  * SITE
  */
-define("CONF_SITE_NAME", "CaféControl");
-define("CONF_SITE_TITLE", "Gerencie suas contas com o melhor café");
+define("CONF_SITE_NAME", "Jogo do Bicho");
+define("CONF_SITE_TITLE", "Sistema");
 define("CONF_SITE_DESC",
     "O CafeControl é um gerenciador de contas simples, poderoso e gratuito. O prazer de tomar um café e ter o controle total de suas contas.");
 define("CONF_SITE_LANG", "pt_BR");
