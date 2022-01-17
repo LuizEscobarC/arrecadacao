@@ -1,6 +1,5 @@
 <?php $v->layout("_theme"); ?>
-
-        <div class="ajax_response"><?= flash(); ?></div>
+    <div class="ajax_response"><?= flash(); ?></div>
     <div class="app_main_box">
         <section class="app_main_left">
             <article class="app_widget">
@@ -60,7 +59,7 @@
                 </p>
             </article>
 
-           <!-- <section class="app_widget app_widget_blog">
+            <!-- <section class="app_widget app_widget_blog">
                 <header class="app_widget_title">
                     <h2 class="icon-graduation-cap">Aprenda:</h2>
                 </header>
@@ -75,7 +74,7 @@
                             </h3>
                         </article>
                     <?php // endfor; ?>
-                    <a target="_blank" href="<?php  //url("/blog"); ?>" title="Blog" class="app_widget_more transition">
+                    <a target="_blank" href="<?php //url("/blog"); ?>" title="Blog" class="app_widget_more transition">
                         Ver Mais...</a>
                 </div>
             </section> -->

@@ -7,6 +7,7 @@ use Source\Core\Controller;
 use Source\Models\Auth;
 use Source\Models\Report\Access;
 use Source\Models\Report\Online;
+use Source\Models\Store;
 use Source\Models\User;
 use Source\Support\Message;
 use Source\Support\Pager;
@@ -260,4 +261,117 @@ class App extends Controller
         Auth::logout();
         redirect("/entrar");
     }
+
+    public function stores()
+    {
+        $head = $this->seo->render(
+            "Lojas - " . CONF_SITE_NAME,
+            CONF_SITE_DESC,
+            url('/app/lojas'),
+            theme("/assets/images/share.jpg"),
+            false
+        );
+        $store = new Store();
+        //$page = (!empty($data['page']) ? $data['page'] : 1);
+
+        //$pager = (new Pager('/arrecadacao/app/usuarios/'));
+        //$pager->pager($user->find()->count(), 20, $page);
+
+        echo $this->view->render("stores", [
+            "head" => $head,
+            'stores' => $store
+                ->find()
+                ->limit(20)
+                ->offset(1)
+                ->fetch(true),
+            'paginator' => null
+        ]);
+    }
+
+    public function store(array $data)
+    {
+        if (empty($data['id'])) {
+            $json['message'] = $this->message->error('Loja sem identificação, por favor contate o desenvolvedor!')->render();
+            echo json_encode($json);
+            return;
+        }
+
+        if (!$id = filter_var($data['id'], FILTER_VALIDATE_INT)) {
+            $json['message'] = $this->message->error('Escolha uma loja válida!')->render();
+            echo json_encode($json);
+            return;
+        }
+
+        $head = $this->seo->render(
+            "Loja - " . CONF_SITE_NAME,
+            CONF_SITE_DESC,
+            url('/app/loja'),
+            theme("/assets/images/share.jpg"),
+            false
+        );
+        $store = (new Store())->findById($id);
+
+        echo $this->view->render("store", [
+            "head" => $head,
+            'store' => $store
+        ]);
+    }
+
+    public function storeSave(?array $data)
+    {
+        if (!empty($data['id'])) {
+            if (!$id = filter_var($data['id'], FILTER_VALIDATE_INT)) {
+                $json['message'] = $this->message->error('Escolha uma loja válida!')->render();
+                echo json_encode($json);
+                return;
+            }
+
+            $store = (new Store())->findByIdStore($id);
+
+            $store->bootstrap(
+                $data["nome_loja"],
+                $data["valor_saldo"],
+                $data["comissao"],
+                $data["valor_aluguel"],
+                $data["aluguel_dia"],
+                $data["valor_gratificao"],
+                $data["gratificacao_dia"]
+            );
+
+            if ($store->save()) {
+                $json['message'] = $store->message()->success("Loja atualizada com sucesso!")->render();
+            } else {
+                $json['message'] = $store->message()->render();
+            }
+
+        } else {
+            $store = (new Store());
+
+            if (!empty($store->findByName($data['nome_loja']))) {
+                $json['message'] = $this->message->warning('Essa loja já está cadastrada!')->render();
+                echo json_encode($json);
+                return;
+            }
+
+
+            $store->bootstrap(
+                $data["nome_loja"],
+                $data["valor_saldo"],
+                $data["comissao"],
+                $data["valor_aluguel"],
+                $data["aluguel_dia"],
+                $data["valor_gratificacao"],
+                $data["gratificacao_dia"]
+            );
+
+            if ($store->save()) {
+                $json['message'] = $store->message()->success("Loja cadastrada com sucesso!")->render();
+            } else {
+                $json['message'] = $store->message()->render();
+            }
+        }
+
+        echo json_encode($json);
+    }
+
 }

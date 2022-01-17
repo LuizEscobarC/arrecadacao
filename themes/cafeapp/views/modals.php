@@ -204,7 +204,7 @@
 
             <label>
                 <span class="field icon-comments">E-mail:</span>
-                <input class="radius" type="wmail" name="email" placeholder="E-mail:" required/>
+                <input class="radius" type="email" name="email" placeholder="E-mail:" required/>
             </label>
 
             <label>
@@ -215,4 +215,55 @@
             <button class="btn radius transition icon-paper-plane-o">Cadastrar</button>
         </form>
     </div>
+
+    <!--STORE-->
+    <div class="app_modal_box app_modal_store">
+        <p class="title icon-calendar-check-o">Nova Loja:</p>
+        <form class="app_form" action="<?= url("/app/loja-salvar"); ?>" method="post">
+            <div class="ajax_response"><?= flash(); ?></div>
+
+            <label>
+                <span class="field icon-leanpub">Nome:</span>
+                <input class="radius" type="text" name="nome_loja" placeholder="Ex: Bentão" required/>
+            </label>
+
+
+            <label>
+                <span class="field icon-leanpub">Valor:</span>
+                <input class="radius mask-money" type="text" name="valor_saldo"  required/>
+            </label>
+
+            <label>
+                <span class="field icon-leanpub">Comissão:</span>
+                <input class="radius mask-money" type="text" name="comissao" required/>
+            </label>
+
+            <div class="label_group">
+                <label>
+                    <span class="field icon-money">Valor Aluguel:</span>
+                    <input class="radius mask-money" type="text" name="valor_aluguel" required/>
+                </label>
+
+                <label>
+                    <span class="field icon-filter">Aluguel Dia:</span>
+                    <input class="radius" type="text" name="aluguel_dia" required/>
+                </label>
+            </div>
+
+            <div class="label_group">
+                <label>
+                    <span class="field icon-money">Valor Gratificação:</span>
+                    <input class="radius mask-money" type="text" name="valor_gratificacao" required/>
+                </label>
+
+                <label>
+                    <span class="field icon-filter">Gratificação Dia:</span>
+                    <input class="radius" type="text" name="gratificacao_dia" required/>
+                </label>
+            </div>
+
+            <button class="btn radius transition icon-check-square-o">Cadastrar Loja</button>
+        </form>
+    </div>
 </div>
+

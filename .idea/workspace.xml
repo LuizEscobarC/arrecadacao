@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4593b35b-64cb-435b-a21c-364e32712cdb" name="Changes" comment="update project test">
+    <list default="true" id="4593b35b-64cb-435b-a21c-364e32712cdb" name="Changes" comment="new theme">
+      <change afterPath="$PROJECT_DIR$/source/Models/Store.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/themes/cafeapp/store.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/themes/cafeapp/stores.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/App/App.php" beforeDir="false" afterPath="$PROJECT_DIR$/source/App/App.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/App/Web.php" beforeDir="false" afterPath="$PROJECT_DIR$/source/App/Web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/themes/cafeapp/users.php" beforeDir="false" afterPath="$PROJECT_DIR$/themes/cafeapp/users.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/themes/cafeapp/home.php" beforeDir="false" afterPath="$PROJECT_DIR$/themes/cafeapp/home.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/themes/cafeapp/views/modals.php" beforeDir="false" afterPath="$PROJECT_DIR$/themes/cafeapp/views/modals.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/themes/cafeapp/views/sidebar.php" beforeDir="false" afterPath="$PROJECT_DIR$/themes/cafeapp/views/sidebar.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,11 +68,13 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/themes/cafeapp" />
+    <property name="php.override.implement.member.chooser.php.doc" value="NONE" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\xampp\htdocs\arrecadacao\themes\cafeapp" />
+      <recent name="C:\xampp\htdocs\arrecadacao\themes\cafeapp\views" />
       <recent name="C:\xampp\htdocs\arrecadacao\source\Boot\Mini" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -87,7 +93,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1642196270883</updated>
-      <workItem from="1642196273737" duration="34607000" />
+      <workItem from="1642196273737" duration="51375000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1642196652808</created>
@@ -124,7 +130,21 @@
       <option name="project" value="LOCAL" />
       <updated>1642351468632</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="update project test">
+      <created>1642366071035</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1642366071050</updated>
+    </task>
+    <task id="LOCAL-00007" summary="new theme">
+      <created>1642366254339</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1642366254339</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -144,6 +164,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init" />
     <MESSAGE value="update project test" />
-    <option name="LAST_COMMIT_MESSAGE" value="update project test" />
+    <MESSAGE value="new theme" />
+    <option name="LAST_COMMIT_MESSAGE" value="new theme" />
   </component>
 </project>
