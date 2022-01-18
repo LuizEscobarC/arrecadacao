@@ -1,12 +1,12 @@
 {
-  "name": "jogodobicho/bicho",
+  "name": "ihsistemas/ih",
   "description": "Site teste",
   "minimum-stability": "stable",
   "authors": [
     {
       "name": "Luiz Paulo",
       "email": "luiz_escobar11@hotmail.com",
-      "homepage": "hhtps://jogodobicho.com",
+      "homepage": "hhtps://ihsistema.com",
       "role": "Developer"
     }
   ],

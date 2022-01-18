@@ -23,7 +23,7 @@
 <header class="main_header gradient gradient-green">
     <div class="container">
         <div class="main_header_logo">
-            <h1><a class="icon-bar-chart transition" title="Home" href="<?= url(); ?>">Jogo do<b> Bicho</b></a></h1>
+            <h1><a class="icon-bar-chart transition" title="Home" href="<?= url(); ?>">IH<b> Sistemas</b></a></h1>
         </div>
 
         <nav class="main_header_nav">

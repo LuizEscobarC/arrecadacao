@@ -5,6 +5,7 @@ namespace Source\App;
 use Composer\Package\Loader\ValidatingArrayLoader;
 use Source\Core\Controller;
 use Source\Models\Auth;
+use Source\Models\Center;
 use Source\Models\Report\Access;
 use Source\Models\Report\Online;
 use Source\Models\Store;
@@ -265,7 +266,7 @@ class App extends Controller
     /**
      *
      */
-    public function stores(): void
+    public function stores(?array $data): void
     {
         $head = $this->seo->render(
             "Lojas - " . CONF_SITE_NAME,
@@ -275,19 +276,19 @@ class App extends Controller
             false
         );
         $store = new Store();
-        //$page = (!empty($data['page']) ? $data['page'] : 1);
+        $page = (!empty($data['page']) ? $data['page'] : 1);
 
-        //$pager = (new Pager('/arrecadacao/app/usuarios/'));
-        //$pager->pager($user->find()->count(), 20, $page);
+        $pager = (new Pager('/arrecadacao/app/usuarios/'));
+        $pager->pager($store->find()->count(), 20, $page);
 
         echo $this->view->render("stores", [
             "head" => $head,
             'stores' => $store
                 ->find()
-                ->limit(20)
-                ->offset(1)
+                ->limit($pager->limit())
+                ->offset($pager->offset())
                 ->fetch(true),
-            'paginator' => null
+            'paginator' => $pager->render()
         ]);
     }
 
@@ -395,11 +396,10 @@ class App extends Controller
             false
         );
 
-
-
-        $this->view->render('costCenter', [
+        echo $this->view->render('cost-centers', [
             'head' => $head,
-            'costCenters' => $costCenters
+            'costCenters' => (new Center())->find()->fetch(true),
+            'paginator' => null
         ]);
     }
 

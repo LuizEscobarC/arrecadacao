@@ -20,7 +20,7 @@
 
 <div class="app">
     <header class="app_header">
-        <h1><a class="icon-coffee transition" href="<?= url("/app"); ?>" title="CaféApp">CaféApp</a></h1>
+        <h1><a class="icon-bar-chart transition" href="<?= url("/app"); ?>" title="IH">IHSistema</a></h1>
         <ul class="app_header_widget">
             <li data-modalopen=".app_modal_contact" class="radius transition icon-life-ring">Precisa de ajuda?</li>
             <li data-mobilemenu="open" class="app_header_widget_mobile radius transition icon-menu icon-notext"></li>
@@ -31,16 +31,6 @@
         <nav class="app_sidebar radius box-shadow">
             <div data-mobilemenu="close"
                  class="app_sidebar_widget_mobile radius transition icon-error icon-notext"></div>
-
-            <div class="app_sidebar_user app_widget_title">
-                <span class="user">
-                    <img class="rounded" alt="Robson" title="Robson"
-                         src="<?= theme("/assets/images/avatar.jpg", CONF_VIEW_APP); ?>"/>
-                    <span>Robson</span>
-                </span>
-                <span class="plan radius">Free</span>
-            </div>
-
             <?= $v->insert("views/sidebar"); ?>
         </nav>
 
@@ -50,9 +40,9 @@
     </div>
 
     <footer class="app_footer">
-        <span class="icon-coffee">
-            Bicho<br>
-            &copy; Luiz P. Escobal da Costa - Todos os direitos reservados
+        <span class="icon-bar-chart">
+            IH<br>
+            &copy; IHSistemas - Todos os direitos reservados
         </span>
     </footer>
     <?= $v->insert("views/modals"); ?>

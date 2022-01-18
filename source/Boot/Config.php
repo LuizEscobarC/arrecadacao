@@ -17,7 +17,7 @@ define("CONF_URL_ADMIN", "/admin");
 /**
  * SITE
  */
-define("CONF_SITE_NAME", "Jogo do Bicho");
+define("CONF_SITE_NAME", "IH SISTEMAS");
 define("CONF_SITE_TITLE", "Sistema");
 define("CONF_SITE_DESC",
     "O CafeControl é um gerenciador de contas simples, poderoso e gratuito. O prazer de tomar um café e ter o controle total de suas contas.");

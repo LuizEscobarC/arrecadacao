@@ -54,7 +54,7 @@ $route->post('/loja-salvar', 'App:storeSave');
 /** COST CENTER */
 $route->get('/centros-de-custo', 'App:costCenters');
 $route->get('/centros-de-custo/{page}', 'App:costCenters');
-$route->get('/centro-de-custo/{id}', 'App:costCenters');
+$route->get('/centro-de-custo/{id}', 'App:costCenter');
 $route->post('/centro-salvar', 'App:saveCenter');
 
 /** OPTIN */

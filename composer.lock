@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e7ae179357781a352691860734e67399",
+    "content-hash": "07b093e14357683d6f7c961504f18b10",
     "packages": [
         {
             "name": "coffeecode/cropper",
