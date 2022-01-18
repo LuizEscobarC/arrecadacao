@@ -180,16 +180,20 @@ class App extends Controller
                 return;
             }
 
-            if ($data['password'] != $data['password_re']) {
-                $json['message'] = $this->message->warning("Informe senhas iguais.")->render();
-                echo json_encode($json);
-                return;
+            if (!empty($data['password_re'])) {
+                if ($data['password'] != $data['password_re']) {
+                    $json['message'] = $this->message->warning("Informe senhas iguais.")->render();
+                    echo json_encode($json);
+                    return;
+                }
             }
 
             $auth = new Auth();
             $user = new User();
-            $user = $user->findByEmail($data['email']);
-
+            // Se for atualização de usuário ele vai buscar o usuário
+            if (!empty($data['id'])) {
+                $user = $user->findById($data['id']);
+            }
             $user->bootstrap(
                 $data["first_name"],
                 $data["last_name"],
