@@ -50,7 +50,12 @@ $route->get('/lojas', 'App:stores');
 $route->get('/lojas/{page}', 'App:stores');
 $route->get('/loja/{id}', 'App:store');
 $route->post('/loja-salvar', 'App:storeSave');
-$route->get('/loja-salvar/{id}', 'App:storeSave');
+
+/** COST CENTER */
+$route->get('/centros-de-custo', 'App:costCenters');
+$route->get('/centros-de-custo/{page}', 'App:costCenters');
+$route->get('/centro-de-custo/{id}', 'App:costCenters');
+$route->post('/centro-salvar', 'App:saveCenter');
 
 /** OPTIN */
 $route->get("/obrigado/{email}", "App:success");

@@ -38,7 +38,7 @@ class App extends Controller
     /**
      * APP HOME
      */
-    public function home()
+    public function home(): void
     {
         $head = $this->seo->render(
             "Olá {$this->user->first_name}. Vamos controlar? - " . CONF_SITE_NAME,
@@ -56,7 +56,7 @@ class App extends Controller
     /**
      * APP INCOME (Receber)
      */
-    public function income()
+    public function income(): void
     {
         $head = $this->seo->render(
             "Minhas receitas - " . CONF_SITE_NAME,
@@ -74,7 +74,7 @@ class App extends Controller
     /**
      * APP EXPENSE (Pagar)
      */
-    public function expense()
+    public function expense(): void
     {
         $head = $this->seo->render(
             "Minhas despesas - " . CONF_SITE_NAME,
@@ -92,7 +92,7 @@ class App extends Controller
     /**
      * APP INVOICE (Fatura)
      */
-    public function invoice()
+    public function invoice(): void
     {
         $head = $this->seo->render(
             "Aluguel - " . CONF_SITE_NAME,
@@ -110,7 +110,7 @@ class App extends Controller
     /**
      * APP LIST USERS
      */
-    public function users(array $data)
+    public function users(array $data): void
     {
         $head = $this->seo->render(
             "Meu perfil - " . CONF_SITE_NAME,
@@ -141,7 +141,7 @@ class App extends Controller
      * APP PROFILE (Perfil)
      * @param array $data
      */
-    public function profile(array $data)
+    public function profile(array $data): void
     {
         $head = $this->seo->render(
             "Meu perfil - " . CONF_SITE_NAME,
@@ -254,7 +254,7 @@ class App extends Controller
     /**
      * APP LOGOUT
      */
-    public function logout()
+    public function logout(): void
     {
         (new Message())->info("Você saiu com sucesso " . Auth::user()->first_name . ". Volte logo :)")->flash();
 
@@ -262,7 +262,10 @@ class App extends Controller
         redirect("/entrar");
     }
 
-    public function stores()
+    /**
+     *
+     */
+    public function stores(): void
     {
         $head = $this->seo->render(
             "Lojas - " . CONF_SITE_NAME,
@@ -288,7 +291,11 @@ class App extends Controller
         ]);
     }
 
-    public function store(array $data)
+    /**
+     * APP STORE EDIT VIEW
+     * @param array $data
+     */
+    public function store(array $data): void
     {
         if (empty($data['id'])) {
             $json['message'] = $this->message->error('Loja sem identificação, por favor contate o desenvolvedor!')->render();
@@ -317,6 +324,10 @@ class App extends Controller
         ]);
     }
 
+    /**
+     * STORE POST SAVE AND EDIT DATA
+     * @param array|null $data
+     */
     public function storeSave(?array $data)
     {
         if (!empty($data['id'])) {
@@ -372,6 +383,24 @@ class App extends Controller
         }
 
         echo json_encode($json);
+    }
+
+    public function costCenters(): void
+    {
+        $head = $this->seo->render(
+            "Centro de Custo - " . CONF_SITE_NAME,
+            CONF_SITE_DESC,
+            url('/app/centro-de-custo'),
+            theme("/assets/images/share.jpg"),
+            false
+        );
+
+
+
+        $this->view->render('costCenter', [
+            'head' => $head,
+            'costCenters' => $costCenters
+        ]);
     }
 
 }
