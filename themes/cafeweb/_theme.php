@@ -30,8 +30,6 @@
             <span class="main_header_nav_mobile j_menu_mobile_open icon-menu icon-notext radius transition"></span>
             <div class="main_header_nav_links j_menu_mobile_tab">
                 <span class="main_header_nav_mobile_close j_menu_mobile_close icon-error icon-notext transition"></span>
-                <a class="link transition radius" title="Home" href="<?= url(); ?>">Home</a>
-                <a class="link transition radius" title="Sobre" href="<?= url("/sobre"); ?>">Sobre</a>
                 <?php if (!\Source\Models\Auth::user()): ?>
                     <a class="link login transition radius icon-sign-in" title="Entrar"
                        href="<?= url("/entrar"); ?>">Entrar</a>

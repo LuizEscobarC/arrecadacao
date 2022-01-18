@@ -334,7 +334,7 @@ class App extends Controller
                 $data["comissao"],
                 $data["valor_aluguel"],
                 $data["aluguel_dia"],
-                $data["valor_gratificao"],
+                $data["valor_gratificacao"],
                 $data["gratificacao_dia"]
             );
 

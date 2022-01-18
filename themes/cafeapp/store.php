@@ -1,7 +1,8 @@
 <?php $v->layout("_theme"); ?>
 <div class="app_invoice app_widget">
-    <form class="app_form" action="<?= url("/app/loja-salvar/{$store->id}"); ?>" method="post">
+    <form class="app_form" action="<?= url("/app/loja-salvar"); ?>" method="post">
         <div class="ajax_response"><?= flash(); ?></div>
+        <input class="radius" type="hidden" name="id" value="<?= $store->id; ?>"
         <label>
             <span class="field icon-leanpub">Nome:</span>
             <input class="radius" type="text" name="nome_loja" value="<?= $store->nome_loja; ?>"
@@ -30,7 +31,7 @@
 
             <label>
                 <span class="field icon-filter">Aluguel Dia:</span>
-                <input class="radius" type="text" name="comissao" value="<?= $store->comissao; ?>" required/>
+                <input class="radius" type="text" name="aluguel dia" value="<?= $store->comissao; ?>" required/>
             </label>
         </div>
 

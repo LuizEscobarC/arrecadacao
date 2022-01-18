@@ -17,7 +17,7 @@ $route->namespace("Source\App");
  * WEB ROUTES
  */
 $route->group(null);
-$route->get("/", "Web:entrar");
+$route->get("/", "Web:login");
 
 //auth
 $route->group(null);
@@ -36,6 +36,7 @@ $route->get("/", "App:home");
 $route->get("/receber", "App:income");
 $route->get("/pagar", "App:expense");
 $route->get("/fatura/{invoice_id}", "App:invoice");
+
 /** USER */
 $route->get("/perfil/{id}", "App:profile");
 $route->post("/perfil", "App:profile");
