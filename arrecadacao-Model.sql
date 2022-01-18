@@ -1,0 +1,293 @@
+-- MySQL dump 10.13  Distrib 5.5.62, for Win64 (AMD64)
+--
+-- Host: localhost    Database: arrecadacao
+-- ------------------------------------------------------
+-- Server version	5.5.5-10.4.21-MariaDB
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `address`
+--
+
+DROP TABLE IF EXISTS `address`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `address` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) unsigned DEFAULT NULL,
+  `street` varchar(255) NOT NULL DEFAULT '',
+  `number` varchar(255) NOT NULL DEFAULT '',
+  `complement` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `addr_user` (`user_id`),
+  CONSTRAINT `user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `address`
+--
+
+LOCK TABLES `address` WRITE;
+/*!40000 ALTER TABLE `address` DISABLE KEYS */;
+INSERT INTO `address` VALUES (1,1,'rua manoel pedro vieira, 810','810','casa 1','2018-09-03 20:40:57','2018-09-16 23:39:59'),(2,2,'paraguai','2041','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:01'),(3,3,'emilio daroz ','107','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:02'),(4,4,'rua lavinia moreira da silva','145','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:03'),(5,5,'padre anchieta','121','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:04'),(6,6,'rua amoroso costa','254','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:06'),(7,7,'alaor martins','312','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:07'),(8,8,'rua das violetas','330','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:09'),(9,9,'francisco carlos ','105','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:10'),(10,10,'torino','95','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:12'),(11,11,'rua erotidas','64','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:13'),(12,12,'r. orquideas','169','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:14'),(13,13,'rua joffre motta','44','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:14'),(14,14,'rua piauí','17','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:15'),(15,15,'fernandes marques','1229','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:16'),(16,16,'av. beta','07','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:17'),(17,17,'abagiba','674','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:23'),(18,18,'gumercindo araujo','302','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:25'),(19,19,'rua 01, quadra 35','35b','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:26'),(20,20,'rua piauí','23d','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:27'),(21,21,'rua leopoldina araãºjo','380','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:28'),(22,22,'rua conceiã§ã£o','101','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:29'),(23,23,'rua benedetto bonfilgi','755','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:30'),(24,24,'rua sã£o francisco','17','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:30'),(25,25,'rua dona zulmira','479','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:32'),(26,26,'rua mampituba','740','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:32'),(27,27,'dezeseis','151','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:34'),(28,28,'rua dos goitacazes','375','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:35'),(29,29,'av lucio jose de meneses','930','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:36'),(30,30,'caetano','3457','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:38'),(31,31,'um nova ','335','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:39'),(32,32,'sres area especial','19','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:40'),(33,33,'islandia','99','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:41'),(34,34,'independência','700','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:42'),(35,35,'sebastiã£o thomaz de oliveira','25','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:46'),(36,36,'nogueira','185','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:48'),(37,37,'tv londrina','12','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:49'),(38,38,'teofilo otoni','222','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:51'),(39,39,'joã£o rasmussen','244','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:53'),(40,40,'travessa elizeu araãºjo','46','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:56'),(41,41,'av. dr. joão pessoa','185','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:58'),(42,42,'travessa brandão','4','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:59'),(43,43,'coqueiros','SN','casa 1','2018-09-03 20:40:57','2018-09-16 23:41:00'),(44,44,'estrada m boi mirim','820','casa 1','2018-09-03 20:40:57','2018-09-16 23:41:01'),(45,45,'travessa dos comerciarios ','5','casa 1','2018-09-03 20:40:57','2018-09-16 23:41:02'),(46,46,'dos jacarandas','30','casa 1','2018-09-03 20:40:57','2018-09-16 23:41:03'),(47,47,'dona ermelinda pereira','413','casa 1','2018-09-03 20:40:57','2018-09-16 23:41:04'),(48,48,'rua projetada 02','742','casa 1','2018-09-03 20:40:57','2018-09-16 23:41:05'),(49,49,'samambaia','96','casa 1','2018-09-03 20:40:57','2018-09-16 23:41:07'),(50,50,'rua dos gerã¢nios','110','casa 1','2018-09-03 20:40:57','2018-09-16 23:41:09');
+/*!40000 ALTER TABLE `address` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `custo`
+--
+
+DROP TABLE IF EXISTS `custo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `custo` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(45) NOT NULL,
+  `emitir` varchar(3) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `custo`
+--
+
+LOCK TABLES `custo` WRITE;
+/*!40000 ALTER TABLE `custo` DISABLE KEYS */;
+INSERT INTO `custo` VALUES (2,'REPOLHO','nao'),(3,'1','sim');
+/*!40000 ALTER TABLE `custo` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `dia`
+--
+
+DROP TABLE IF EXISTS `dia`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `dia` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nrdia` varchar(1) NOT NULL,
+  `diasemana` varchar(15) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `dia`
+--
+
+LOCK TABLES `dia` WRITE;
+/*!40000 ALTER TABLE `dia` DISABLE KEYS */;
+INSERT INTO `dia` VALUES (1,'0','DOMINGO'),(2,'1','SEGUNDA-FEIRA'),(3,'2','TERÇA-FEIRA'),(4,'3','QUARTA-FEIRA'),(5,'4','QUINTA-FEIRA'),(6,'5','SEXTA-FEIRA'),(7,'6','SÁBADO');
+/*!40000 ALTER TABLE `dia` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `flxcaixa`
+--
+
+DROP TABLE IF EXISTS `flxcaixa`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `flxcaixa` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `dtmovto` datetime DEFAULT NULL,
+  `diasemana` varchar(15) DEFAULT NULL,
+  `idloja` int(11) DEFAULT NULL,
+  `descricaohorario` varchar(15) DEFAULT NULL,
+  `idcusto` int(11) DEFAULT NULL,
+  `descricaocusto` varchar(45) DEFAULT NULL,
+  `vrlancto` decimal(2,0) DEFAULT NULL,
+  `obs` varchar(150) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `flxcaixa`
+--
+
+LOCK TABLES `flxcaixa` WRITE;
+/*!40000 ALTER TABLE `flxcaixa` DISABLE KEYS */;
+/*!40000 ALTER TABLE `flxcaixa` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `horario`
+--
+
+DROP TABLE IF EXISTS `horario`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `horario` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nrdia` int(11) NOT NULL,
+  `diasemana` varchar(15) NOT NULL,
+  `descricao` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `horario`
+--
+
+LOCK TABLES `horario` WRITE;
+/*!40000 ALTER TABLE `horario` DISABLE KEYS */;
+INSERT INTO `horario` VALUES (81,0,'Domingo','HORARIO 1'),(82,1,'Segunda-feira','HORARIO 1'),(83,1,'Segunda-feira','HORARIO 2'),(84,1,'Segunda-feira','HORARIO 3'),(85,4,'Quinta-feira','HORARIO 1'),(86,4,'Quinta-feira','HORARIO 3'),(87,3,'Quarta-feira','HORARIO 3');
+/*!40000 ALTER TABLE `horario` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `listas`
+--
+
+DROP TABLE IF EXISTS `listas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `listas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `dtmovto` datetime DEFAULT NULL,
+  `descricaohorario` varchar(15) DEFAULT NULL,
+  `idloja` int(11) DEFAULT NULL,
+  `vrbruto` decimal(2,0) DEFAULT NULL,
+  `vrcomissao` decimal(2,0) DEFAULT NULL,
+  `vrliquido` decimal(2,0) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `listas`
+--
+
+LOCK TABLES `listas` WRITE;
+/*!40000 ALTER TABLE `listas` DISABLE KEYS */;
+/*!40000 ALTER TABLE `listas` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `loja`
+--
+
+DROP TABLE IF EXISTS `loja`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `loja` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nomeloja` varchar(35) NOT NULL,
+  `vrsaldo` decimal(10,0) NOT NULL,
+  `comissao` int(2) NOT NULL,
+  `vraluguel` decimal(10,0) NOT NULL,
+  `alugueldia` int(11) NOT NULL,
+  `vrgratificacao` decimal(10,0) NOT NULL,
+  `gratificacaodia` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `loja`
+--
+
+LOCK TABLES `loja` WRITE;
+/*!40000 ALTER TABLE `loja` DISABLE KEYS */;
+INSERT INTO `loja` VALUES (16,'LOJA DO MIGUELAO',1029,20,0,0,0,0),(17,'loja teste',12,10,0,0,0,0),(19,'RONALDO',10,20,1200,20,200,20);
+/*!40000 ALTER TABLE `loja` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `mail_queue`
+--
+
+DROP TABLE IF EXISTS `mail_queue`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `mail_queue` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `subject` varchar(255) NOT NULL DEFAULT '',
+  `body` text NOT NULL,
+  `from_email` varchar(255) NOT NULL DEFAULT '',
+  `from_name` varchar(255) NOT NULL DEFAULT '',
+  `recipient_email` varchar(255) NOT NULL DEFAULT '',
+  `recipient_name` varchar(255) NOT NULL DEFAULT '',
+  `sent_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `mail_queue`
+--
+
+LOCK TABLES `mail_queue` WRITE;
+/*!40000 ALTER TABLE `mail_queue` DISABLE KEYS */;
+INSERT INTO `mail_queue` VALUES (1,'Teste de fila de e-mail 1542115115','Este é apenas um teste de envio de email','cursos@upinside.com.br','Robson V. Leite','robsonvleite@gmail.com','Robson V. Leite','2018-11-13 15:30:54','2018-11-13 15:18:35','2018-11-13 15:30:54'),(2,'Teste de fila de e-mail 1542115178','Este é apenas um teste de envio de email','cursos@upinside.com.br','Robson V. Leite','robsonvleite@gmail.com','Robson V. Leite','2018-11-13 15:31:00','2018-11-13 15:19:38','2018-11-13 15:31:00'),(3,'Teste de fila de e-mail 1542115185','Este é apenas um teste de envio de email','cursos@upinside.com.br','Robson V. Leite','robsonvleite@gmail.com','Robson V. Leite','2018-11-13 15:31:06','2018-11-13 15:19:45','2018-11-13 15:31:06');
+/*!40000 ALTER TABLE `mail_queue` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(255) NOT NULL DEFAULT '',
+  `last_name` varchar(255) NOT NULL DEFAULT '',
+  `email` varchar(255) NOT NULL DEFAULT '',
+  `status` varchar(50) NOT NULL DEFAULT 'registered' COMMENT 'registered, confirmed',
+  `password` varchar(255) NOT NULL DEFAULT '',
+  `forget` varchar(255) DEFAULT NULL,
+  `document` varchar(11) DEFAULT NULL,
+  `photo` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `level` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'Robson','Leitea','robsonvleite@email.com.br','confirmed','$2y$10$zytg0p8eFFw8NTam1iYRY.lxLYU3mrCVAw509tVIEjYjZ4DZquqDi',NULL,NULL,'images/2018/10/robsonvleite.jpg','2018-09-03 20:39:07','2022-01-16 20:34:53',0),(2,'Alexandre','Santos','alexandre27@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(3,'Willian','Santos','willian28@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(4,'Eleno','Santos','eleno29@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(5,'Lucas','Santos','lucas30@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(6,'Mateus','Santos','mateus31@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(7,'João','Santos','joão32@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(8,'Felipe','Santos','felipe33@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(9,'Anderson','Santos','anderson34@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(10,'Elton','Santos','elton35@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(11,'Leonardo','Santos','leonardo36@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(12,'Regilton','Santos','regilton37@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(13,'Sidney','Santos','sidney38@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(14,'Lourival','Santos','lourival39@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(15,'Henrique','Santos','henrique40@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(16,'Daniel','Santos','daniel41@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(17,'Pedro','Santos','pedro42@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(18,'Andre Roberto','Santos','andre roberto43@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(19,'Ozeias','Santos','ozeias44@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(20,'Arnobio','Santos','arnobio45@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(21,'Roniel','Santos','roniel46@email.com.br','registered','$2y$10$wb6TiQgWiu5KcBbCpxBRDedC.zAz6dTxPqKtEBD6nnkVH3JA/nxLq',NULL,NULL,NULL,'2018-09-03 20:39:07','2022-01-16 20:23:13',0),(22,'Caíque','Santos','caíque47@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(23,'Lucas','Santos','lucas48@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(24,'Francisco','Santos','francisco49@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(25,'Cristian','Santos','cristian50@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(26,'Eduardo','Santos','eduardo51@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(27,'Rodrigo','Santos','rodrigo52@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(28,'Raphael','Santos','raphael53@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(29,'Jose','Santos','jose54@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(30,'Rodrigo','Santos','rodrigo55@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(31,'Diego','Santos','diego56@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(32,'Alexandre','Santos','alexandre57@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(33,'Edimar','Santos','edimar58@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(34,'Jackell','Santos','jackell59@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(35,'Luis','Santos','luis60@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(36,'Lucas','Santos','lucas61@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(37,'Wander','Santos','wander62@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(38,'Tairo','Santos','tairo63@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(39,'Rubens','Santos','rubens64@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(40,'Hugo','Santos','hugo65@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(41,'Gustavo','Santos','gustavo66@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(42,'Paulo','Santos','paulo67@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(43,'Rodrigo','Santos','rodrigo68@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(44,'Denio','Santos','denio69@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(45,'Idalmir','Santos','idalmir70@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(46,'Ataide','Santos','ataide71@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(47,'Luiz','Santos','luiz72@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(48,'Luciano','Santos','luciano73@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(49,'Adir','Santos','adir74@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(50,'Tainan','Santos','tainan75@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(51,'Robson','Leite','robsonvleite@gmail.com','confirmed','$2y$10$rLjfjEIzvdOWyTTue.PO.uS8OdoZJakD5zTlR91UOJlzIF2MpnJ76','02f2c324242f924e648ce0dd295511dd',NULL,NULL,'2018-11-13 19:11:57','2018-11-13 20:08:42',0),(60,'Luiz','Hammer','luiz_escobar12@hotmail.com','confirmed','$2y$10$B1UT1tBcmin70gvHbD4lWOQ1zY4el.Q9VZthwOUTxOZc7W1tX.To6',NULL,NULL,NULL,'2022-01-16 07:33:46','2022-01-16 07:33:48',0),(61,'Luiz','Hammer','luiz_escobar13@hotmail.com','registered','$2y$10$YYtD9hcxYEOrBo.D5q2Qmeq102gjzjDc.VrAWD.L9yCnlcmKgzXnO',NULL,NULL,NULL,'2022-01-16 07:36:15',NULL,0),(62,'Luiz','Hammer','luiz_escobar14@hotmail.com','registered','$2y$10$30ePs6vdIk8KLbpuH4Yo7OeQ2sxWQ0iiT4F6h70DJfiIsiK1Kzp9S',NULL,NULL,NULL,'2022-01-16 07:45:39',NULL,0);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping routines for database 'arrecadacao'
+--
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2022-01-16 16:52:46
