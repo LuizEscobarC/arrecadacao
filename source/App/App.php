@@ -278,7 +278,7 @@ class App extends Controller
         $store = new Store();
         $page = (!empty($data['page']) ? $data['page'] : 1);
 
-        $pager = (new Pager('/arrecadacao/app/usuarios/'));
+        $pager = (new Pager('/arrecadacao/app/lojas/'));
         $pager->pager($store->find()->count(), 20, $page);
 
         echo $this->view->render("stores", [
