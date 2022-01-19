@@ -3,6 +3,7 @@
 <div class="app_invoice app_widget">
     <form class="app_form" action="<?= url("/app/cadastrar"); ?>" method="post">
         <div class="ajax_response"><?= flash(); ?></div>
+        <input class="radius" type="hidden" name="id" value="<?= $user->id ?>" required/>
         <div class="label_group">
             <label>
                 <span class="field icon-user">Nome:</span>

@@ -33,7 +33,7 @@
     <!--<div class="app_launch_btn expense radius transition icon-plus-circle" data-modalopen=".app_modal_expense">
         Botão sem função
     </div>-->
-    <div class="app_launch_btn income radius transition icon-plus-circle" data-modalopen=".app_modal_user">
+    <div class="app_launch_btn income radius transition icon-plus-circle" data-modalopen=".app_modal_cost">
         Novo centro de custo
     </div>
 </div>
@@ -43,7 +43,7 @@
     <div class="app_launch_item header">
         <p class="desc">descrição</p>
         <p class="emit">Emitir</p>
-        <p class="price">Editar</p>
+        <p class="price">Data de Criação</p>
     </div>
     <?php foreach ($costCenters as $center):?>
         <article class="app_launch_item">

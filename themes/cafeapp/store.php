@@ -2,7 +2,7 @@
 <div class="app_invoice app_widget">
     <form class="app_form" action="<?= url("/app/loja-salvar"); ?>" method="post">
         <div class="ajax_response"><?= flash(); ?></div>
-        <input class="radius" type="hidden" name="id" value="<?= $store->id; ?>"
+        <input class="radius" type="hidden" name="id" value="<?= $store->id; ?>" required/>
         <label>
             <span class="field icon-leanpub">Nome:</span>
             <input class="radius" type="text" name="nome_loja" value="<?= $store->nome_loja; ?>"

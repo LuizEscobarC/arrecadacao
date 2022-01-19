@@ -17,7 +17,9 @@ $(function () {
             success: function (response) {
                 //redirect
                 if (response.redirect) {
-                    window.location.href = response.redirect;
+                    setTimeout(function (){
+                        window.location.href = response.redirect;
+                    }, 1000);
                 } else {
                     load.fadeOut(200);
                 }

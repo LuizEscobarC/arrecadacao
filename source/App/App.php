@@ -203,6 +203,7 @@ class App extends Controller
 
             if ($auth->register($user)) {
                 $json['message'] = $auth->message()->success("Usuário editado com sucesso!")->render();
+                $json['redirect'] = url("/app/usuarios");
             } else {
                 $json['message'] = $auth->message()->render();
             }
@@ -335,40 +336,19 @@ class App extends Controller
      */
     public function storeSave(?array $data)
     {
-        if (!empty($data['id'])) {
-            if (!$id = filter_var($data['id'], FILTER_VALIDATE_INT)) {
-                $json['message'] = $this->message->error('Escolha uma loja válida!')->render();
-                echo json_encode($json);
-                return;
-            }
-
-            $store = (new Store())->findByIdStore($id);
-
-            $store->bootstrap(
-                $data["nome_loja"],
-                $data["valor_saldo"],
-                $data["comissao"],
-                $data["valor_aluguel"],
-                $data["aluguel_dia"],
-                $data["valor_gratificacao"],
-                $data["gratificacao_dia"]
-            );
-
-            if ($store->save()) {
-                $json['message'] = $store->message()->success("Loja atualizada com sucesso!")->render();
-            } else {
-                $json['message'] = $store->message()->render();
-            }
-
-        } else {
+        if (!empty($data)) {
             $store = (new Store());
 
-            if (!empty($store->findByName($data['nome_loja']))) {
+            if (!empty($store->findByName($data['nome_loja'])) && empty($data['id'])) {
                 $json['message'] = $this->message->warning('Essa loja já está cadastrada!')->render();
                 echo json_encode($json);
                 return;
             }
 
+            if (!empty($data['id'])) {
+                $store = $store->findById($data['id']);
+            }
+
 
             $store->bootstrap(
                 $data["nome_loja"],
@@ -380,10 +360,11 @@ class App extends Controller
                 $data["gratificacao_dia"]
             );
 
-            if ($store->save()) {
-                $json['message'] = $store->message()->success("Loja cadastrada com sucesso!")->render();
-            } else {
+            if (!$store->save()) {
                 $json['message'] = $store->message()->render();
+            } else {
+                $json['message'] = $this->message->success("Loja atualizada com sucesso!")->render();
+                $json['redirect'] = url("/app/lojas");
             }
         }
 
@@ -393,9 +374,9 @@ class App extends Controller
     public function costCenters(): void
     {
         $head = $this->seo->render(
-            "Centro de Custo - " . CONF_SITE_NAME,
+            "Centro de Custos - " . CONF_SITE_NAME,
             CONF_SITE_DESC,
-            url('/app/centro-de-custo'),
+            url('/app/centro-de-custos'),
             theme("/assets/images/share.jpg"),
             false
         );
@@ -405,6 +386,49 @@ class App extends Controller
             'costCenters' => (new Center())->find()->fetch(true),
             'paginator' => null
         ]);
+    }
+
+    public function costCenter(array $data): void
+    {
+        $id = filter_var($data['id'], FILTER_VALIDATE_INT);
+
+        $head = $this->seo->render(
+            "Centro de Custo - " . CONF_SITE_NAME,
+            CONF_SITE_DESC,
+            url('/app/centro-de-custo'),
+            theme("/assets/images/share.jpg"),
+            false
+        );
+
+        echo $this->view->render('cost-center', [
+            'head' => $head,
+            'costCenter' => (new Center())->findById($id)
+        ]);
+    }
+
+    public function saveCenter(array $data): void
+    {
+
+        $data = filter_var_array($data, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+        if (!empty($data)) {
+            //atualizar
+            $center = (new Center());
+
+            if (!empty($data['id'])) {
+                $center =  $center->findById($data['id']);
+            }
+            $center->bootstrap($data['description'], $data['emit']);
+
+            if (!$center->save()) {
+                $json['message'] = $center->message()->render();
+            } else {
+                $json['message'] = $this->message->success('Centro de custo atualizado com sucesso!')->render();
+                $json['redirect'] = url("/app/centros-de-custo");
+            }
+        }
+
+        echo json_encode($json);
     }
 
 }
