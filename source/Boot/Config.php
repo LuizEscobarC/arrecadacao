@@ -2,15 +2,23 @@
 /**
  * DATABASE
  */
-define("CONF_DB_HOST", "localhost");
-define("CONF_DB_USER", "root");
-define("CONF_DB_PASS", "");
-define("CONF_DB_NAME", "arrecadacao");
+define("CONF_DB_HOST", "arrecada.mysql.dbaas.com.br");
+define("CONF_DB_USER", "arrecada");
+define("CONF_DB_PASS", "ruab7551");
+define("CONF_DB_NAME", "arrecada");
+
+/**
+ * DATABASE
+ */
+define("CONF_DB_HOST_LOCAL", "arrecada.mysql.dbaas.com.br");
+define("CONF_DB_USER_LOCAL", "arrecada");
+define("CONF_DB_PASS_LOCAL", "ruab7551");
+define("CONF_DB_NAME_LOCAL", "arrecada");
 
 /**
  * PROJECT URLs
  */
-define("CONF_URL_BASE", "http://www.localhost/arrecadacao");
+define("CONF_URL_BASE", "http://www.ihsistemas.com");
 define("CONF_URL_TEST", "http://www.localhost/arrecadacao");
 define("CONF_URL_ADMIN", "/admin");
 
