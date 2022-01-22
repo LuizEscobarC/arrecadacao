@@ -290,6 +290,13 @@ body {
     padding: var(--area-normal);
 }
 
+.app_drop, .app_drop1, .app_drop2, .app_drop_children, .app_drop_children2, .app_drop1_children, .app_drop2_children  {
+    display: none;
+    flex-basis: 20%;
+    background: #ffffff;
+    padding: var(--area-normal);
+}
+
 .app_sidebar_widget_mobile {
     display: none;
     padding: var(--area-small) 0;

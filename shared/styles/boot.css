@@ -128,6 +128,9 @@ input:-webkit-autofill {
 .transition {
     transition-duration: var(--hover-duration);
 }
+.pointer {
+    cursor: pointer;
+}
 
 .radius {
     -webkit-border-radius: var(--radius-normal);

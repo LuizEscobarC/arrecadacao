@@ -28,7 +28,8 @@
 
         <div class="al-center">
             <div>
-                <button class="btn btn_inline radius transition icon-pencil-square-o">Atualizar Centro de Custo</button>
+                <span data-centerremove="<?= url("/app/remove-center/{$costCenter->id}") ?>" class="btn_remove transition icon-error">Excluir</span>
+                <button class="btn btn_inline radius transition icon-pencil-square-o">Atualizar</button>
             </div>
         </div>
     </form>

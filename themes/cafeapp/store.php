@@ -51,7 +51,8 @@
 
         <div class="al-center">
             <div>
-                <button class="btn btn_inline radius transition icon-pencil-square-o">Atualizar Loja</button>
+                <span data-storeremove="<?= url("/app/remove-store/{$store->id}") ?>" class="btn_remove transition icon-error">Excluir</span>
+                <button class="btn btn_inline radius transition icon-pencil-square-o">Atualizar</button>
             </div>
         </div>
     </form>

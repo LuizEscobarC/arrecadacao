@@ -17,7 +17,7 @@
             <option value="5">Entretenimento</option>
             <option value="6">Impostos e taxas</option>
             <option value="7">Saúde</option>
-            <option value="8">Viagens</option>
+            <option value="8">Viagens</option>'
             <option value="9">Outras despesas</option>
         </select>
 
@@ -33,35 +33,28 @@
     <!--<div class="app_launch_btn expense radius transition icon-plus-circle" data-modalopen=".app_modal_expense">
         Botão sem função
     </div>-->
-    <div class="app_launch_btn income radius transition icon-plus-circle" data-modalopen=".app_modal_user">
-        Novo usuário
+    <div class="app_launch_btn income radius transition icon-plus-circle" data-modalopen=".app_modal_cost">
+        Novo centro de custo
     </div>
 </div>
 <div class="ajax_response"><?= flash(); ?></div>
 
 <section class="app_launch_box">
     <div class="app_launch_item header">
-        <p class="desc">Nome</p>
-        <p class="date">Nascimento</p>
-        <p class="E-mail">Função</p>
-        <p class="enrollment">algo</p>
-        <p class="price">Editar</p>
+        <p class="desc">dia da semana</p>
+        <p class="desc">description</p>
+        <p class="date">Data de Criação</p>
     </div>
-    <?php foreach ($users as $user):?>
+    <?php foreach ($hours as $hour):?>
         <article class="app_launch_item">
             <p class="desc app_invoice_link transition">
-                <a title="Ver fatura" href="<?= url("/app/fatura/1"); ?>"><?= $user->first_name ?></a>
+                <a title="Ver fatura" href="<?= url(); ?>"><?= $hour->week_day; ?></a>
             </p>
-            <p class="date"><?= date_fmt_br($user->created_at) ?></p>
-            <p class="E-mail"><?= $user->email; ?></p>
-            <p class="enrollment">
-                <span class="icon-calendar-check-o">algo</span>
-                <!--03 de 12-->
-                <!--<span class="icon-exchange">Fixa</span>-->
+            <p class="desc"><?= date_fmt_br($hour->description) ?></p>
+            <!--03 de 12-->
+            <!--<span class="icon-exchange">Fixa</span>-->
             </p>
-            <p class="price app_invoice_link transition">
-                <a class="icon-user" style="text-decoration: none;" href="<?= url("/app/perfil/{$user->id}")?>">Editar</a>
-            </p>
+            <p class="date"><?= date_fmt_br($hour->created_at) ?></p>
         </article>
     <?php endforeach; ?>
     <div class="app_launch_item footer">

@@ -56,6 +56,7 @@
 
         <div class="al-center">
             <div>
+                <span data-userremove="<?= url("/app/remove-user/{$user->id}") ?>" class="btn_remove transition icon-error">Excluir</span>
                 <button class="btn btn_inline radius transition icon-pencil-square-o">Atualizar</button>
             </div>
         </div>

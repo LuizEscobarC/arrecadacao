@@ -64,8 +64,6 @@
         <p class="desc"></p>
         <p></p>
         <p></p>
-        <p class="icon-calendar-check-o">R$ 36,000.00</p>
-        <p class="icon-thumbs-o-up">R$ 28,000.00</p>
     </div>
     <?= $paginator; ?>
 </section>

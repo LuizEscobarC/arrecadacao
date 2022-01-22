@@ -6,6 +6,8 @@ use Composer\Package\Loader\ValidatingArrayLoader;
 use Source\Core\Controller;
 use Source\Models\Auth;
 use Source\Models\Center;
+use Source\Models\Hour;
+use Source\Models\Lists;
 use Source\Models\Report\Access;
 use Source\Models\Report\Online;
 use Source\Models\Store;
@@ -50,60 +52,6 @@ class App extends Controller
         );
 
         echo $this->view->render("home", [
-            "head" => $head
-        ]);
-    }
-
-    /**
-     * APP INCOME (Receber)
-     */
-    public function income(): void
-    {
-        $head = $this->seo->render(
-            "Minhas receitas - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url(),
-            theme("/assets/images/share.jpg"),
-            false
-        );
-
-        echo $this->view->render("income", [
-            "head" => $head
-        ]);
-    }
-
-    /**
-     * APP EXPENSE (Pagar)
-     */
-    public function expense(): void
-    {
-        $head = $this->seo->render(
-            "Minhas despesas - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url(),
-            theme("/assets/images/share.jpg"),
-            false
-        );
-
-        echo $this->view->render("expense", [
-            "head" => $head
-        ]);
-    }
-
-    /**
-     * APP INVOICE (Fatura)
-     */
-    public function invoice(): void
-    {
-        $head = $this->seo->render(
-            "Aluguel - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url(),
-            theme("/assets/images/share.jpg"),
-            false
-        );
-
-        echo $this->view->render("invoice", [
             "head" => $head
         ]);
     }
@@ -225,6 +173,21 @@ class App extends Controller
     }
 
     /**
+     * @param array $data
+     * @return void
+     */
+    public function removeUser(array $data): void
+    {
+        $hour = (new User())->findById($data['id']);
+        if ($hour) {
+            $hour->destroy();
+        }
+        $this->message->success("Tudo pronto {$this->user->first_name}, usuário removido com sucesso!")->flash();
+        $json['redirect'] = url('/app');
+        echo json_encode($json);
+    }
+
+    /**
      * SITE OPT-IN SUCCESS
      * @param array $data
      */
@@ -280,6 +243,7 @@ class App extends Controller
             theme("/assets/images/share.jpg"),
             false
         );
+
         $store = new Store();
         $page = (!empty($data['page']) ? $data['page'] : 1);
 
@@ -371,6 +335,24 @@ class App extends Controller
         echo json_encode($json);
     }
 
+    /**
+     * @param array $data
+     * @return void
+     */
+    public function removeStore(array $data): void
+    {
+        $hour = (new Store())->findById($data['id']);
+        if ($hour) {
+            $hour->destroy();
+        }
+        $this->message->success("Tudo pronto {$this->user->first_name}, loja removida com sucesso!")->flash();
+        $json['redirect'] = url('/app');
+        echo json_encode($json);
+    }
+
+    /**
+     * @return void
+     */
     public function costCenters(): void
     {
         $head = $this->seo->render(
@@ -381,13 +363,27 @@ class App extends Controller
             false
         );
 
+        $center = new Center();
+
+        $page = (!empty($data['page']) ? $data['page'] : 1);
+
+        $pager = (new Pager('/arrecadacao/app/usuarios/'));
+        $pager->pager($center->find()->count(), 20, $page);
+
         echo $this->view->render('cost-centers', [
             'head' => $head,
-            'costCenters' => (new Center())->find()->fetch(true),
-            'paginator' => null
+            'costCenters' => $center->find()
+                ->limit($pager->limit())
+                ->offset($pager->offset())
+                ->fetch(true),
+            'paginator' => $pager->render()
         ]);
     }
 
+    /**
+     * @param array $data
+     * @return void
+     */
     public function costCenter(array $data): void
     {
         $id = filter_var($data['id'], FILTER_VALIDATE_INT);
@@ -406,6 +402,10 @@ class App extends Controller
         ]);
     }
 
+    /**
+     * @param array $data
+     * @return void
+     */
     public function saveCenter(array $data): void
     {
 
@@ -416,7 +416,7 @@ class App extends Controller
             $center = (new Center());
 
             if (!empty($data['id'])) {
-                $center =  $center->findById($data['id']);
+                $center = $center->findById($data['id']);
             }
             $center->bootstrap($data['description'], $data['emit']);
 
@@ -431,4 +431,225 @@ class App extends Controller
         echo json_encode($json);
     }
 
+    /**
+     * @param array $data
+     * @return void
+     */
+    public function removeCenter(array $data): void
+    {
+        $center = (new Center())->findById($data['id']);
+        if ($center) {
+            $center->destroy();
+        }
+        $this->message->success("Tudo pronto {$this->user->first_name}, centro de custo removido com sucesso!")->flash();
+        $json['redirect'] = url('/app');
+        echo json_encode($json);
+    }
+
+    /**
+     * @return void
+     */
+    public function hours(): void
+    {
+        $head = $this->seo->render(
+            "Horários - " . CONF_SITE_NAME,
+            CONF_SITE_DESC,
+            url('/app/horarios'),
+            theme("/assets/images/share.jpg"),
+            false
+        );
+
+        $hour = new Hour();
+        $page = (!empty($data['page']) ? $data['page'] : 1);
+
+        $pager = (new Pager('/arrecadacao/app/usuarios/'));
+        $pager->pager($hour->find()->count(), 20, $page);
+
+        echo $this->view->render('hours', [
+            'head' => $head,
+            'hours' => $hour->find()
+                ->limit($pager->limit())
+                ->offset($pager->offset())
+                ->fetch(true),
+            'paginator' => $pager->render()
+        ]);
+    }
+
+    /**
+     * @param array|null $data
+     * @return void
+     */
+    public function hour(?array $data): void
+    {
+        $id = filter_var($data['id'], FILTER_VALIDATE_INT);
+
+        $head = $this->seo->render(
+            "Horário - " . CONF_SITE_NAME,
+            CONF_SITE_DESC,
+            url('/app/horario'),
+            theme("/assets/images/share.jpg"),
+            false
+        );
+
+        echo $this->view->render('hour', [
+            'head' => $head,
+            'hour' => (new Hour())->findById($id)
+        ]);
+    }
+
+    /**
+     * @param array|null $data
+     * @return void
+     */
+    public function saveHour(?array $data): void
+    {
+        $data = filter_var_array($data, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+        if (!empty($data)) {
+            //atualizar
+            $hour = (new Hour());
+            if (in_array('', $data)) {
+                $json['message'] = $this->message->warning('Todos os campos são necessários!')->render();
+                echo json_encode($json);
+                return;
+            }
+
+            if (!empty($data['id'])) {
+                $hour = $hour->findById($data['id']);
+            }
+            switch ($data['number_day']) {
+                case 1:
+                    $data['week_day'] = 'domingo';
+                    break;
+                case 2:
+                    $data['week_day'] = 'segunda-feira';
+                    break;
+                case 3:
+                    $data['week_day'] = 'terça-feira';
+                    break;
+                case 4:
+                    $data['week_day'] = 'Quarta-feira';
+                    break;
+                case 5:
+                    $data['week_day'] = 'Quinta-feira';
+                    break;
+                case 6:
+                    $data['week_day'] = 'Sexta-feira';
+                    break;
+                case 7:
+                    $data['week_day'] = 'Sábado';
+                    break;
+            }
+
+            $hour->bootstrap($data['number_day'], $data['week_day'], $data['description']);
+
+            if (!$hour->save()) {
+                $json['message'] = $hour->message()->render();
+            } else {
+                $json['message'] = $this->message->success('Horário de custo atualizado com sucesso!')->render();
+                $json['redirect'] = url("/app/horarios");
+            }
+        }
+
+        echo json_encode($json);
+    }
+
+    /**
+     * @param array $data
+     * @return void
+     */
+    public function removeHour(array $data): void
+    {
+        $hour = (new Hour())->findById($data['id']);
+        if ($hour) {
+            $hour->destroy();
+        }
+        $this->message->success("Tudo pronto {$this->user->first_name}, horário removido com sucesso!")->flash();
+        $json['redirect'] = url('/app');
+        echo json_encode($json);
+    }
+
+    public function lists(): void
+    {
+        $head = $this->seo->render(
+            "Listas - " . CONF_SITE_NAME,
+            CONF_SITE_DESC,
+            url('/app/listas'),
+            theme("/assets/images/share.jpg"),
+            false
+        );
+
+        $list = new Lists();
+        $page = (!empty($data['page']) ? $data['page'] : 1);
+
+        $pager = (new Pager('/arrecadacao/app/usuarios/'));
+        $pager->pager($list->find()->count(), 20, $page);
+
+        echo $this->view->render('lists', [
+            'head' => $head,
+            'lists' => $list->find()
+                ->limit($pager->limit())
+                ->offset($pager->offset())
+                ->fetch(true),
+            'allMoney' => $list->find(null, null, 'sum(total_value) as value')->fetch(),
+            'paginator' => $pager->render()
+        ]);
+    }
+
+    public function list(?array $data): void
+    {
+        $id = filter_var($data['id'], FILTER_VALIDATE_INT);
+
+        $head = $this->seo->render(
+            "Lista - " . CONF_SITE_NAME,
+            CONF_SITE_DESC,
+            url('/app/lista'),
+            theme("/assets/images/share.jpg"),
+            false
+        );
+
+        echo $this->view->render('list', [
+            'head' => $head,
+            'list' => (new Lists())->findById($id)
+        ]);
+    }
+
+    public function saveList(array $data): void
+    {
+
+        $data = filter_var_array($data, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+        if (!empty($data)) {
+            //atualizar
+            $list = (new Lists());
+
+            if (!empty($data['id'])) {
+                $list = $list->findById($data['id']);
+            }
+            $list->bootstrap($data['id_hour'], $data['id_store'], $data['total_value'], $data['comission_value'],
+                $data['net_value']);
+
+            if (!$list->save()) {
+                $json['message'] = $list->message()->render();
+            } else {
+                $json['message'] = $this->message->success('Lista atualizado com sucesso!')->render();
+                $json['redirect'] = url("/app/listas");
+            }
+        }
+
+        echo json_encode($json);
+    }
+
+    public function removeList(array $data): void
+    {
+        $list = (new Lists())->findById($data['id']);
+        if ($list) {
+            $list->destroy();
+        }
+        $this->message->success("Tudo pronto {$this->user->first_name}, lista de custo removido com sucesso!")->flash();
+        $json['redirect'] = url('/app');
+        echo json_encode($json);
+    }
+
 }
+

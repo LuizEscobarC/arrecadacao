@@ -166,7 +166,7 @@
 
             <label>
                 <span class="field icon-thumb-tack">Assunto:</span>
-                <input class="radius" type="text" name="subject"  required/>
+                <input class="radius" type="text" name="subject" required/>
             </label>
 
             <label>
@@ -182,7 +182,7 @@
     <div class="app_modal_box app_modal_user">
         <p class="title icon-calendar-minus-o">Cadastro:</p>
         <form class="app_form" action="<?= url("/app/cadastrar"); ?>" method="post">
-        <div class="ajax_response"><?= flash(); ?></div>
+            <div class="ajax_response"><?= flash(); ?></div>
             <?= csrf_input(); ?>
             <label>
                 <span class="field icon-life-ring">Nível?</span>
@@ -230,7 +230,7 @@
 
             <label>
                 <span class="field icon-leanpub">Valor:</span>
-                <input class="radius mask-money" type="text" name="valor_saldo"  required/>
+                <input class="radius mask-money" type="text" name="valor_saldo" required/>
             </label>
 
             <label>
@@ -265,8 +265,8 @@
             <button class="btn radius transition icon-check-square-o">Cadastrar Loja</button>
         </form>
     </div>
-<!-- COST -->
-<div class="app_modal_box app_modal_cost">
+    <!-- COST -->
+    <div class="app_modal_box app_modal_cost">
         <p class="title icon-calendar-check-o">Novo centro de custo:</p>
         <form class="app_form" action="<?= url("/app/centro-salvar"); ?>" method="post">
             <div class="ajax_response"><?= flash(); ?></div>
@@ -296,7 +296,94 @@
             <button class="btn radius transition icon-check-square-o">Cadastrar Centro de Custo</button>
         </form>
     </div>
-</div>
+
+    <!-- HOUR -->
+    <div class="app_modal_box app_modal_hour">
+        <p class="title icon-calendar-check-o">Novo centro de custo:</p>
+        <form class="app_form" action="<?= url("/app/horario"); ?>" method="post">
+            <div class="ajax_response"><?= flash(); ?></div>
+
+            <label>
+                <span class="field icon-leanpub">Nome do Horário:</span>
+                <input class="radius" type="text" name="description" placeholder="Ex: Primeiro turno" required/>
+            </label>
+
+
+            <div class="select2-container">
+                <p class="field check icon-exchange">Escolha o dia:</p>
+                <label>
+                    <select name="number_day">
+                        <option value="">Todas</option>
+                        <option value="1">Domingo</option>
+                        <option value="2">Segunda</option>
+                        <option value="3">Terça</option>
+                        <option value="4">Quarta</option>
+                        <option value="5">Quinta</option>
+                        <option value="6">Sexta</option>
+                        <option value="7">Sábado</option>
+                    </select>
+                </label>
+
+            </div>
+
+            <div class="al-center">
+                <div>
+                    <button class="btn btn_inline radius transition icon-pencil-square-o">Cadastrar Horário</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- HOUR -->
+    <div class="app_modal_box app_modal_list">
+        <p class="title icon-calendar-check-o">Novo centro de custo:</p>
+        <form class="app_form" action="<?= url("/app/lista"); ?>" method="post">
+            <div class="ajax_response"><?= flash(); ?></div>
+            <label>
+                <span class="field icon-briefcase">Horário Desejado:</span>
+                <select name="id_hour">
+                    <?php foreach((new \Source\Models\Hour())->find()->fetch(true) as $hour):?>
+                        <option value="<?= $hour->id; ?>">&ofcir; <?= $hour->description; ?></option>
+                    <?php endforeach;?>
+                </select>
+            </label>
+
+
+            <label>
+                <span class="field icon-briefcase">Loja:</span>
+                <select name="id_store">
+                    <?php foreach((new \Source\Models\Store())->find()->fetch(true) as $store):?>
+                        <option value="<?= $store->id; ?>">&ofcir; <?= $store->nome_loja; ?></option>
+                    <?php endforeach;?>
+                </select>
+            </label>
+
+            <label>
+                <span class="field icon-leanpub">Valor de Comissão:</span>
+                <input class="radius" type="number" name="comission_value" placeholder="Ex: 999"
+                       required/>
+            </label>
+
+            <div class="label_group">
+                <label>
+                    <span class="field icon-leanpub">Valor Total:</span>
+                    <input class="radius" type="number" name="total_value" placeholder="Ex: 999"
+                           required/>
+                </label>
+
+                <label>
+                    <span class="field icon-leanpub">Valor Líquido:</span>
+                    <input class="radius" type="number" name="net_value" placeholder="Ex: 999"
+                           required/>
+                </label>
+            </div>
+            <div class="al-center">
+                <div>
+                    <button class="btn btn_inline radius transition icon-pencil-square-o">Atualizar</button>
+                </div>
+            </div>
+        </form>
+    </div>
 
 
 
