@@ -11,12 +11,12 @@
 </head>
 <body>
 
-<!-- <div class="ajax_load">
+<div class="ajax_load">
     <div class="ajax_load_box">
         <div class="ajax_load_box_circle"></div>
         <p class="ajax_load_box_title">Aguarde, carregando...</p>
     </div>
-</div> -->
+</div>
 
 <div class="app">
     <header class="app_header">
