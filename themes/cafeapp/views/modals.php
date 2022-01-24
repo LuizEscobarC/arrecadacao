@@ -299,7 +299,7 @@
 
     <!-- HOUR -->
     <div class="app_modal_box app_modal_hour">
-        <p class="title icon-calendar-check-o">Novo centro de custo:</p>
+        <p class="title icon-calendar-check-o">Novo horário:</p>
         <form class="app_form" action="<?= url("/app/horario"); ?>" method="post">
             <div class="ajax_response"><?= flash(); ?></div>
 
@@ -336,7 +336,7 @@
 
     <!-- LIST -->
     <div class="app_modal_box app_modal_list">
-        <p class="title icon-calendar-check-o">Novo centro de custo:</p>
+        <p class="title icon-calendar-check-o">Nova Lista:</p>
         <form class="app_form" action="<?= url("/app/lista"); ?>" method="post">
             <div class="ajax_response"><?= flash(); ?></div>
             <label>

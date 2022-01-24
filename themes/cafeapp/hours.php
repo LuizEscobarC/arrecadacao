@@ -34,7 +34,7 @@
         Botão sem função
     </div>-->
     <div class="app_launch_btn income radius transition icon-plus-circle" data-modalopen=".app_modal_cost">
-        Novo centro de custo
+        Novo Horário
     </div>
 </div>
 <div class="ajax_response"><?= flash(); ?></div>
