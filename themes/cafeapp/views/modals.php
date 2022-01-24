@@ -273,7 +273,7 @@
 
             <label>
                 <span class="field icon-leanpub">Descrição:</span>
-                <input class="radius" type="text" name="description" placeholder="Ex: Bentão" required/>
+                <input class="radius" type="text" name="description" placeholder="Ex: Recibos" required/>
             </label>
 
 
