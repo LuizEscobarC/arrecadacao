@@ -342,9 +342,9 @@
             <label>
                 <span class="field icon-briefcase">Horário Desejado:</span>
                 <select name="id_hour">
-                    <?php foreach((new \Source\Models\Hour())->find()->fetch(true) as $hour):?>
+                    <?php foreach ((new \Source\Models\Hour())->find()->fetch(true) as $hour): ?>
                         <option value="<?= $hour->id; ?>">&ofcir; <?= $hour->description; ?></option>
-                    <?php endforeach;?>
+                    <?php endforeach; ?>
                 </select>
             </label>
 
@@ -352,31 +352,24 @@
             <label>
                 <span class="field icon-briefcase">Loja:</span>
                 <select name="id_store">
-                    <?php foreach((new \Source\Models\Store())->find()->fetch(true) as $store):?>
+                    <?php foreach ((new \Source\Models\Store())->find()->fetch(true) as $store): ?>
                         <option value="<?= $store->id; ?>">&ofcir; <?= $store->nome_loja; ?></option>
-                    <?php endforeach;?>
+                    <?php endforeach; ?>
                 </select>
             </label>
 
             <label>
-                <span class="field icon-leanpub">Valor de Comissão:</span>
-                <input class="radius" type="number" name="comission_value" placeholder="Ex: 999"
+                <span class="field icon-leanpub">Valor Bruto:</span>
+                <input class="radius" type="number" name="total_value" placeholder="Ex: 999"
                        required/>
             </label>
 
-            <div class="label_group">
-                <label>
-                    <span class="field icon-leanpub">Valor Total:</span>
-                    <input class="radius" type="number" name="total_value" placeholder="Ex: 999"
-                           required/>
-                </label>
+            <label>
+                <span class="field icon-thumb-tack">Data de movimentação:</span>
+                <input class="radius" type="date" name="date_moviment"
+                       required/>
+            </label>
 
-                <label>
-                    <span class="field icon-leanpub">Valor Líquido:</span>
-                    <input class="radius" type="number" name="net_value" placeholder="Ex: 999"
-                           required/>
-                </label>
-            </div>
             <div class="al-center">
                 <div>
                     <button class="btn btn_inline radius transition icon-pencil-square-o">Atualizar</button>

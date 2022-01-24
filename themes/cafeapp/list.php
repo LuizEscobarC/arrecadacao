@@ -15,7 +15,7 @@
 
         <label>
             <span class="field icon-briefcase">Loja:</span>
-            <select name="id_hour">
+            <select name="id_store">
             <?php foreach((new \Source\Models\Store())->find()->fetch(true) as $store):?>
                 <option <?= ($list->id_store == $store->id ? 'selected' : ""); ?> value="<?= $store->id; ?>">&ofcir; <?= $store->nome_loja; ?></option>
             <?php endforeach;?>
@@ -23,24 +23,34 @@
         </label>
 
         <label>
-            <span class="field icon-leanpub">Valor de Comissão:</span>
-            <input class="radius" type="number" name="comission_value" value="<?= $list->comission_value; ?>" placeholder="Ex: 999"
+            <span class="field icon-leanpub">Valor Total:</span>
+            <input class="radius" type="number" name="total_value" value="<?= $list->total_value; ?>" placeholder="Ex: 999"
                    required/>
         </label>
 
         <div class="label_group">
+
             <label>
-                <span class="field icon-leanpub">Valor Total:</span>
-                <input class="radius" type="number" name="total_value" value="<?= $list->total_value; ?>" placeholder="Ex: 999"
+                <span class="field icon-leanpub">Valor de Comissão:</span>
+                <input class="radius" type="number" name="" readonly  value="<?= $list->comission_value; ?>" placeholder="Ex: 999"
                        required/>
             </label>
 
             <label>
                 <span class="field icon-leanpub">Valor Líquido:</span>
-                <input class="radius" type="number" name="net_value" value="<?= $list->net_value; ?>" placeholder="Ex: 999"
+                <input class="radius" type="number" name="" readonly value="<?= $list->net_value; ?>" placeholder="Ex: 999"
                        required/>
             </label>
+
+
         </div>
+
+        <label>
+            <span class="field icon-thumb-tack">Data de movimentação:</span>
+            <input class="radius" type="date" name="date_moviment" value="<?= $list->date_moviment; ?>"
+                   required/>
+        </label>
+
         <div class="al-center">
             <div>
                 <span data-listremove="<?= url("/app/remove-list/{$list->id}") ?>" class="btn_remove transition icon-error">Excluir</span>

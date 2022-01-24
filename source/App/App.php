@@ -626,9 +626,9 @@ class App extends Controller
             if (!empty($data['id'])) {
                 $list = $list->findById($data['id']);
             }
-            $list->bootstrap($data['id_hour'], $data['id_store'], $data['total_value'], $data['comission_value'],
-                $data['net_value']);
+            $list->bootstrap($data['id_hour'], $data['id_store'], $data['total_value'], $data['date_moviment']);
 
+            /** @var Lists $list */
             if (!$list->save()) {
                 $json['message'] = $list->message()->render();
             } else {

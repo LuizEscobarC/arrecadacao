@@ -59,7 +59,7 @@
             <!--03 de 12-->
             <!--<span class="icon-exchange">Fixa</span>-->
             <p class="desc"><?= $list->hour()->description; ?></p>
-            <p class="date"><?= date_fmt_br($list->created_at); ?></p>
+            <p class="date"><?= date_fmt($list->date_moviment, 'd/m/Y') . ' ' . $list->day;  ?></p>
             <p class="desc"><?= $list->store()->nome_loja; ?></p>
             <p class="enrollment"><?= "R$ " . $list->total_value; ?></p>
             <p class="price"><?= "R$ " . $list->net_value; ?></p>
