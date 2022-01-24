@@ -3,12 +3,17 @@
     <form class="app_form" action="<?= url("/app/lista"); ?>" method="post">
         <div class="ajax_response"><?= flash(); ?></div>
         <input class="radius" type="hidden" name="id" value="<?= $list->id; ?>" required/>
+
+        <label>
+            <span class="field icon-thumb-tack">Data de movimentação:</span>
+            <input class="radius" value="<?= date_fmt($list->date_moviment, 'Y-m-d'); ?>" id="hour" rel="<?= url('/app/get_hour')?>" type="date" name="date_moviment"
+                   required/>
+        </label>
+
         <label>
             <span class="field icon-briefcase">Horário Desejado:</span>
-            <select name="id_hour">
-            <?php foreach((new \Source\Models\Hour())->find()->fetch(true) as $hour):?>
-                <option <?= ($list->id_hour == $hour->id ? 'selected' : ""); ?> value="<?= $hour->id; ?>">&ofcir; <?= $hour->description; ?></option>
-            <?php endforeach;?>
+            <select name="id_hour" id="callback">
+                <option value="<?= $list->hour()->id;?>"><?= $list->hour()->description ?></option>
             </select>
         </label>
 
@@ -44,12 +49,6 @@
 
 
         </div>
-
-        <label>
-            <span class="field icon-thumb-tack">Data de movimentação:</span>
-            <input class="radius" type="date" name="date_moviment" value="<?= $list->date_moviment; ?>"
-                   required/>
-        </label>
 
         <div class="al-center">
             <div>

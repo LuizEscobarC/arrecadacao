@@ -245,6 +245,37 @@ function date_fmt_app(string $date = "now"): string
     return (new DateTime($date))->format(CONF_DATE_APP);
 }
 
+
+/**
+ * RETORNA O DIA DA DATA
+ * @param string $dateParam
+ * @return string
+ */
+function weekDay(string $dateParam, bool $isNumber = false): string
+{
+    $weekDays = array(
+        1 => "Segunda-Feira",
+        2 => "Terça-Feira",
+        3 => "Quarta-Feira",
+        4 => "Quinta-Feira",
+        5 => "Sexta-Feira",
+        6 => "Sábado",
+        0 => "Domingo"
+    );
+
+    $date = $dateParam;
+    $date = str_replace('/', '-', $date);
+
+    $today = getdate(strtotime($date));
+
+    $weekDay = $today["wday"];
+    if ($isNumber) {
+        return $weekDay;
+    } else {
+        return $weekDays[$weekDay];
+    }
+}
+
 /**
  * ####################
  * ###   PASSWORD   ###

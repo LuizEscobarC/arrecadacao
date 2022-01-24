@@ -20,4 +20,10 @@ class Hour extends Model
         return $this;
     }
 
+    public function findByNumberDay(int $numberDay): ?array
+    {
+        $this->find('number_day = :number_day', "number_day={$numberDay}");
+        return $this->fetch(true);
+    }
+
 }

@@ -44,17 +44,20 @@
         <p class="desc">dia da semana</p>
         <p class="desc">description</p>
         <p class="date">Data de Criação</p>
+        <p></p>
     </div>
     <?php foreach ($hours as $hour):?>
         <article class="app_launch_item">
             <p class="desc app_invoice_link transition">
                 <a title="Ver fatura" href="<?= url(); ?>"><?= $hour->week_day; ?></a>
             </p>
-            <p class="desc"><?= date_fmt_br($hour->description) ?></p>
+            <p class="desc"><?= $hour->description; ?></p>
             <!--03 de 12-->
             <!--<span class="icon-exchange">Fixa</span>-->
-            </p>
             <p class="date"><?= date_fmt_br($hour->created_at) ?></p>
+            <p class=" app_invoice_link transition">
+                <a class="icon-thumb-tack" style="text-decoration: none;" href="<?= url("/app/horario/{$hour->id}")?>">Editar</a>
+            </p>
         </article>
     <?php endforeach; ?>
     <div class="app_launch_item footer">

@@ -518,25 +518,25 @@ class App extends Controller
                 $hour = $hour->findById($data['id']);
             }
             switch ($data['number_day']) {
-                case 1:
+                case 0:
                     $data['week_day'] = 'domingo';
                     break;
-                case 2:
+                case 1:
                     $data['week_day'] = 'segunda-feira';
                     break;
-                case 3:
+                case 2:
                     $data['week_day'] = 'terça-feira';
                     break;
-                case 4:
+                case 3:
                     $data['week_day'] = 'Quarta-feira';
                     break;
-                case 5:
+                case 4:
                     $data['week_day'] = 'Quinta-feira';
                     break;
-                case 6:
+                case 5:
                     $data['week_day'] = 'Sexta-feira';
                     break;
-                case 7:
+                case 6:
                     $data['week_day'] = 'Sábado';
                     break;
             }
@@ -552,6 +552,19 @@ class App extends Controller
         }
 
         echo json_encode($json);
+    }
+
+    public function getHour(array $data): void
+    {
+        $getDayNumber = weekDay($data['date_moviment'], true);
+        $dataDay = (new Hour())->findByNumberDay($getDayNumber);
+        $i = 0;
+        foreach ($dataDay as $item) {
+            $callback[$i]['id'] = $item->id;
+            $callback[$i]['description'] = $item->description;
+            $i++;
+        }
+        echo json_encode($callback);
     }
 
     /**

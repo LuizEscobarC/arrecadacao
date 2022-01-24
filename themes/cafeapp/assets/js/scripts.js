@@ -273,4 +273,25 @@ $(function () {
         }
     })
 
+    /*
+    * AJAX GET HOUR
+    */
+
+    $('input#hour').on("focusout", function(){
+        if ($('#callback')) {
+            $('#callback').html('');
+        }
+        $.ajax({
+            url: $('input#hour').attr('rel'),
+            type: 'POST',
+            data:  $(this).serialize(),
+            dataType: 'JSON',
+            success: function (callback) {
+                for (let i = 0, len = callback.length; i < len; ++i) {
+                    $('#callback').prepend('<option value="' + callback[i].id + '">' + callback[i].description + '</option>');
+                }
+            }
+        });
+    });
+
 });

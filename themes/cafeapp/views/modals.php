@@ -334,17 +334,20 @@
         </form>
     </div>
 
-    <!-- HOUR -->
+    <!-- LIST -->
     <div class="app_modal_box app_modal_list">
         <p class="title icon-calendar-check-o">Novo centro de custo:</p>
         <form class="app_form" action="<?= url("/app/lista"); ?>" method="post">
             <div class="ajax_response"><?= flash(); ?></div>
             <label>
+                <span class="field icon-thumb-tack">Data de movimentação:</span>
+                <input class="radius" id="hour" rel="<?= url('/app/get_hour')?>" type="date" name="date_moviment"
+                       required/>
+            </label>
+
+            <label>
                 <span class="field icon-briefcase">Horário Desejado:</span>
-                <select name="id_hour">
-                    <?php foreach ((new \Source\Models\Hour())->find()->fetch(true) as $hour): ?>
-                        <option value="<?= $hour->id; ?>">&ofcir; <?= $hour->description; ?></option>
-                    <?php endforeach; ?>
+                <select name="id_hour" id="callback">
                 </select>
             </label>
 
@@ -364,11 +367,6 @@
                        required/>
             </label>
 
-            <label>
-                <span class="field icon-thumb-tack">Data de movimentação:</span>
-                <input class="radius" type="date" name="date_moviment"
-                       required/>
-            </label>
 
             <div class="al-center">
                 <div>

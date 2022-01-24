@@ -70,7 +70,9 @@ $route->post('/horario', 'App:saveHour');
 $route->post('/remove-hour/{id}', 'App:removeHour');
 
 
+
 /** LISTS */
+$route->post('/get_hour', 'App:getHour');
 $route->get('/listas', 'App:lists');
 $route->get('/listas/{page}', 'App:lists');
 $route->get('/lista/{id}', 'App:list');
