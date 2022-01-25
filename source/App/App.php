@@ -541,7 +541,7 @@ class App extends Controller
                     break;
             }
 
-            $hour->bootstrap($data['number_day'], $data['week_day'], $data['description']);
+            $hour->bootstrap((string)$data['number_day'], $data['week_day'], $data['description']);
 
             if (!$hour->save()) {
                 $json['message'] = $hour->message()->render();

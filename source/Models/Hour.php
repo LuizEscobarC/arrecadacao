@@ -12,7 +12,7 @@ class Hour extends Model
         parent::__construct('hour', ['id', 'created_at', 'updated_at'], ['number_day', 'week_day', 'description']);
     }
 
-    public function bootstrap(int $numberDay, string $weekDay, string $description): Hour
+    public function bootstrap(string $numberDay, string $weekDay, string $description): Hour
     {
         $this->number_day = $numberDay;
         $this->week_day = $weekDay;
