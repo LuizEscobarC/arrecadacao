@@ -68,9 +68,9 @@
             <p class="desc"><?= $list->hour()->description; ?></p>
             <p class="date"><?= date_fmt($list->date_moviment, 'd/m/Y') . ' ' . $list->day;  ?></p>
             <p class="desc"><?= $list->store()->nome_loja; ?></p>
-            <p class="enrollment"><?= "R$ " . $list->total_value; ?></p>
-            <p class="price"><?= "R$ " . $list->net_value; ?></p>
-            <p class="enrollment"><?= "R$ " . $list->comission_value; ?></p>
+            <p class="enrollment"><?= money_fmt_br($list->total_value,true); ?></p>
+            <p class="price"><?= money_fmt_br($list->net_value, true); ?></p>
+            <p class="enrollment "><?= money_fmt_br($list->comission_value, true); ?></p>
             <p class=" app_invoice_link transition">
                 <a class="icon-thumb-tack" style="text-decoration: none;" href="<?= url("/app/lista/{$list->id}")?>">Editar</a>
             </p>

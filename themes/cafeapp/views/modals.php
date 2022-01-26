@@ -365,7 +365,7 @@
 
             <label>
                 <span class="field icon-leanpub">Valor Bruto:</span>
-                <input class="radius" type="number" name="total_value" placeholder="Ex: 999"
+                <input class="radius mask-money" type="text" name="total_value" placeholder="Ex: 999"
                        required/>
             </label>
 

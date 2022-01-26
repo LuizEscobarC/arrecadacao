@@ -35,7 +35,7 @@
         <div class="label_group">
             <label class="three_label">
                 <span class="field icon-leanpub">Valor Total:</span>
-                <input class="radius" type="number" name="total_value" value="<?= $list->total_value; ?>"
+                <input class="radius mask-money" type="text" name="total_value" value="<?= $list->total_value; ?>"
                        placeholder="Ex: 999"
                        required/>
             </label>

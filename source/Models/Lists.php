@@ -15,12 +15,12 @@ class Lists extends Model
     public function bootstrap(
         int $descriptionHour,
         int $idStore,
-        float $totalValue,
+        string $totalValue,
         string $dateMoviment
     ): Lists {
         $this->id_hour = $descriptionHour;
         $this->id_store = $idStore;
-        $this->total_value = $totalValue;
+        $this->total_value = str_replace (',', '.', str_replace ('.', '', $totalValue));;
         $this->date_moviment = $dateMoviment;
         return $this;
     }
