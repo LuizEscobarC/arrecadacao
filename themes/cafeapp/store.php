@@ -1,5 +1,8 @@
 <?php $v->layout("_theme"); ?>
 <div class="app_invoice app_widget">
+    <div class="color_888 app_header">
+        <h2 class=" icon-calendar-check-o ">Atualizar Loja:</h2>
+    </div>
     <form class="app_form" action="<?= url("/app/loja-salvar"); ?>" method="post">
         <div class="ajax_response"><?= flash(); ?></div>
         <input class="radius" type="hidden" name="id" value="<?= $store->id; ?>" required/>
@@ -51,7 +54,8 @@
 
         <div class="al-center">
             <div>
-                <span data-storeremove="<?= url("/app/remove-store/{$store->id}") ?>" class="btn_remove transition icon-error">Excluir</span>
+                <span data-storeremove="<?= url("/app/remove-store/{$store->id}") ?>"
+                      class="btn_remove transition icon-error">Excluir</span>
                 <button class="btn btn_inline radius transition icon-pencil-square-o">Atualizar</button>
             </div>
         </div>

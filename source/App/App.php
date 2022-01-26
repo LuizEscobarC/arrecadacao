@@ -151,7 +151,6 @@ class App extends Controller
 
             if ($auth->register($user)) {
                 $json['message'] = $auth->message()->success("Usuário editado com sucesso!")->render();
-                $json['redirect'] = url("/app/usuarios");
             } else {
                 $json['message'] = $auth->message()->render();
             }
@@ -254,6 +253,7 @@ class App extends Controller
             "head" => $head,
             'stores' => $store
                 ->find()
+                ->order('id')
                 ->limit($pager->limit())
                 ->offset($pager->offset())
                 ->fetch(true),
@@ -468,6 +468,7 @@ class App extends Controller
         echo $this->view->render('hours', [
             'head' => $head,
             'hours' => $hour->find()
+                ->order('week_day')
                 ->limit($pager->limit())
                 ->offset($pager->offset())
                 ->fetch(true),

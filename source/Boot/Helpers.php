@@ -174,6 +174,20 @@ function redirect(string $url): void
 }
 
 /**
+ * @param string $money
+ * @return string
+ */
+function money_fmt_br(float $money, bool $brl = false): string
+{
+    if ($brl) {
+        $money = 'R$ ' . number_format($money, 2, ',','.');
+    } else {
+        $money = number_format($money, 2, ',','.');
+    }
+    return $money;
+}
+
+/**
  * ##################
  * ###   ASSETS   ###
  * ##################

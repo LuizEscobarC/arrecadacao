@@ -180,7 +180,7 @@
 
     <!--USER-->
     <div class="app_modal_box app_modal_user">
-        <p class="title icon-calendar-minus-o">Cadastro:</p>
+        <p class="title icon-calendar-minus-o">Novo usuário:</p>
         <form class="app_form" action="<?= url("/app/cadastrar"); ?>" method="post">
             <div class="ajax_response"><?= flash(); ?></div>
             <?= csrf_input(); ?>
@@ -313,7 +313,6 @@
                 <p class="field check icon-exchange">Escolha o dia:</p>
                 <label>
                     <select name="number_day">
-                        <option value="">Todas</option>
                         <option value="0">Domingo</option>
                         <option value="1">Segunda</option>
                         <option value="2">Terça</option>

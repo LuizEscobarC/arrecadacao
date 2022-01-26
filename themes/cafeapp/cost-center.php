@@ -1,5 +1,8 @@
 <?php $v->layout("_theme"); ?>
 <div class="app_invoice app_widget">
+    <div class="color_888 app_header">
+        <h2 class=" icon-calendar-check-o ">Atualizar Centro de Custo:</h2>
+    </div>
     <form class="app_form" action="<?= url("/app/centro-salvar"); ?>" method="post">
         <div class="ajax_response"><?= flash(); ?></div>
 

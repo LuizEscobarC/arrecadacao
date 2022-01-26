@@ -406,9 +406,9 @@ body {
 .app_modal_box {
     display: none;
     margin: auto;
-    width: 500px;
+    width: 900px;
     max-width: 94%;
-    padding: calc(var(--area-box) * 1.5);
+    padding: calc(var(--area-box) * 1.5) calc(var(--area-box) * 5);
     background: #ffffff;
 
     -webkit-border-radius: var(--radius-normal);
@@ -747,6 +747,18 @@ body {
     text-align: left;
 }
 
+.app_launch_item p.desc_center {
+    flex-basis: 30%;
+    text-align: center;
+}
+
+.app_launch_item p.desc_right {
+    display: flex;
+    justify-content: space-around;
+    flex-basis: 30%;
+    text-align: right;
+}
+
 .app_launch_item .price {
     display: flex;
     justify-content: space-around;
@@ -775,6 +787,42 @@ body {
 
 .app_invoice .field {
     margin-bottom: 15px;
+}
+
+/* reutilizaveis */
+.padding_btn{
+    padding: 10px 20px;
+}
+.padding_botton_top{
+    padding: 20px 0;
+}
+
+.font_120_percent {
+    font-size: 1.2em;
+}
+
+.font_80_percent {
+    font-size: 0.8em;
+}
+
+.font_60_percent {
+    font-size: 0.6em;
+}
+
+.font_40_percent {
+    font-size: 0.4em;
+}
+
+.color_888 {
+    color: #888888;
+}
+
+.color_default {
+    color: var(--color-default);
+}
+
+.color_white {
+    color: #ffffff;
 }
 
 

@@ -1,7 +1,11 @@
 <?php $v->layout("_theme"); ?>
 <div class="app_launch_header">
-    <form class="app_launch_form_filter app_form" action="" method="post">
-        <select name="status">
+    <div class="app_flex_title">
+        <h2><a class="color_white font_80_percent icon-user padding_btn transition gradient gradient-green gradient-hover radius box-shadow"
+               title="usuários">Registros de Lojas</a></h2>
+    </div>
+    <!-- FILTROS <form class="app_launch_form_filter app_form" action="" method="post">
+         <select name="status">
             <option value="">Todos</option>
             <option value="paid">filtro</option>
             <option value="unpaid">filtro</option>
@@ -20,14 +24,15 @@
             <option value="9">Outras despesas</option>
         </select>
 
-        <input list="datelist" type="text" class="radius mask-month" name="date" placeholder="<?= date("m/Y"); ?>">
+        <input list="datelist" type="text" class="radius mask-month" name="date" placeholder="< date("m/Y"); ?>">
         <datalist id="datelist">
-            <?php for ($range = -2; $range <= 3; $range++): $date = date("m/Y", strtotime("{$range}month")); ?>
-                <option value="<?= $date; ?>"/>
-            <?php endfor; ?>
+            < for ($range = -2; $range <= 3; $range++): $date = date("m/Y", strtotime("{$range}month")); ?>
+                <option value="< $date; ?>"/>
+            < endfor; ?>
         </datalist>
         <button class="filter radius transition icon-filter icon-notext"></button>
     </form>
+        -->
 
     <!--<div class="app_launch_btn expense radius transition icon-plus-circle" data-modalopen=".app_modal_expense">
         Botão sem função
@@ -40,13 +45,14 @@
 
 <section class="app_launch_box">
     <div class="app_launch_item header">
+        <p class="desc">id</p>
         <p class="desc">Nome</p>
         <p class="price">Saldo</p>
         <p class="price">Comissão</p>
         <p class="price">Aluguel</p>
-        <p class="price">Al. Diário</p>
+        <p class="price">Aluguel Dia Pagar</p>
         <p class="price">Gratificação</p>
-        <p class="price">G. Diária</p>
+        <p class="price">Gratifica dia Pagar</p>
         <p class="price"></p>
     </div>
     <?php
@@ -54,15 +60,16 @@
         /** @var \Source\Models\Store $store */
         ?>
         <article class="app_launch_item">
+            <p class="desc"><?= $store->id; ?></p>
             <p class="desc app_invoice_link transition">
                 <a title="Ver fatura" href="<?= url("/app/loja/{$store->id}"); ?>"><?= $store->nome_loja ?></a>
             </p>
-            <p class="price"><?= $store->valor_saldo; ?></p>
-            <p class="price"><?= $store->comissao; ?></p>
-            <p class="price"><?= $store->valor_aluguel; ?></p>
-            <p class="price"><?= $store->aluguel_dia; ?></p>
-            <p class="price"><?= $store->valor_gratificacao; ?></p>
-            <p class="price"><?= $store->gratificacao_dia; ?></p>
+            <p class="price"><?= money_fmt_br($store->valor_saldo, true); ?></p>
+            <p class="price"><?= money_fmt_br($store->comissao, true); ?></p>
+            <p class="price"><?= money_fmt_br($store->valor_aluguel, true); ?></p>
+            <p class="date"><?= $store->aluguel_dia; ?></p>
+            <p class="price"><?= money_fmt_br($store->valor_gratificacao, true); ?></p>
+            <p class="date"><?= $store->gratificacao_dia; ?></p>
             <!-- <p class="enrollment">
                  <span class="icon-calendar-check-o">algo</span>
                  03 de 12

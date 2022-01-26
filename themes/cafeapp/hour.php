@@ -1,5 +1,8 @@
 <?php $v->layout("_theme"); ?>
 <div class="app_invoice app_widget">
+    <div class="color_888 app_header">
+        <h2 class=" icon-calendar-check-o ">Atualizar Horário:</h2>
+    </div>
     <form class="app_form" action="<?= url("/app/horario"); ?>" method="post">
         <div class="ajax_response"><?= flash(); ?></div>
 
@@ -16,14 +19,13 @@
 
             <p class="field check icon-exchange">Escolha o dia:</p>
             <select name="number_day">
-                <option value="">Todas</option>
-                <option <?= ($hour->number_day == 1 ? 'selected' : null) ?> value="1">Domingo</option>
-                <option <?= ($hour->number_day == 2 ? 'selected' : null) ?> value="2">Segunda</option>
-                <option <?= ($hour->number_day == 3 ? 'selected' : null) ?> value="3">Terça</option>
-                <option <?= ($hour->number_day == 4 ? 'selected' : null) ?> value="4">Quarta</option>
-                <option <?= ($hour->number_day == 5 ? 'selected' : null) ?> value="5">Quinta</option>
-                <option <?= ($hour->number_day == 6 ? 'selected' : null) ?> value="6">Sexta</option>
-                <option <?= ($hour->number_day == 7 ? 'selected' : null) ?> value="7">Sábado</option>
+                <option <?= ($hour->number_day == 0 ? 'selected' : null) ?> value="1">Domingo</option>
+                <option <?= ($hour->number_day == 1 ? 'selected' : null) ?> value="2">Segunda</option>
+                <option <?= ($hour->number_day == 2 ? 'selected' : null) ?> value="3">Terça</option>
+                <option <?= ($hour->number_day == 3 ? 'selected' : null) ?> value="4">Quarta</option>
+                <option <?= ($hour->number_day == 4 ? 'selected' : null) ?> value="5">Quinta</option>
+                <option <?= ($hour->number_day == 5 ? 'selected' : null) ?> value="6">Sexta</option>
+                <option <?= ($hour->number_day == 6 ? 'selected' : null) ?> value="7">Sábado</option>
             </select>
 
         </div>
