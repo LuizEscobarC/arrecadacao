@@ -47,6 +47,7 @@
 
 <section class="app_launch_box">
     <div class="app_launch_item header">
+        <p class="desc">ID</p>
         <p class="enrollment">dia da semana</p>
         <p class="desc">Horário desejado</p>
         <p class="date">Horário de Movimentação</p>
@@ -58,6 +59,7 @@
     </div>
     <?php foreach ($lists as $list):?>
         <article class="app_launch_item">
+            <p class="desc"><?= $list->id; ?></p>
             <p class="enrollment app_invoice_link transition">
                 <a title="Ver Lista" href="<?= url("/app/horario/{$list->id}"); ?>"><?= $list->hour()->week_day; ?></a>
             </p>

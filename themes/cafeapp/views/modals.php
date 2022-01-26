@@ -338,17 +338,20 @@
         <p class="title icon-calendar-check-o">Nova Lista:</p>
         <form class="app_form" action="<?= url("/app/lista"); ?>" method="post">
             <div class="ajax_response"><?= flash(); ?></div>
-            <label>
-                <span class="field icon-thumb-tack">Data de movimentação:</span>
-                <input class="radius" id="hour" rel="<?= url('/app/get_hour')?>" type="date" name="date_moviment"
-                       required/>
-            </label>
 
-            <label>
-                <span class="field icon-briefcase">Horário Desejado:</span>
-                <select name="id_hour" id="callback">
-                </select>
-            </label>
+            <div class="label_group">
+                <label>
+                    <span class="field icon-thumb-tack">DATA DE MOVIMENTO:</span>
+                    <input class="radius" id="hour" rel="<?= url('/app/get_hour') ?>" type="date" name="date_moviment"
+                           required/>
+                </label>
+
+                <label>
+                    <span class="field icon-briefcase">DIA DA SEMANA / HORÁRIO:</span>
+                    <select name="id_hour" id="callback">
+                    </select>
+                </label>
+            </div>
 
 
             <label>
