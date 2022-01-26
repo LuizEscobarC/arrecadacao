@@ -4,7 +4,7 @@
  */
 define("CONF_DB_HOST", "arrecada.mysql.dbaas.com.br");
 define("CONF_DB_USER", "arrecada");
-define("CONF_DB_PASS", "ruab7551");
+define("CONF_DB_PASS", "Locaweb@102030");
 define("CONF_DB_NAME", "arrecada");
 
 /**

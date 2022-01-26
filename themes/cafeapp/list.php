@@ -43,14 +43,14 @@
 
             <label class="three_label">
                 <span class="field icon-leanpub">Valor de Comissão:</span>
-                <input class="radius" type="number" name="" readonly value="<?= $list->comission_value; ?>"
+                <input class="radius" type="number" name="" readonly value="<?= money_fmt_br($list->comission_value); ?>"
                        placeholder="Ex: 999"
                        required/>
             </label>
 
             <label class="three_label">
                 <span class="field icon-leanpub">Valor Líquido:</span>
-                <input class="radius" type="number" name="" readonly value="<?= $list->net_value; ?>"
+                <input class="radius" type="number" name="" readonly value="<?= money_fmt_br($list->net_value); ?>"
                        placeholder="Ex: 999"
                        required/>
             </label>
