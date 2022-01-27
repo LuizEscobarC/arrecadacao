@@ -3,6 +3,7 @@
 namespace Source\App;
 
 use Composer\Package\Loader\ValidatingArrayLoader;
+use Source\Core\Connect;
 use Source\Core\Controller;
 use Source\Models\Auth;
 use Source\Models\Center;
@@ -593,18 +594,25 @@ class App extends Controller
             false
         );
 
+
         $list = new Lists();
         $page = (!empty($data['page']) ? $data['page'] : 1);
 
         $pager = (new Pager('/arrecadacao/app/usuarios/'));
         $pager->pager($list->find()->count(), 20, $page);
 
+        $lists = Connect::getInstance()->prepare("select l.*, h.week_day , h.description, s.nome_loja from lists l 
+                                                        join hour h on h.id = l.id_hour 
+                                                        join loja s on s.id = l.id_store 
+                                                       
+                                                        order by l.date_moviment, s.nome_loja ASC 
+                                                        limit {$pager->offset()},{$pager->limit()}");
+        $lists->execute();
+        $lists = $lists->fetchAll(\PDO::FETCH_OBJ);
+
         echo $this->view->render('lists', [
             'head' => $head,
-            'lists' => $list->find()
-                ->limit($pager->limit())
-                ->offset($pager->offset())
-                ->fetch(true),
+            'lists' => $lists,
             'allMoney' => $list->find(null, null, 'sum(total_value) as value')->fetch(),
             'paginator' => $pager->render()
         ]);

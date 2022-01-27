@@ -466,6 +466,13 @@ body {
     font-size: var(--font-normal);
 }
 
+.app_widget_title p {
+    font-size: var(--font-normal);
+    margin-bottom: var(--area-small) / 5;
+    padding-bottom: var(--area-small) / 2;
+    justify-content: space-around; !important;
+}
+
 .app_widget_title .action {
     color: #ffffff;
     background: var(--color-green);

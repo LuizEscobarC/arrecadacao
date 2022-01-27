@@ -61,13 +61,13 @@
         <article class="app_launch_item">
             <p class="desc"><?= $list->id; ?></p>
             <p class="enrollment app_invoice_link transition">
-                <a title="Ver Lista" href="<?= url("/app/horario/{$list->id}"); ?>"><?= $list->hour()->week_day; ?></a>
+                <a title="Ver Lista" href="<?= url("/app/horario/{$list->id}"); ?>"><?= $list->week_day; ?></a>
             </p>
             <!--03 de 12-->
             <!--<span class="icon-exchange">Fixa</span>-->
-            <p class="desc"><?= $list->hour()->description; ?></p>
-            <p class="date"><?= date_fmt($list->date_moviment, 'd/m/Y') . ' ' . $list->day;  ?></p>
-            <p class="desc"><?= $list->store()->nome_loja; ?></p>
+            <p class="desc"><?= $list->description; ?></p>
+            <p class="date"><?= date_fmt($list->date_moviment, 'd/m/Y') . ' ' . $list->week_day;  ?></p>
+            <p class="desc"><?= $list->nome_loja; ?></p>
             <p class="enrollment"><?= money_fmt_br($list->total_value,true); ?></p>
             <p class="price"><?= money_fmt_br($list->net_value, true); ?></p>
             <p class="enrollment "><?= money_fmt_br($list->comission_value, true); ?></p>

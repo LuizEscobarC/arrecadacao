@@ -7,14 +7,17 @@
         <div class="ajax_response"><?= flash(); ?></div>
         <input class="radius" type="hidden" name="id" value="<?= $list->id; ?>" required/>
         <div class="label_group">
-            <label>
+            <label class="three_label">
                 <span class="field icon-thumb-tack">Data de movimentação:</span>
                 <input class="radius" value="<?= date_fmt($list->date_moviment, 'Y-m-d'); ?>" id="hour"
                        rel="<?= url('/app/get_hour') ?>" type="date" name="date_moviment"
                        required/>
             </label>
+            <label class="three_label">
+                <p class="app_widget_title"> <?= $list->hour()->week_day; ?></p>
+            </label>
 
-            <label>
+            <label class="three_label">
                 <span class="field icon-briefcase">Horário Desejado:</span>
                 <select name="id_hour" id="callback">
                     <option value="<?= $list->hour()->id; ?>"><?= $list->hour()->description ?></option>
@@ -43,14 +46,14 @@
 
             <label class="three_label">
                 <span class="field icon-leanpub">Valor de Comissão:</span>
-                <input class="radius" type="number" name="" readonly value="<?= money_fmt_br($list->comission_value); ?>"
+                <input class="radius" type="text" name="" readonly value="<?= money_fmt_br($list->comission_value); ?>"
                        placeholder="Ex: 999"
                        required/>
             </label>
 
             <label class="three_label">
                 <span class="field icon-leanpub">Valor Líquido:</span>
-                <input class="radius" type="number" name="" readonly value="<?= money_fmt_br($list->net_value); ?>"
+                <input class="radius" type="text" name="" readonly value="<?= money_fmt_br($list->net_value); ?>"
                        placeholder="Ex: 999"
                        required/>
             </label>
