@@ -49,7 +49,7 @@
         <p class="desc">id</p>
         <p class="desc">Nome</p>
         <p class="desc">Email</p>
-        <p class="desc_right">Editar</p>
+        <p class="wrap"></p>
     </div>
     <?php foreach ($users as $user): ?>
         <article class="app_launch_item">
@@ -58,9 +58,9 @@
                 <a title="Ver fatura" href="<?= url("/app/fatura/1"); ?>"><?= $user->first_name ?></a>
             </p>
             <p class="desc"><?= $user->email; ?></p>
-            <p class="desc_right app_invoice_link transition center-flex">
-                <a class="icon-user" style="text-decoration: none;"
-                   href="<?= url("/app/perfil/{$user->id}") ?>">Editar</a>
+
+            <p class="wrap gradient gradient-red font_80_percent gradient-hover transition radius">
+                <a class="color_white " style="text-decoration: none;"  href="<?= url("/app/perfil/{$user->id}") ?>">Editar</a>
             </p>
         </article>
     <?php endforeach; ?>

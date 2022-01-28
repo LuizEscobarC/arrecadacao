@@ -47,32 +47,41 @@
 
 <section class="app_launch_box">
     <div class="app_launch_item header">
-        <p class="desc">ID</p>
-        <p class="enrollment">dia da semana</p>
+        <p class="wrap">ID</p>
+        <p class="wrap">dia da semana</p>
         <p class="desc">Horário desejado</p>
         <p class="date">Horário de Movimentação</p>
         <p class="desc">Loja</p>
-        <p class="enrollment">Valor Bruto</p>
-        <p class="price">Valor Líquido</p>
-        <p class="enrollment">Valor de Comissão</p>
-        <p></p>
+        <p class="price">Valor Bruto</p>
+        <p class="desc_center">Valor Líquido</p>
+        <p class="desc_center">Valor de Comissão</p>
+        <p class="wrap"></p>
     </div>
     <?php foreach ($lists as $list):?>
         <article class="app_launch_item">
-            <p class="desc"><?= $list->id; ?></p>
-            <p class="enrollment app_invoice_link transition">
+            <p class="wrap"><?= $list->id; ?></p>
+            <p class="wrap app_invoice_link transition">
                 <a title="Ver Lista" href="<?= url("/app/horario/{$list->id}"); ?>"><?= $list->week_day; ?></a>
             </p>
             <!--03 de 12-->
             <!--<span class="icon-exchange">Fixa</span>-->
             <p class="desc"><?= $list->description; ?></p>
             <p class="date"><?= date_fmt($list->date_moviment, 'd/m/Y') . ' ' . $list->week_day;  ?></p>
-            <p class="desc"><?= $list->nome_loja; ?></p>
-            <p class="enrollment"><?= money_fmt_br($list->total_value,true); ?></p>
-            <p class="price"><?= money_fmt_br($list->net_value, true); ?></p>
-            <p class="enrollment "><?= money_fmt_br($list->comission_value, true); ?></p>
-            <p class=" app_invoice_link transition">
-                <a class="icon-thumb-tack" style="text-decoration: none;" href="<?= url("/app/lista/{$list->id}")?>">Editar</a>
+            <p class="category"><?= $list->nome_loja; ?></p>
+            <p class="price">
+                <span>R$</span>
+                <span><?= money_fmt_br($list->total_value); ?></span>
+            </p>
+            <p class="desc_center">
+                <span>R$</span>
+                <span><?= money_fmt_br($list->net_value); ?></span>
+            </p>
+            <p class="desc_center">
+                <span>R$</span>
+                <span><?= money_fmt_br($list->comission_value); ?></span>
+            </p>
+            <p class="wrap gradient gradient-red font_80_percent gradient-hover transition radius">
+                <a class="color_white " style="text-decoration: none;"  href="<?= url("/app/lista/{$list->id}")?>">Editar</a>
             </p>
         </article>
     <?php endforeach; ?>
@@ -80,7 +89,7 @@
         <p class="desc"></p>
         <p></p>
         <p>Valor total:</p>
-        <p class="icon-thumbs-o-up">R$ <?= $allMoney->value;?></p>
+        <p class="icon-thumbs-o-up">R$ <?= money_fmt_br($allMoney->value);?></p>
     </div>
     <?= $paginator; ?>
 </section>

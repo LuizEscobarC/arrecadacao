@@ -322,7 +322,8 @@ class App extends Controller
                 $data["valor_aluguel"],
                 $data["aluguel_dia"],
                 $data["valor_gratificacao"],
-                $data["gratificacao_dia"]
+                $data["gratificacao_dia"],
+                $data['code']
             );
 
             if (!$store->save()) {
@@ -561,11 +562,20 @@ class App extends Controller
         $getDayNumber = weekDay($data['date_moviment'], true);
         $dataDay = (new Hour())->findByNumberDay($getDayNumber);
         $i = 0;
+
         foreach ($dataDay as $item) {
             $callback[$i]['id'] = $item->id;
             $callback[$i]['description'] = $item->description;
             $i++;
         }
+        echo json_encode($callback);
+    }
+
+    public function getWeekDay(?array $data): void
+    {
+        $id = filter_var($data['id'], FILTER_VALIDATE_INT);
+        $weekDay = (new Hour())->findById($id)->week_day;
+        $callback['week_day'] = $weekDay;
         echo json_encode($callback);
     }
 
@@ -601,18 +611,15 @@ class App extends Controller
         $pager = (new Pager('/arrecadacao/app/usuarios/'));
         $pager->pager($list->find()->count(), 20, $page);
 
-        $lists = Connect::getInstance()->prepare("select l.*, h.week_day , h.description, s.nome_loja from lists l 
-                                                        join hour h on h.id = l.id_hour 
-                                                        join loja s on s.id = l.id_store 
-                                                       
-                                                        order by l.date_moviment, s.nome_loja ASC 
-                                                        limit {$pager->offset()},{$pager->limit()}");
-        $lists->execute();
-        $lists = $lists->fetchAll(\PDO::FETCH_OBJ);
-
         echo $this->view->render('lists', [
             'head' => $head,
-            'lists' => $lists,
+            'lists' => (new Lists())->find(null, null, 'lists.*, h.week_day , h.description, s.nome_loja')
+                ->join('hour h', 'lists.id_hour', 'h.id')
+                ->join('loja s', 'lists.id_store', 's.id')
+                ->order('lists.date_moviment, s.nome_loja')
+                ->offset($pager->offset())
+                ->limit($pager->limit())
+                ->fetch(true),
             'allMoney' => $list->find(null, null, 'sum(total_value) as value')->fetch(),
             'paginator' => $pager->render()
         ]);
@@ -645,9 +652,10 @@ class App extends Controller
             //atualizar
             $list = (new Lists());
 
-            if (!empty($data['id'])) {
+            if (!empty($data['id']) ) {
                 $list = $list->findById($data['id']);
             }
+
             $list->bootstrap($data['id_hour'], $data['id_store'], $data['total_value'], $data['date_moviment']);
 
             /** @var Lists $list */

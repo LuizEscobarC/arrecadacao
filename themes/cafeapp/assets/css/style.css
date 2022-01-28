@@ -773,6 +773,21 @@ body {
     flex-basis: 30%;
     text-align: right;
 }
+/* único para a listagem de centros de custo*/
+.app_launch_item p.desc_right.cost {
+    display: flex;
+    justify-content: space-around;
+    flex-basis: 10%;
+    text-align: right;
+    margin-left: 200px;
+}
+
+.app_launch_item p.wrap {
+    display: flex;
+    text-align: left;
+    flex-basis: 5%;
+    flex-wrap: wrap;
+}
 
 .app_launch_item .price {
     display: flex;

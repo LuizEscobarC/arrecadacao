@@ -49,6 +49,7 @@
         <p class="desc">descrição</p>
         <p class="emit">Emitir</p>
         <p class="price">Data de Criação</p>
+        <p class="desc_right"></p>
     </div>
     <?php foreach ($costCenters as $center):?>
         <article class="app_launch_item">
@@ -59,9 +60,8 @@
             <p class="date"><?= date_fmt_br($center->created_at) ?></p>
                 <!--03 de 12-->
                 <!--<span class="icon-exchange">Fixa</span>-->
-            </p>
-            <p class="price app_invoice_link transition">
-                <a class="icon-user" style="text-decoration: none;" href="<?= url("/app/centro-de-custo/{$center->id}")?>">Editar</a>
+            <p class="desc_right cost gradient gradient-red font_80_percent gradient-hover transition radius">
+                <a class="color_white " style="text-decoration: none;"  href="<?= url("/app/centro-de-custo/{$center->id}")?>">Editar</a>
             </p>
         </article>
     <?php endforeach; ?>

@@ -1,19 +1,19 @@
 <?php
-/**
- * DATABASE
- */
-define("CONF_DB_HOST", "arrecada.mysql.dbaas.com.br");
-define("CONF_DB_USER", "arrecada");
-define("CONF_DB_PASS", "Locaweb@102030");
-define("CONF_DB_NAME", "arrecada");
 
 /**
  * DATABASE
  */
-define("CONF_DB_HOST_LOCAL", "arrecada.mysql.dbaas.com.br");
-define("CONF_DB_USER_LOCAL", "arrecada");
-define("CONF_DB_PASS_LOCAL", "ruab7551");
-define("CONF_DB_NAME_LOCAL", "arrecada");
+if (strpos($_SERVER['HTTP_HOST'], "localhost")) {
+    define("CONF_DB_HOST", "localhost");
+    define("CONF_DB_USER", "root");
+    define("CONF_DB_PASS", "");
+    define("CONF_DB_NAME", "arrecadacao");
+} else {
+    define("CONF_DB_HOST", "arrecada.mysql.dbaas.com.br");
+    define("CONF_DB_USER", "arrecada");
+    define("CONF_DB_PASS", "Locaweb@102030");
+    define("CONF_DB_NAME", "arrecada");
+}
 
 /**
  * PROJECT URLs
@@ -30,26 +30,26 @@ define("CONF_SITE_TITLE", "Sistema");
 define("CONF_SITE_DESC",
     "O CafeControl é um gerenciador de contas simples, poderoso e gratuito. O prazer de tomar um café e ter o controle total de suas contas.");
 define("CONF_SITE_LANG", "pt_BR");
-define("CONF_SITE_DOMAIN", "upinside.com.br");
-define("CONF_SITE_ADDR_STREET", "SC 406 - Rod. Drº Antônio Luiz Moura Gonzaga");
-define("CONF_SITE_ADDR_NUMBER", "3339");
-define("CONF_SITE_ADDR_COMPLEMENT", "Bloco A, Sala 208");
-define("CONF_SITE_ADDR_CITY", "Florianópolis");
-define("CONF_SITE_ADDR_STATE", "SC");
-define("CONF_SITE_ADDR_ZIPCODE", "88048-301");
+define("CONF_SITE_DOMAIN", "ihsistemas.com");
+define("CONF_SITE_ADDR_STREET", ".");
+define("CONF_SITE_ADDR_NUMBER", ".");
+define("CONF_SITE_ADDR_COMPLEMENT", ".");
+define("CONF_SITE_ADDR_CITY", ".");
+define("CONF_SITE_ADDR_STATE", ".");
+define("CONF_SITE_ADDR_ZIPCODE", ".");
 
 /**
  * SOCIAL
  */
-define("CONF_SOCIAL_TWITTER_CREATOR", "@robsonvleite");
-define("CONF_SOCIAL_TWITTER_PUBLISHER", "@robsonvleite");
-define("CONF_SOCIAL_FACEBOOK_APP", "626590460695980");
-define("CONF_SOCIAL_FACEBOOK_PAGE", "upinside");
-define("CONF_SOCIAL_FACEBOOK_AUTHOR", "robsonvleiteoficial");
-define("CONF_SOCIAL_GOOGLE_PAGE", "107305124528362639842");
-define("CONF_SOCIAL_GOOGLE_AUTHOR", "103958419096641225872");
-define("CONF_SOCIAL_INSTAGRAM_PAGE", "robsonvleite");
-define("CONF_SOCIAL_YOUTUBE_PAGE", "upinside");
+define("CONF_SOCIAL_TWITTER_CREATOR", ".");
+define("CONF_SOCIAL_TWITTER_PUBLISHER", ".");
+define("CONF_SOCIAL_FACEBOOK_APP", ".");
+define("CONF_SOCIAL_FACEBOOK_PAGE", ".");
+define("CONF_SOCIAL_FACEBOOK_AUTHOR", ".");
+define("CONF_SOCIAL_GOOGLE_PAGE", ".");
+define("CONF_SOCIAL_GOOGLE_AUTHOR", ".");
+define("CONF_SOCIAL_INSTAGRAM_PAGE", ".");
+define("CONF_SOCIAL_YOUTUBE_PAGE", ".");
 
 /**
  * DATES
@@ -100,12 +100,12 @@ define("CONF_IMAGE_QUALITY", ["jpg" => 75, "png" => 5]);
 /**
  * MAIL
  */
-define("CONF_MAIL_HOST", "smtp.sendgrid.net");
-define("CONF_MAIL_PORT", "587");
-define("CONF_MAIL_USER", "apikey");
-define("CONF_MAIL_PASS", "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");
-define("CONF_MAIL_SENDER", ["name" => "Robson V. Leite", "address" => "cursos@upinside.com.br"]);
-define("CONF_MAIL_SUPPORT", "cursos@upinside.com.br");
+define("CONF_MAIL_HOST", "");
+define("CONF_MAIL_PORT", "");
+define("CONF_MAIL_USER", "");
+define("CONF_MAIL_PASS", "");
+define("CONF_MAIL_SENDER", ["name" => "", "address" => ""]);
+define("CONF_MAIL_SUPPORT", "");
 define("CONF_MAIL_OPTION_LANG", "br");
 define("CONF_MAIL_OPTION_HTML", true);
 define("CONF_MAIL_OPTION_AUTH", true);

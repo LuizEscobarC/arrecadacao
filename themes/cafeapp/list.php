@@ -13,14 +13,16 @@
                        rel="<?= url('/app/get_hour') ?>" type="date" name="date_moviment"
                        required/>
             </label>
+
             <label class="three_label">
-                <p class="app_widget_title"> <?= $list->hour()->week_day; ?></p>
+                <p id="label" class="app_widget_title"> <?= $list->hour()->week_day; ?></p>
             </label>
 
             <label class="three_label">
                 <span class="field icon-briefcase">Horário Desejado:</span>
-                <select name="id_hour" id="callback">
-                    <option value="<?= $list->hour()->id; ?>"><?= $list->hour()->description ?></option>
+                <select name="id_hour" id="callback" rel="<?= url("/app/get_week_day") ?>">
+                    <option value="0">Escolha</option>
+                    <option selected value="<?= $list->hour()->id; ?>"><?= $list->hour()->description ?></option>
                 </select>
             </label>
         </div>

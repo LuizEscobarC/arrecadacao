@@ -45,7 +45,7 @@
 
 <section class="app_launch_box">
     <div class="app_launch_item header">
-        <p class="desc">id</p>
+        <p class="wrap">Código</p>
         <p class="desc">Nome</p>
         <p class="price">Saldo</p>
         <p class="price">Comissão</p>
@@ -60,7 +60,7 @@
         /** @var \Source\Models\Store $store */
         ?>
         <article class="app_launch_item">
-            <p class="desc"><?= $store->id; ?></p>
+            <p class="wrap"><?= $store->code; ?></p>
             <p class="desc app_invoice_link transition">
                 <a title="Ver fatura" href="<?= url("/app/loja/{$store->id}"); ?>"><?= $store->nome_loja ?></a>
             </p>
@@ -75,9 +75,8 @@
                  03 de 12
                  <span class="icon-exchange">Fixa</span>
              </p>-->
-            <p class="price app_invoice_link transition">
-                <a class="desc app_invoice_link transition"
-                   href="<?= url("/app/loja/{$store->id}") ?>">Editar</a>
+            <p class="wrap gradient gradient-red font_80_percent gradient-hover transition radius">
+                <a class="color_white " style="text-decoration: none;"  href="<?= url("/app/loja/{$store->id}") ?>">Editar</a>
             </p>
         </article>
     <?php endforeach; ?>

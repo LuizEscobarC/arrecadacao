@@ -200,6 +200,28 @@ abstract class Model
     }
 
     /**
+     * @param $table
+     * @param string $firstOn
+     * @param string|null $lastOn
+     * @param string $type
+     * @param string|null $operator
+     * @param string|null $where
+     * @return $this
+     */
+    public function join(
+        $table,
+        string $firstOn,
+        ?string $lastOn = null,
+        string $type = 'inner',
+        string $operator = ' = ',
+        ?string $where = null
+    ): Model {
+        $type = mb_convert_case($type, MB_CASE_UPPER);
+        $this->query .= " {$type} JOIN {$table} ON {$firstOn} {$operator} {$lastOn} {$where}";
+        return $this;
+    }
+
+    /**
      * @param string $key
      * @return int
      */

@@ -196,11 +196,11 @@ $(function () {
     /*
      *  APP HOUR REMOVE
      */
-    $("[data-hourremove]").click(function(e) {
+    $("[data-hourremove]").click(function (e) {
         var remove = confirm("ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir esse horário?");
 
         if (remove === true) {
-            $.post($(this).data("hourremove"), function (response){
+            $.post($(this).data("hourremove"), function (response) {
                 //redirect
                 if (response.redirect) {
                     window.location.href = response.redirect;
@@ -212,11 +212,11 @@ $(function () {
     /*
      *  APP USER REMOVE
      */
-    $("[data-userremove]").click(function(e) {
+    $("[data-userremove]").click(function (e) {
         var remove = confirm("ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir esse usuário?");
 
         if (remove === true) {
-            $.post($(this).data("userremove"), function (response){
+            $.post($(this).data("userremove"), function (response) {
                 //redirect
                 if (response.redirect) {
                     window.location.href = response.redirect;
@@ -228,11 +228,11 @@ $(function () {
     /*
      *  APP USER REMOVE
      */
-    $("[data-centerremove]").click(function(e) {
+    $("[data-centerremove]").click(function (e) {
         var remove = confirm("ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir esse centro de custo?");
 
         if (remove === true) {
-            $.post($(this).data("centerremove"), function (response){
+            $.post($(this).data("centerremove"), function (response) {
                 //redirect
                 if (response.redirect) {
                     window.location.href = response.redirect;
@@ -244,11 +244,11 @@ $(function () {
     /*
      *  APP STORE REMOVE
      */
-    $("[data-storeremove]").click(function(e) {
+    $("[data-storeremove]").click(function (e) {
         var remove = confirm("ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir essa loja?");
 
         if (remove === true) {
-            $.post($(this).data("storeremove"), function (response){
+            $.post($(this).data("storeremove"), function (response) {
                 //redirect
                 if (response.redirect) {
                     window.location.href = response.redirect;
@@ -260,11 +260,11 @@ $(function () {
     /*
      *  APP STORE REMOVE
      */
-    $("[data-listremove]").click(function(e) {
+    $("[data-listremove]").click(function (e) {
         var remove = confirm("ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir essa lista?");
 
         if (remove === true) {
-            $.post($(this).data("listremove"), function (response){
+            $.post($(this).data("listremove"), function (response) {
                 //redirect
                 if (response.redirect) {
                     window.location.href = response.redirect;
@@ -277,20 +277,32 @@ $(function () {
     * AJAX GET HOUR
     */
 
-    $('input#hour').on("focusout", function(){
+    $('input#hour').change(function () {
         if ($('#callback')) {
             $('#callback').html('');
         }
         $.ajax({
             url: $('input#hour').attr('rel'),
             type: 'POST',
-            data:  $(this).serialize(),
+            data: $(this).serialize(),
             dataType: 'JSON',
             success: function (callback) {
+                        $('#callback').append('<option value="0">Escolha</option>');
                 for (let i = 0, len = callback.length; i < len; ++i) {
-                    $('#callback').prepend('<option value="' + callback[i].id + '">' + callback[i].description + '</option>');
+                        $('#callback').append('<option value="' + callback[i].id + '">' + callback[i].description + '</option>');
                 }
             }
+        });
+    });
+
+    $('select#callback').change(function () {
+        let url = $(this).attr('rel') + '/' + $(this).find(':selected').attr('value');
+
+        if ($('#label')) {
+            $('#label').html('');
+        }
+        $.getJSON(url, function (callback) {
+            $('p#label').html(callback.week_day);
         });
     });
 

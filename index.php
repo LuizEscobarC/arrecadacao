@@ -73,6 +73,7 @@ $route->post('/remove-hour/{id}', 'App:removeHour');
 
 /** LISTS */
 $route->post('/get_hour', 'App:getHour');
+$route->get('/get_week_day/{id}', 'App:getWeekDay');
 $route->get('/listas', 'App:lists');
 $route->get('/listas/{page}', 'App:lists');
 $route->get('/lista/{id}', 'App:list');

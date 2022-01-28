@@ -49,7 +49,7 @@
         <p class="desc">id</p>
         <p class="desc">dia da semana</p>
         <p class="desc">Nome do horário</p>
-        <p></p>
+        <p class="wrap"></p>
     </div>
     <?php foreach ($hours as $hour):?>
         <article class="app_launch_item">
@@ -60,8 +60,8 @@
             <p class="desc"><?= $hour->description; ?></p>
             <!--03 de 12-->
             <!--<span class="icon-exchange">Fixa</span>-->
-            <p class=" app_invoice_link transition">
-                <a class="icon-thumb-tack" style="text-decoration: none;" href="<?= url("/app/horario/{$hour->id}")?>">Editar</a>
+            <p class="wrap gradient gradient-red font_80_percent gradient-hover transition radius">
+                <a class="color_white " style="text-decoration: none;"  href="<?= url("/app/horario/{$hour->id}")?>">Editar</a>
             </p>
         </article>
     <?php endforeach; ?>

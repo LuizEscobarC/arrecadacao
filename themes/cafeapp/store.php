@@ -6,12 +6,18 @@
     <form class="app_form" action="<?= url("/app/loja-salvar"); ?>" method="post">
         <div class="ajax_response"><?= flash(); ?></div>
         <input class="radius" type="hidden" name="id" value="<?= $store->id; ?>" required/>
+
+        <label>
+            <span class="field icon-leanpub">Código da loja:</span>
+            <input class="radius" type="text" name="code" value="<?= $store->code; ?>"
+                   placeholder="Ex: 1234 ou N123" required/>
+        </label>
+
         <label>
             <span class="field icon-leanpub">Nome:</span>
             <input class="radius" type="text" name="nome_loja" value="<?= $store->nome_loja; ?>"
                    placeholder="Ex: Bentão" required/>
         </label>
-
 
         <label>
             <span class="field icon-leanpub">Valor:</span>

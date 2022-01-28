@@ -223,6 +223,12 @@
             <div class="ajax_response"><?= flash(); ?></div>
 
             <label>
+                <span class="field icon-leanpub">Código da loja:</span>
+                <input class="radius" type="text" name="code"
+                       placeholder="Ex: 1234 ou N123" required/>
+            </label>
+
+            <label>
                 <span class="field icon-leanpub">Nome:</span>
                 <input class="radius" type="text" name="nome_loja" placeholder="Ex: Bentão" required/>
             </label>
@@ -340,15 +346,19 @@
             <div class="ajax_response"><?= flash(); ?></div>
 
             <div class="label_group">
-                <label>
+                <label class="three_label">
                     <span class="field icon-thumb-tack">DATA DE MOVIMENTO:</span>
                     <input class="radius" id="hour" rel="<?= url('/app/get_hour') ?>" type="date" name="date_moviment"
                            required/>
                 </label>
 
-                <label>
-                    <span class="field icon-briefcase">DIA DA SEMANA / HORÁRIO:</span>
-                    <select name="id_hour" id="callback">
+                <label class="three_label">
+                    <p id="label" class="app_widget_title"></p>
+                </label>
+
+                <label class="three_label">
+                    <span class="field icon-briefcase"> HORÁRIO:</span>
+                    <select name="id_hour" id="callback" rel="<?= url("/app/get_week_day") ?>">
                     </select>
                 </label>
             </div>
