@@ -8,6 +8,7 @@
 
     <link rel="stylesheet" href="<?= theme("/assets/style.css", CONF_VIEW_APP); ?>"/>
     <link rel="icon" type="image/png" href="<?= theme("/assets/images/favicon.png", CONF_VIEW_APP); ?>"/>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 <body>
 
@@ -50,7 +51,7 @@
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-53658515-18"></script>
 <script src="<?= theme("/assets/scripts.js", CONF_VIEW_APP); ?>"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <?= $v->section("scripts"); ?>
-
 </body>
 </html>

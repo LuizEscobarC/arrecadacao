@@ -364,9 +364,9 @@
             </div>
 
 
-            <label>
+            <label class="">
                 <span class="field icon-briefcase">Loja:</span>
-                <select name="id_store">
+                <select name="id_store" id="select_page2">
                     <?php foreach ((new \Source\Models\Store())->find()->fetch(true) as $store): ?>
                         <option value="<?= $store->id; ?>">&ofcir; <?= $store->nome_loja; ?></option>
                     <?php endforeach; ?>

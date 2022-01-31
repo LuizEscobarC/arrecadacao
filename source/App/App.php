@@ -232,7 +232,7 @@ class App extends Controller
     }
 
     /**
-     *
+     * LISTAGEM DE LOJAS
      */
     public function stores(?array $data): void
     {
@@ -244,21 +244,27 @@ class App extends Controller
             false
         );
 
-        $store = new Store();
+        $search = filter_var((!empty($data['search']) ? $data['search'] : null), FILTER_SANITIZE_STRIPPED);
+
+
+        if ($search) {
+            $stores = (new Store())->find("MATCH(nome_loja, code) AGAINST(:s)", "s={$search}");
+        } else {
+            $stores = (new Store())->find()->order('id');
+            $search = null;
+        }
         $page = (!empty($data['page']) ? $data['page'] : 1);
 
         $pager = (new Pager('/arrecadacao/app/lojas/'));
-        $pager->pager($store->find()->count(), 20, $page);
-
+        $pager->pager($stores->count(), 5, $page);
         echo $this->view->render("stores", [
             "head" => $head,
-            'stores' => $store
-                ->find()
-                ->order('id')
+            'stores' => $stores
                 ->limit($pager->limit())
                 ->offset($pager->offset())
                 ->fetch(true),
-            'paginator' => $pager->render()
+            'paginator' => $pager->render(),
+            'search' => ($search ?? null)
         ]);
     }
 
@@ -355,7 +361,7 @@ class App extends Controller
     /**
      * @return void
      */
-    public function costCenters(): void
+    public function costCenters(?array $data): void
     {
         $head = $this->seo->render(
             "Centro de Custos - " . CONF_SITE_NAME,
@@ -365,20 +371,28 @@ class App extends Controller
             false
         );
 
-        $center = new Center();
+        $searchDay = filter_var((!empty($data['day']) ? $data['day'] : null), FILTER_VALIDATE_INT);
+
+        if ($searchDay) {
+            $center = (new Center())->find("DAY(created_at) = :s", "s={$searchDay}");
+        } else {
+            $center = (new Center())->find();
+            $searchDay = null;
+        }
 
         $page = (!empty($data['page']) ? $data['page'] : 1);
 
-        $pager = (new Pager('/arrecadacao/app/usuarios/'));
-        $pager->pager($center->find()->count(), 20, $page);
+        $pager = (new Pager('/arrecadacao/app/centro-de-custos/'));
+        $pager->pager($center->count(), 20, $page);
 
         echo $this->view->render('cost-centers', [
             'head' => $head,
-            'costCenters' => $center->find()
+            'costCenters' => $center
                 ->limit($pager->limit())
                 ->offset($pager->offset())
                 ->fetch(true),
-            'paginator' => $pager->render()
+            'paginator' => $pager->render(),
+            'search' => ($searchDay ?? null)
         ]);
     }
 
@@ -594,7 +608,7 @@ class App extends Controller
         echo json_encode($json);
     }
 
-    public function lists(): void
+    public function lists(?array $data): void
     {
         $head = $this->seo->render(
             "Listas - " . CONF_SITE_NAME,
@@ -604,24 +618,23 @@ class App extends Controller
             false
         );
 
+        list($list, $search) = (new Lists())->listFilters($data);
 
-        $list = new Lists();
         $page = (!empty($data['page']) ? $data['page'] : 1);
 
-        $pager = (new Pager('/arrecadacao/app/usuarios/'));
-        $pager->pager($list->find()->count(), 20, $page);
+        $pager = (new Pager('/arrecadacao/app/listas/'));
+        $pager->pager($list->count(), 20, $page);
+
 
         echo $this->view->render('lists', [
             'head' => $head,
-            'lists' => (new Lists())->find(null, null, 'lists.*, h.week_day , h.description, s.nome_loja')
-                ->join('hour h', 'lists.id_hour', 'h.id')
-                ->join('loja s', 'lists.id_store', 's.id')
-                ->order('lists.date_moviment, s.nome_loja')
-                ->offset($pager->offset())
-                ->limit($pager->limit())
-                ->fetch(true),
-            'allMoney' => $list->find(null, null, 'sum(total_value) as value')->fetch(),
-            'paginator' => $pager->render()
+            'lists' => $list->order('lists.date_moviment, s.nome_loja')
+                    ->offset($pager->offset())
+                    ->limit($pager->limit())
+                    ->fetch(true),
+            'allMoney' => (new Lists())->find(null, null, 'sum(total_value) as value')->fetch(),
+            'paginator' => $pager->render(),
+            'search' => ((object)$search ?? null)
         ]);
     }
 
@@ -652,7 +665,7 @@ class App extends Controller
             //atualizar
             $list = (new Lists());
 
-            if (!empty($data['id']) ) {
+            if (!empty($data['id'])) {
                 $list = $list->findById($data['id']);
             }
 

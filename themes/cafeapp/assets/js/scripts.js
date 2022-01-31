@@ -192,6 +192,7 @@ $(function () {
     $(".mask-date").mask('00/00/0000', {reverse: true});
     $(".mask-month").mask('00/0000', {reverse: true});
     $(".mask-doc").mask('000.000.000-00', {reverse: true});
+    $(".mask-day").mask('00', {reverse: true});
 
     /*
      *  APP HOUR REMOVE
@@ -287,9 +288,9 @@ $(function () {
             data: $(this).serialize(),
             dataType: 'JSON',
             success: function (callback) {
-                        $('#callback').append('<option value="0">Escolha</option>');
+                $('#callback').append('<option value="0">Escolha</option>');
                 for (let i = 0, len = callback.length; i < len; ++i) {
-                        $('#callback').append('<option value="' + callback[i].id + '">' + callback[i].description + '</option>');
+                    $('#callback').append('<option value="' + callback[i].id + '">' + callback[i].description + '</option>');
                 }
             }
         });
@@ -301,9 +302,33 @@ $(function () {
         if ($('#label')) {
             $('#label').html('');
         }
+
         $.getJSON(url, function (callback) {
             $('p#label').html(callback.week_day);
         });
     });
+
+
+    /* Select with search*/
+    $("select#select_page").select2({
+        width: '100%',
+        placeholder: 'Escolha uma loja',
+
+    });
+
+    $("select#select_page2").select2({
+        width: '100%',
+        placeholder: 'Escolha uma loja',
+    });
+
+    $("select#select_page_hour").select2({
+        width: '150',
+        placeholder: 'Escolha um horário',
+    });
+    $("select#select_page_store").select2({
+        width: '150',
+        placeholder: 'Escolha uma loja',
+    });
+
 
 });

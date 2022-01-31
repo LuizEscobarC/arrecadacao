@@ -49,6 +49,7 @@ $route->get("/sair", "App:logout");
 /** STORES */
 $route->get('/lojas', 'App:stores');
 $route->get('/lojas/{page}', 'App:stores');
+$route->post('/lojas', 'App:stores');
 $route->get('/loja/{id}', 'App:store');
 $route->post('/loja-salvar', 'App:storeSave');
 $route->post('/remove-store/{id}', 'App:removeStore');
@@ -57,6 +58,7 @@ $route->post('/remove-store/{id}', 'App:removeStore');
 /** COST CENTER */
 $route->get('/centros-de-custo', 'App:costCenters');
 $route->get('/centros-de-custo/{page}', 'App:costCenters');
+$route->post('/centros-de-custo', 'App:costCenters');
 $route->get('/centro-de-custo/{id}', 'App:costCenter');
 $route->post('/centro-salvar', 'App:saveCenter');
 $route->post('/remove-center/{id}', 'App:removeCenter');
@@ -76,6 +78,7 @@ $route->post('/get_hour', 'App:getHour');
 $route->get('/get_week_day/{id}', 'App:getWeekDay');
 $route->get('/listas', 'App:lists');
 $route->get('/listas/{page}', 'App:lists');
+$route->post('/listas', 'App:lists');
 $route->get('/lista/{id}', 'App:list');
 $route->post('/lista', 'App:saveList');
 $route->post('/remove-list/{id}', 'App:removeList');

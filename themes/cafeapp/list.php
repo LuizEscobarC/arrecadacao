@@ -29,7 +29,7 @@
 
         <label>
             <span class="field icon-briefcase">Loja:</span>
-            <select name="id_store">
+            <select name="id_store"  id="select_page" class="operator">
                 <?php foreach ((new \Source\Models\Store())->find()->fetch(true) as $store): ?>
                     <option <?= ($list->id_store == $store->id ? 'selected' : ""); ?> value="<?= $store->id; ?>">
                         &ofcir; <?= $store->nome_loja; ?></option>
@@ -72,3 +72,7 @@
         </div>
     </form>
 </div>
+
+<?= $v->start('scripts'); ?>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<?= $v->end(); ?>
