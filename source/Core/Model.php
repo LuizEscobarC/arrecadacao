@@ -83,6 +83,14 @@ abstract class Model
     }
 
     /**
+     * @param string $query
+     */
+    public function putQuery(string $query, string $operator = ' AND '): void
+    {
+        $this->query .= $operator . $query;
+    }
+
+    /**
      * @param $name
      * @return null
      */
