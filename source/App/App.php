@@ -59,7 +59,9 @@ class App extends Controller
     }
 
     /**
-     * APP LIST USERS
+     * IT PRESENTES THE REGISTERS OF USERS TABLE
+     * @param array $data
+     * @return void
      */
     public function users(array $data): void
     {
@@ -89,7 +91,7 @@ class App extends Controller
     }
 
     /**
-     * APP PROFILE (Perfil)
+     * APP PROFILE (Perfil) IT PRESENTS THE CURRENT USER EDIT SCREEN
      * @param array $data
      */
     public function profile(array $data): void
@@ -118,7 +120,7 @@ class App extends Controller
 
 
     /**
-     * APP REGISTER USER
+     * APP REGISTER USER |  IT UPDATES OR CREATES CURRENT USER OF THE TABLE DEPENDING ON IF HAVE ID OR NOT
      * @param array|null $data
      */
     public function register(?array $data): void
@@ -174,6 +176,7 @@ class App extends Controller
     }
 
     /**
+     * IT REMOVES CURRENT USER OF TABLE WITH ONE CLICK
      * @param array $data
      * @return void
      */
@@ -232,8 +235,11 @@ class App extends Controller
         redirect("/entrar");
     }
 
+
     /**
-     * LISTAGEM DE LOJAS
+     * IT PRESENTES THE REGISTERS OF STORE TABLE
+     * @param array|null $data
+     * @return void
      */
     public function stores(?array $data): void
     {
@@ -270,7 +276,7 @@ class App extends Controller
     }
 
     /**
-     * APP STORE EDIT VIEW
+     * APP STORE EDIT VIEW | IT PRESENTS THE CURRENT STORE EDIT SCREEN
      * @param array $data
      */
     public function store(array $data): void
@@ -303,7 +309,7 @@ class App extends Controller
     }
 
     /**
-     * STORE POST SAVE AND EDIT DATA
+     *  IT UPDATES OR CREATES CURRENT STORE OF THE TABLE DEPENDING ON IF HAVE ID OR NOT
      * @param array|null $data
      */
     public function storeSave(?array $data)
@@ -345,6 +351,7 @@ class App extends Controller
     }
 
     /**
+     * IT REMOVES CURRENT STORE WITH ONE CLICK
      * @param array $data
      * @return void
      */
@@ -359,7 +366,10 @@ class App extends Controller
         echo json_encode($json);
     }
 
+
     /**
+     * IT PRESENTES THE REGISTERS OF COST CENTER TABLE
+     * @param array|null $data
      * @return void
      */
     public function costCenters(?array $data): void
@@ -398,6 +408,7 @@ class App extends Controller
     }
 
     /**
+     * APP COST CENTER EDIT VIEW | IT PRESENTS THE CURRENT COST CENTER EDIT SCREEN
      * @param array $data
      * @return void
      */
@@ -420,6 +431,7 @@ class App extends Controller
     }
 
     /**
+     *  IT UPDATES OR CREATES CURRENT COST CENTER OF THE TABLE DEPENDING ON IF HAVE ID OR NOT
      * @param array $data
      * @return void
      */
@@ -449,6 +461,7 @@ class App extends Controller
     }
 
     /**
+     * IT REMOVES CURRENT COST CENTER OF TABLE WITH ONE CLICK
      * @param array $data
      * @return void
      */
@@ -463,7 +476,9 @@ class App extends Controller
         echo json_encode($json);
     }
 
+
     /**
+     * IT PRESENTES THE REGISTERS OF HOUR TABLE
      * @return void
      */
     public function hours(): void
@@ -494,6 +509,7 @@ class App extends Controller
     }
 
     /**
+     * APP HOUR EDIT VIEW | IT PRESENTS THE CURRENT HOUR EDIT SCREEN
      * @param array|null $data
      * @return void
      */
@@ -516,6 +532,7 @@ class App extends Controller
     }
 
     /**
+     *  IT UPDATES OR CREATES CURRENT HOUR OF THE TABLE DEPENDING ON IF HAVE ID OR NOT
      * @param array|null $data
      * @return void
      */
@@ -572,6 +589,11 @@ class App extends Controller
         echo json_encode($json);
     }
 
+    /**
+     * IT LOAD HOUR DINAMIC COLUMNS WITH AJAX TO THE FORM INPUT BASED AT DATE INPUT
+     * @param array $data
+     * @return void
+     */
     public function getHour(array $data): void
     {
         $getDayNumber = weekDay($data['date_moviment'], true);
@@ -586,6 +608,11 @@ class App extends Controller
         echo json_encode($callback);
     }
 
+    /**
+     * IT LOAD WEEK DAY WITH AJAX TO FORM
+     * @param array|null $data
+     * @return void
+     */
     public function getWeekDay(?array $data): void
     {
         $id = filter_var($data['id'], FILTER_VALIDATE_INT);
@@ -595,6 +622,7 @@ class App extends Controller
     }
 
     /**
+     * IT REMOVES CURRENT HOUR OF TABLE WITH ONE CLICK
      * @param array $data
      * @return void
      */
@@ -609,6 +637,12 @@ class App extends Controller
         echo json_encode($json);
     }
 
+
+    /**
+     * IT PRESENTES THE REGISTERS OF LISTS TABLE
+     * @param array|null $data
+     * @return void
+     */
     public function lists(?array $data): void
     {
         $head = $this->seo->render(
@@ -639,6 +673,11 @@ class App extends Controller
         ]);
     }
 
+    /**
+     * APP LIST EDIT VIEW | IT PRESENTS THE CURRENT LIST EDIT SCREEN
+     * @param array|null $data
+     * @return void
+     */
     public function list(?array $data): void
     {
         $id = filter_var($data['id'], FILTER_VALIDATE_INT);
@@ -657,6 +696,11 @@ class App extends Controller
         ]);
     }
 
+    /**
+     *  IT UPDATES OR CREATES CURRENT LISTS OF THE TABLE DEPENDING ON IF HAVE ID OR NOT
+     * @param array $data
+     * @return void
+     */
     public function saveList(array $data): void
     {
 
@@ -684,6 +728,11 @@ class App extends Controller
         echo json_encode($json);
     }
 
+    /**
+     * IT REMOVES CURRENT LIST OF TABLE WITH ONE CLICK
+     * @param array $data
+     * @return void
+     */
     public function removeList(array $data): void
     {
         $list = (new Lists())->findById($data['id']);
@@ -695,6 +744,11 @@ class App extends Controller
         echo json_encode($json);
     }
 
+    /**
+     * IT PRESENTES THE REGISTERS OF CASH FLOW TABLE
+     * @param array|null $data
+     * @return void
+     */
     public function cashFlows(?array $data): void
     {
         $head = $this->seo->render(
@@ -730,6 +784,11 @@ class App extends Controller
         ]);
     }
 
+    /**
+     * APP CASH FLOW EDIT VIEW | IT PRESENTS THE CURRENT CASH FLOW EDIT SCREEN
+     * @param array $data
+     * @return void
+     */
     public function cashFlow(array $data): void
     {
         $head = $this->seo->render(
@@ -747,6 +806,11 @@ class App extends Controller
         ]);
     }
 
+    /**
+     *  IT UPDATES OR CREATES CURRENT CASH FLOW OF THE TABLE DEPENDING ON IF HAVE ID OR NOT
+     * @param array|null $data
+     * @return void
+     */
     public function saveCashFlow(?array $data): void
     {
         if (!empty($data)) {
@@ -777,6 +841,11 @@ class App extends Controller
         echo json_encode($json);
     }
 
+    /**
+     * IT REMOVES CURRENT CASH FLOW OF TABLE WITH ONE CLICK
+     * @param array $data
+     * @return void
+     */
     public function removeCashFlow(array $data): void
     {
         $cashFlow = (new CashFlow())->findById($data['id']);
