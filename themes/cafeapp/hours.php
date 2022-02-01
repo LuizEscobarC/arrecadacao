@@ -2,7 +2,8 @@
 
 <div class="app_launch_header">
     <div class="app_flex_title">
-        <h2><a class="color_white font_80_percent icon-user padding_btn transition gradient gradient-green gradient-hover radius box-shadow"
+        <h2>
+            <a class="color_white font_80_percent icon-user padding_btn transition gradient gradient-green gradient-hover radius box-shadow"
                title="usuários">Registros de Horários</a></h2>
     </div>
     <!-- FILTROS <form class="app_launch_form_filter app_form" action="" method="post">
@@ -51,20 +52,23 @@
         <p class="desc">Nome do horário</p>
         <p class="wrap"></p>
     </div>
-    <?php foreach ($hours as $hour):?>
-        <article class="app_launch_item">
-            <p class="desc"><?= $hour->id; ?></p>
-            <p class="desc app_invoice_link transition">
-                <a title="Ver fatura" href="<?= url(); ?>"><?= $hour->week_day; ?></a>
-            </p>
-            <p class="desc"><?= $hour->description; ?></p>
-            <!--03 de 12-->
-            <!--<span class="icon-exchange">Fixa</span>-->
-            <p class="wrap gradient gradient-red font_80_percent gradient-hover transition radius">
-                <a class="color_white " style="text-decoration: none;"  href="<?= url("/app/horario/{$hour->id}")?>">Editar</a>
-            </p>
-        </article>
-    <?php endforeach; ?>
+    <?php if (isnt_empty($hours)): ?>
+        <?php foreach ($hours as $hour): ?>
+            <article class="app_launch_item">
+                <p class="desc"><?= $hour->id; ?></p>
+                <p class="desc app_invoice_link transition">
+                    <a title="Ver fatura" href="<?= url(); ?>"><?= $hour->week_day; ?></a>
+                </p>
+                <p class="desc"><?= $hour->description; ?></p>
+                <!--03 de 12-->
+                <!--<span class="icon-exchange">Fixa</span>-->
+                <p class="wrap gradient gradient-red font_80_percent gradient-hover transition radius">
+                    <a class="color_white " style="text-decoration: none;"
+                       href="<?= url("/app/horario/{$hour->id}") ?>">Editar</a>
+                </p>
+            </article>
+        <?php endforeach; ?>
+    <?php endif; ?>
     <div class="app_launch_item footer">
         <p class="desc"></p>
         <p></p>

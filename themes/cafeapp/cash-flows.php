@@ -32,29 +32,34 @@
         <p class="desc">Tipo de movimento</p>
         <p class="wrap"></p>
     </div>
-    <?php foreach ($cashFlows as $cash): ?>
-        <article class="app_launch_item">
-            <p class="wrap"><?= $cash->id; ?></p>
-            <p class="wrap app_invoice_link transition">
-                <a title="Ver Lista" href="<?= url("/app/horario/{$cash->id}"); ?>"><?= $cash->week_day; ?></a>
-            </p>
-            <p class="desc font_80_percent"><?= str_limit_words($cash->description, 4); ?></p>
-            <p class="desc"><?= $cash->hour; ?></p>
-            <p class="desc"><?= $cash->cost; ?></p>
-            <p class="date"><?= date_fmt($cash->date_moviment, 'd/m/Y') . ' ' . $cash->week_day; ?></p>
-            <p class="desc"><?= $cash->nome_loja; ?></p>
-            <p class="price">
-                <span>R$</span>
-                <span><?= money_fmt_br($cash->value); ?></span>
-            </p>
-            <p class="desc">
-                <span><?= ($cash->type == 1 ? 'Entrada' :  'Saída' );?></span>
-            </p>
-            <p class="wrap gradient gradient-red font_80_percent gradient-hover transition radius">
-                <a class="color_white " style="text-decoration: none;" href="<?= url("/app/fluxo-de-caixa/{$cash->id}") ?>">Editar</a>
-            </p>
-        </article>
-    <?php endforeach; ?>
+    <?php if (isnt_empty($cashFlows)): ?>
+        <?php foreach ($cashFlows as $cash): ?>
+            <article class="app_launch_item">
+                <p class="wrap"><?= $cash->id; ?></p>
+                <p class="wrap app_invoice_link transition">
+                    <a title="Ver Lista" href="<?= url("/app/horario/{$cash->id}"); ?>"><?= $cash->week_day; ?></a>
+                </p>
+                <p class="desc font_80_percent"><?= str_limit_words($cash->description, 4); ?></p>
+                <p class="desc"><?= $cash->hour; ?></p>
+                <p class="desc"><?= $cash->cost; ?></p>
+                <p class="date"><?= date_fmt($cash->date_moviment, 'd/m/Y') . ' ' . $cash->week_day; ?></p>
+                <p class="desc"><?= $cash->nome_loja; ?></p>
+                <p class="price">
+                    <span>R$</span>
+                    <span><?= money_fmt_br($cash->value); ?></span>
+                </p>
+                <p class="desc">
+                <span <?= ($cash->type == 1 ? ' title="Receber" class="check income color_green icon-thumbs-o-up transition"' :
+                    ' title="Receber" class="check income icon-thumbs-o-down color_red transition"'); ?>><?= ($cash->type == 1 ?
+                        'Entrada' : 'Saída'); ?></span>
+                </p>
+                <p class="wrap gradient gradient-red font_80_percent gradient-hover transition radius">
+                    <a class="color_white " style="text-decoration: none;"
+                       href="<?= url("/app/fluxo-de-caixa/{$cash->id}") ?>">Editar</a>
+                </p>
+            </article>
+        <?php endforeach; ?>
+    <?php endif; ?>
     <div class="app_launch_item footer">
         <p class="desc"></p>
         <p></p>

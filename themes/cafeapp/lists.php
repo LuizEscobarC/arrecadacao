@@ -10,25 +10,30 @@
     </div>
     <form class="ajax_off app_launch_form_filter app_form" action="<?= url('/app/listas'); ?>" method="post">
 
-        <select name="search_store"  id="select_page_store" class="operator">
-            <option  value="">
-                &ofcir; Selecione uma loja</option>
+        <select name="search_store" id="select_page_store" class="operator">
+            <option value="">
+                &ofcir; Selecione uma loja
+            </option>
             <?php foreach ((new \Source\Models\Store())->find()->fetch(true) as $store): ?>
-                <option <?= ($search->search_store == $store->nome_loja ? 'selected' : ""); ?> value="<?= $store->nome_loja; ?>">
+                <option <?= ($search->search_store == $store->nome_loja ? 'selected' : ""); ?>
+                        value="<?= $store->nome_loja; ?>">
                     &ofcir; <?= $store->nome_loja; ?></option>
             <?php endforeach; ?>
         </select>
 
-        <select name="search_hour"  id="select_page_hour" class="operator">
-            <option  value="">
-                &ofcir; Selecione um horário</option>
+        <select name="search_hour" id="select_page_hour" class="operator">
+            <option value="">
+                &ofcir; Selecione um horário
+            </option>
             <?php foreach ((new \Source\Models\Hour())->find()->fetch(true) as $hour): ?>
-                <option <?= ($search->search_hour == $hour->description ? 'selected' : ""); ?> value="<?= $hour->description; ?>">
+                <option <?= ($search->search_hour == $hour->description ? 'selected' : ""); ?>
+                        value="<?= $hour->description; ?>">
                     &ofcir; <?= $hour->description; ?></option>
             <?php endforeach; ?>
         </select>
 
-        <input list="datelist" type="text" value="<?= $search->search_date; ?>" class="radius mask-date" name="search_date" placeholder="Dia da criação">
+        <input list="datelist" type="text" value="<?= $search->search_date; ?>" class="radius mask-date"
+               name="search_date" placeholder="Dia da criação">
         <datalist id="datelist">
             <?php for ($range = 1; $range <= 30; $range++):
                 $date = date("d/m/Y", strtotime("+{$range} month")); ?>
@@ -58,34 +63,36 @@
         <p class="desc_center">Valor de Comissão</p>
         <p class="wrap"></p>
     </div>
-    <?php foreach ($lists as $list): ?>
-        <article class="app_launch_item">
-            <p class="wrap"><?= $list->id; ?></p>
-            <p class="wrap app_invoice_link transition">
-                <a title="Ver Lista" href="<?= url("/app/horario/{$list->id}"); ?>"><?= $list->week_day; ?></a>
-            </p>
-            <!--03 de 12-->
-            <!--<span class="icon-exchange">Fixa</span>-->
-            <p class="desc"><?= $list->description; ?></p>
-            <p class="date"><?= date_fmt($list->date_moviment, 'd/m/Y') . ' ' . $list->week_day; ?></p>
-            <p class="category"><?= $list->nome_loja; ?></p>
-            <p class="price">
-                <span>R$</span>
-                <span><?= money_fmt_br($list->total_value); ?></span>
-            </p>
-            <p class="desc_center">
-                <span>R$</span>
-                <span><?= money_fmt_br($list->net_value); ?></span>
-            </p>
-            <p class="desc_center">
-                <span>R$</span>
-                <span><?= money_fmt_br($list->comission_value); ?></span>
-            </p>
-            <p class="wrap gradient gradient-red font_80_percent gradient-hover transition radius">
-                <a class="color_white " style="text-decoration: none;" href="<?= url("/app/lista/{$list->id}") ?>">Editar</a>
-            </p>
-        </article>
-    <?php endforeach; ?>
+    <?php if (isnt_empty($lists)): ?>
+        <?php foreach ($lists as $list): ?>
+            <article class="app_launch_item">
+                <p class="wrap"><?= $list->id; ?></p>
+                <p class="wrap app_invoice_link transition">
+                    <a title="Ver Lista" href="<?= url("/app/horario/{$list->id}"); ?>"><?= $list->week_day; ?></a>
+                </p>
+                <!--03 de 12-->
+                <!--<span class="icon-exchange">Fixa</span>-->
+                <p class="desc"><?= $list->description; ?></p>
+                <p class="date"><?= date_fmt($list->date_moviment, 'd/m/Y') . ' ' . $list->week_day; ?></p>
+                <p class="category"><?= $list->nome_loja; ?></p>
+                <p class="price">
+                    <span>R$</span>
+                    <span><?= money_fmt_br($list->total_value); ?></span>
+                </p>
+                <p class="desc_center">
+                    <span>R$</span>
+                    <span><?= money_fmt_br($list->net_value); ?></span>
+                </p>
+                <p class="desc_center">
+                    <span>R$</span>
+                    <span><?= money_fmt_br($list->comission_value); ?></span>
+                </p>
+                <p class="wrap gradient gradient-red font_80_percent gradient-hover transition radius">
+                    <a class="color_white " style="text-decoration: none;" href="<?= url("/app/lista/{$list->id}") ?>">Editar</a>
+                </p>
+            </article>
+        <?php endforeach; ?>
+    <?php endif; ?>
     <div class="app_launch_item footer">
         <p class="desc"></p>
         <p></p>

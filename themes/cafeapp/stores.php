@@ -10,7 +10,8 @@
         <input type="text" name="search" alt="pesquise por nome ou código" value="<?= $search; ?>"
                placeholder="Nome da loja/código">
 
-        <input list="datelist" type="text" value="<?= $search; ?>" class="radius " name="day" placeholder="Dia da criação">
+        <input list="datelist" type="text" value="<?= $search; ?>" class="radius " name="day"
+               placeholder="Dia da criação">
         <datalist id="datelist">
             <?php for ($range = 1; $range <= date('d'); $range++):
                 $date = date("d", strtotime("{$range} day")); ?>
@@ -44,30 +45,32 @@
         <p class="price"></p>
     </div>
     <?php
-    foreach ($stores as $store):
-        /** @var \Source\Models\Store $store */
-        ?>
-        <article class="app_launch_item">
-            <p class="wrap"><?= $store->code; ?></p>
-            <p class="desc app_invoice_link transition">
-                <a title="Ver fatura" href="<?= url("/app/loja/{$store->id}"); ?>"><?= $store->nome_loja ?></a>
-            </p>
-            <p class="price"><?= money_fmt_br($store->valor_saldo, true); ?></p>
-            <p class="price"><?= money_fmt_br($store->comissao, true); ?></p>
-            <p class="price"><?= money_fmt_br($store->valor_aluguel, true); ?></p>
-            <p class="date"><?= $store->aluguel_dia; ?></p>
-            <p class="price"><?= money_fmt_br($store->valor_gratificacao, true); ?></p>
-            <p class="date"><?= $store->gratificacao_dia; ?></p>
-            <!-- <p class="enrollment">
-                 <span class="icon-calendar-check-o">algo</span>
-                 03 de 12
-                 <span class="icon-exchange">Fixa</span>
-             </p>-->
-            <p class="wrap gradient gradient-red font_80_percent gradient-hover transition radius">
-                <a class="color_white " style="text-decoration: none;" href="<?= url("/app/loja/{$store->id}") ?>">Editar</a>
-            </p>
-        </article>
-    <?php endforeach; ?>
+    if (isnt_empty($stores)):
+        foreach ($stores as $store):
+            /** @var \Source\Models\Store $store */
+            ?>
+            <article class="app_launch_item">
+                <p class="wrap"><?= $store->code; ?></p>
+                <p class="desc app_invoice_link transition">
+                    <a title="Ver fatura" href="<?= url("/app/loja/{$store->id}"); ?>"><?= $store->nome_loja ?></a>
+                </p>
+                <p class="price"><?= money_fmt_br($store->valor_saldo, true); ?></p>
+                <p class="price"><?= money_fmt_br($store->comissao, true); ?></p>
+                <p class="price"><?= money_fmt_br($store->valor_aluguel, true); ?></p>
+                <p class="date"><?= $store->aluguel_dia; ?></p>
+                <p class="price"><?= money_fmt_br($store->valor_gratificacao, true); ?></p>
+                <p class="date"><?= $store->gratificacao_dia; ?></p>
+                <!-- <p class="enrollment">
+                     <span class="icon-calendar-check-o">algo</span>
+                     03 de 12
+                     <span class="icon-exchange">Fixa</span>
+                 </p>-->
+                <p class="wrap gradient gradient-red font_80_percent gradient-hover transition radius">
+                    <a class="color_white " style="text-decoration: none;" href="<?= url("/app/loja/{$store->id}") ?>">Editar</a>
+                </p>
+            </article>
+        <?php endforeach; ?>
+    <?php endif; ?>
 
 
     <div class="app_launch_item footer">

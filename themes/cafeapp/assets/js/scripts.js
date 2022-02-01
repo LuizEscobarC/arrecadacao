@@ -275,6 +275,22 @@ $(function () {
     })
 
     /*
+     *  APP STORE REMOVE
+     */
+    $("[data-cashremove]").click(function (e) {
+        var remove = confirm("ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir esse lançamento?");
+
+        if (remove === true) {
+            $.post($(this).data("cashremove"), function (response) {
+                //redirect
+                if (response.redirect) {
+                    window.location.href = response.redirect;
+                }
+            }, "json");
+        }
+    })
+
+    /*
     * AJAX GET HOUR
     */
 

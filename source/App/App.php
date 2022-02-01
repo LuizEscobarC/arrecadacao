@@ -732,7 +732,19 @@ class App extends Controller
 
     public function cashFlow(array $data): void
     {
+        $head = $this->seo->render(
+            "Editar lançamento - " . CONF_SITE_NAME,
+            CONF_SITE_DESC,
+            url('/app/fluxo-de-caixa'),
+            theme("/assets/images/share.jpg"),
+            false
+        );
+        $id = filter_var($data['id'], FILTER_VALIDATE_INT);
 
+       echo $this->view->render('cash-flow', [
+            'head' => $head,
+            'cash' => (new CashFlow())->findById($id)
+        ]);
     }
 
     public function saveCashFlow(?array $data): void
@@ -767,7 +779,13 @@ class App extends Controller
 
     public function removeCashFlow(array $data): void
     {
-
+        $cashFlow = (new CashFlow())->findById($data['id']);
+        if ($cashFlow) {
+            $cashFlow->destroy();
+        }
+        $this->message->success("Tudo pronto {$this->user->first_name}, lançamento removido com sucesso!")->flash();
+        $json['redirect'] = url('/app/fluxos-de-caixa');
+        echo json_encode($json);
     }
 
 }

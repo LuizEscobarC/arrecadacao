@@ -46,4 +46,43 @@ class CashFlow extends Model
         $this->id_cost = $idCost;
         return $this;
     }
+
+    /**
+     * RETURN HOUR FOREIGN KEY VALUES
+     * @return Hour|null
+     */
+    public function hour(): ?Hour
+    {
+        $hour = (new Hour())->findById($this->id_hour);
+        if (isnt_empty($hour)) {
+            return $hour;
+        }
+        return null;
+    }
+
+    /**
+     * RETURN STORE FOREIGN KEY VALUES
+     * @return mixed|Model|null
+     */
+    public function store()
+    {
+        $store = (new Store())->findById($this->id_store);
+        if (isnt_empty($store)) {
+            return $store;
+        }
+        return null;
+    }
+
+    /**
+     * RETURN COSTCENTER FOREIGN KEY VALUES
+     * @return mixed|Model|null
+     */
+    public function cost()
+    {
+        $cost = (new Center())->findById($this->id_cost);
+        if (isnt_empty($cost)) {
+            return $cost;
+        }
+        return null;
+    }
 }

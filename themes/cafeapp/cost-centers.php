@@ -7,7 +7,8 @@
                title="usuários">Registros de centro de custos</a></h2>
     </div>
     <form class="ajax_off app_launch_form_filter app_form" action="<?= url('/app/centros-de-custo'); ?>" method="post">
-        <input list="datelist" type="text" value="<?= $search; ?>" class="radius mask-day" name="day" placeholder="Dia da criação">
+        <input list="datelist" type="text" value="<?= $search; ?>" class="radius mask-day" name="day"
+               placeholder="Dia da criação">
         <datalist id="datelist">
             <?php for ($range = 1; $range <= date('d'); $range++):
                 $date = date("d", strtotime("{$range} day")); ?>
@@ -33,23 +34,25 @@
         <p class="price">Data de Criação</p>
         <p class="desc_right"></p>
     </div>
-    <?php foreach ($costCenters as $center): ?>
-        <article class="app_launch_item">
-            <p class="desc app_invoice_link transition">
-                <a title="Ver fatura"
-                   href="<?= url("/app/centro-de-custo/{$center->id}") ?>"><?= str_limit_words($center->description,
-                        3); ?></a>
-            </p>
-            <p class="emit"><?= $center->emit; ?></p>
-            <p class="date"><?= date_fmt_br($center->created_at) ?></p>
-            <!--03 de 12-->
-            <!--<span class="icon-exchange">Fixa</span>-->
-            <p class="desc_right cost gradient gradient-red font_80_percent gradient-hover transition radius">
-                <a class="color_white " style="text-decoration: none;"
-                   href="<?= url("/app/centro-de-custo/{$center->id}") ?>">Editar</a>
-            </p>
-        </article>
-    <?php endforeach; ?>
+    <?php if (isnt_empty($costCenters)): ?>
+        <?php foreach ($costCenters as $center): ?>
+            <article class="app_launch_item">
+                <p class="desc app_invoice_link transition">
+                    <a title="Ver fatura"
+                       href="<?= url("/app/centro-de-custo/{$center->id}") ?>"><?= str_limit_words($center->description,
+                            3); ?></a>
+                </p>
+                <p class="emit"><?= $center->emit; ?></p>
+                <p class="date"><?= date_fmt_br($center->created_at) ?></p>
+                <!--03 de 12-->
+                <!--<span class="icon-exchange">Fixa</span>-->
+                <p class="desc_right cost gradient gradient-red font_80_percent gradient-hover transition radius">
+                    <a class="color_white " style="text-decoration: none;"
+                       href="<?= url("/app/centro-de-custo/{$center->id}") ?>">Editar</a>
+                </p>
+            </article>
+        <?php endforeach; ?>
+    <?php endif; ?>
     <div class="app_launch_item footer">
         <p class="desc"></p>
         <p></p>

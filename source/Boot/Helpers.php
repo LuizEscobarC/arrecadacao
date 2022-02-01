@@ -29,6 +29,27 @@ function is_passwd(string $password): bool
 }
 
 /**
+ * Facilita a verificação do empty nas visões
+ * @param $value
+ * @param string $left
+ * @param string $right
+ * @return mixed
+ */
+function isnt_empty($value, string $left = "", string $right = "")
+{
+
+    if ((mb_convert_case($left, MB_CASE_LOWER) === 'self') && !empty($value)) {
+        $left = $value;
+    }
+
+    if ((mb_convert_case($left, MB_CASE_LOWER) === '') || !empty($left)) {
+        return $value;
+    }
+
+    return (!empty($value) ? "{$left}" : $right);
+}
+
+/**
  * ##################
  * ###   STRING   ###
  * ##################
