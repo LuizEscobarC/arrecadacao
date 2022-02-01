@@ -52,7 +52,6 @@
         <p class="desc">Email</p>
         <p class="wrap"></p>
     </div>
-</section
 <?php if (isnt_empty($users)): ?>
     <?php foreach ($users as $user): ?>
         <article class="app_launch_item">
