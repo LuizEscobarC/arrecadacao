@@ -6,6 +6,7 @@ use Composer\Package\Loader\ValidatingArrayLoader;
 use Source\Core\Connect;
 use Source\Core\Controller;
 use Source\Models\Auth;
+use Source\Models\CashFlow;
 use Source\Models\Center;
 use Source\Models\Hour;
 use Source\Models\Lists;
@@ -629,9 +630,9 @@ class App extends Controller
         echo $this->view->render('lists', [
             'head' => $head,
             'lists' => $list->order('lists.date_moviment, s.nome_loja')
-                    ->offset($pager->offset())
-                    ->limit($pager->limit())
-                    ->fetch(true),
+                ->offset($pager->offset())
+                ->limit($pager->limit())
+                ->fetch(true),
             'allMoney' => (new Lists())->find(null, null, 'sum(total_value) as value')->fetch(),
             'paginator' => $pager->render(),
             'search' => ((object)$search ?? null)
@@ -692,6 +693,81 @@ class App extends Controller
         $this->message->success("Tudo pronto {$this->user->first_name}, lista de custo removido com sucesso!")->flash();
         $json['redirect'] = url('/app');
         echo json_encode($json);
+    }
+
+    public function cashFlows(?array $data): void
+    {
+        $head = $this->seo->render(
+            "Fluxo - " . CONF_SITE_NAME,
+            CONF_SITE_DESC,
+            url('/app/fluxos-de-caixa'),
+            theme("/assets/images/share.jpg"),
+            false
+        );
+
+        //list($list, $search) = (new Lists())->listFilters($data);
+        $cashFlows = (new CashFlow())->find(null, null,
+            'cash_flow.*, h.week_day, h.number_day, h.description as hour, s.nome_loja, cc.description as cost')
+            ->join('hour h', 'h.id', 'cash_flow.id_hour')
+            ->join('loja s', 's.id', 'cash_flow.id_store')
+            ->join('cost cc', 'cc.id', 'cash_flow.id_cost', 'LEFT');
+
+        $page = (!empty($data['page']) ? $data['page'] : 1);
+
+        $pager = (new Pager('/arrecadacao/app/fluxos-de-caixa'));
+        $pager->pager($cashFlows->count(), 20, $page);
+
+
+        echo $this->view->render('cash-flows', [
+            'head' => $head,
+            'cashFlows' => $cashFlows->order('cash_flow.date_moviment, h.number_day, s.nome_loja')
+                ->offset($pager->offset())
+                ->limit($pager->limit())
+                ->fetch(true),
+            'allMoney' => (new $cashFlows())->find(null, null, 'sum(value) as value')->fetch(),
+            'paginator' => $pager->render(),
+            'search' => ((object)'$search' ?? null)
+        ]);
+    }
+
+    public function cashFlow(array $data): void
+    {
+
+    }
+
+    public function saveCashFlow(?array $data): void
+    {
+        if (!empty($data)) {
+            $cash = (new CashFlow());
+
+            if (!empty($data['id'])) {
+                $cash = $cash->findById($data['id']);
+            }
+
+            $cash->bootstrap(
+                $data["date_moviment"],
+                $data["id_store"],
+                $data["id_hour"],
+                $data["description"],
+                $data["value"],
+                $data["type"],
+                $data["id_cost"]
+            );
+
+            if (!$cash->save()) {
+                $json['message'] = $cash->message()->render();
+            } else {
+                $json['message'] = $this->message->success("Lançamento atualizado com sucesso!")->render();
+                $json['redirect'] = url("/app/fluxos-de-caixa");
+            }
+        }
+
+        echo json_encode($json);
+    }
+
+    public function removeCashFlow(array $data): void
+    {
+
     }
 
 }

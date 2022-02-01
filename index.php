@@ -72,10 +72,7 @@ $route->post('/horario', 'App:saveHour');
 $route->post('/remove-hour/{id}', 'App:removeHour');
 
 
-
 /** LISTS */
-$route->post('/get_hour', 'App:getHour');
-$route->get('/get_week_day/{id}', 'App:getWeekDay');
 $route->get('/listas', 'App:lists');
 $route->get('/listas/{page}', 'App:lists');
 $route->post('/listas', 'App:lists');
@@ -83,7 +80,18 @@ $route->get('/lista/{id}', 'App:list');
 $route->post('/lista', 'App:saveList');
 $route->post('/remove-list/{id}', 'App:removeList');
 
+/** FINANCES */
+$route->get('/fluxos-de-caixa', 'App:cashFlows');
+$route->get('/fluxos-de-caixa/{page}', 'App:cashFlows');
+$route->post('/fluxos-de-caixa', 'App:cashFlows');
+$route->get('/fluxo-de-caixa/{id}', 'App:cashFlow');
+$route->post('/fluxo-de-caixa', 'App:saveCashFlow');
+$route->post('/remove-cash-flow/{id}', 'App:removeCashFlow');
 
+
+/** SHARED */
+$route->post('/get_hour', 'App:getHour');
+$route->get('/get_week_day/{id}', 'App:getWeekDay');
 
 /** OPTIN */
 $route->get("/obrigado/{email}", "App:success");

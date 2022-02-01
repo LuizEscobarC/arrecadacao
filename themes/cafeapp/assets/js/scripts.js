@@ -279,8 +279,8 @@ $(function () {
     */
 
     $('input#hour').change(function () {
-        if ($('#callback')) {
-            $('#callback').html('');
+        if ($('select#callback')) {
+            $('select#callback').html('');
         }
         $.ajax({
             url: $('input#hour').attr('rel'),
@@ -288,9 +288,9 @@ $(function () {
             data: $(this).serialize(),
             dataType: 'JSON',
             success: function (callback) {
-                $('#callback').append('<option value="0">Escolha</option>');
+                $('select#callback').append('<option value="0">Escolha</option>');
                 for (let i = 0, len = callback.length; i < len; ++i) {
-                    $('#callback').append('<option value="' + callback[i].id + '">' + callback[i].description + '</option>');
+                    $('select#callback').append('<option value="' + callback[i].id + '">' + callback[i].description + '</option>');
                 }
             }
         });
@@ -325,8 +325,14 @@ $(function () {
         width: '150',
         placeholder: 'Escolha um horário',
     });
+
     $("select#select_page_store").select2({
         width: '150',
+        placeholder: 'Escolha uma loja',
+    });
+
+    $("select#select_page_center").select2({
+        width: '100%',
         placeholder: 'Escolha uma loja',
     });
 

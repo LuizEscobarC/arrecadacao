@@ -15,12 +15,9 @@
     </div>
     <a class="pointer icon-home radius transition open" id="sidebar2" title="Dashboard">CONTROLE DE CAIXA</a>
     <div class="app_drop1">
-        <a class="pointer icon-home radius transition open" id="sidebar2_children" title="Dashboard">opção</a>
+        <a class="pointer icon-home radius transition open" id="sidebar2_children" title="Dashboard">fluxo</a>
         <div class="app_drop1_children">
-            <a class="pointer radius transition" title="Dashboard" href="<?= url("/app"); ?>">opção</a>
-            <a class="pointer radius transition" title="Dashboard" href="<?= url("/app"); ?>">opção</a>
-            <a class="pointer radius transition" title="Dashboard" href="<?= url("/app"); ?>">opção</a>
-            <a class="pointer radius transition" title="Dashboard" href="<?= url("/app"); ?>">opção</a>
+            <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/fluxos-de-caixa"); ?>">Registros de fluxo de caixa</a>
         </div>
     </div>
     <a class="pointer icon-home radius transition open" id="sidebar3" title="Dashboard">CONTROLE GERENCIAL</a>

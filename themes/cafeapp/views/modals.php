@@ -271,6 +271,7 @@
             <button class="btn radius transition icon-check-square-o">Cadastrar Loja</button>
         </form>
     </div>
+
     <!-- COST -->
     <div class="app_modal_box app_modal_cost">
         <p class="title icon-calendar-check-o">Novo centro de custo:</p>
@@ -378,6 +379,82 @@
                 <input class="radius mask-money" type="text" name="total_value" placeholder="Ex: 999"
                        required/>
             </label>
+
+
+            <div class="al-center">
+                <div>
+                    <button class="btn btn_inline radius transition icon-pencil-square-o">Atualizar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- FINANCE -->
+    <div class="app_modal_box app_modal_cash">
+        <p class="title icon-calendar-check-o">Novo lançamento:</p>
+        <form class="app_form" action="<?= url("/app/fluxo-de-caixa"); ?>" method="post">
+            <div class="ajax_response"><?= flash(); ?></div>
+
+            <div class="label_group">
+                <label class="three_label">
+                    <span class="field icon-thumb-tack">DATA DE MOVIMENTO:</span>
+                    <input class="radius" id="hour" rel="<?= url('/app/get_hour') ?>" type="date"
+                           name="date_moviment"
+                           required/>
+                </label>
+
+                <label class="three_label">
+                    <p id="label" class="app_widget_title"></p>
+                </label>
+
+                <label class="three_label">
+                    <span class="field icon-briefcase"> HORÁRIO:</span>
+                    <select name="id_hour" id="callback" rel="<?= url("/app/get_week_day") ?>">
+                    </select>
+                </label>
+            </div>
+
+            <label>
+                <span class="field icon-briefcase">Loja:</span>
+                <select name="id_store" id="select_page2">
+                    <option value="">Escolha</option>
+                    <?php foreach ((new \Source\Models\Store())->find()->fetch(true) as $store): ?>
+                        <option value="<?= $store->id; ?>">&ofcir; <?= $store->nome_loja; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </label>
+
+            <label>
+                <span class="field icon-briefcase">Centro de custo:<small
+                            class="font_80_percent">Opcional</small></span>
+                <select name="id_cost" id="select_page_center">
+                    <option value="">Escolha</option>
+                    <?php foreach ((new \Source\Models\Center())->find()->fetch(true) as $center): ?>
+                        <option value="<?= $center->id; ?>">&ofcir; <?= $center->description; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </label>
+
+            <div class="label_group">
+
+                <label class="three_label">
+                    <span class="field icon-leanpub">Valor do lançamento:</span>
+                    <input class="radius mask-money" type="text" name="value" placeholder="Ex: 999"
+                           required/>
+                </label>
+
+                <label class="three_label">
+                    <span class="field">Entrada:</span>
+                    <input type="radio" name="type" value="1">
+                    <span class="field">Saída: </span>
+                    <input type="radio" name="type" value="2">
+                </label>
+
+                <label class="three_label ">
+                    <span class="field">Descrição:</span>
+                    <textarea class="radius" name="description"></textarea>
+                </label>
+            </div>
 
 
             <div class="al-center">
