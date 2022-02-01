@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.5.62, for Win64 (AMD64)
 --
--- Host: localhost    Database: arrecadacao
+-- Host: 127.0.0.1    Database: arrecadacao
 -- ------------------------------------------------------
 -- Server version	5.5.5-10.4.21-MariaDB
 
@@ -47,6 +47,44 @@ INSERT INTO `address` VALUES (1,1,'rua manoel pedro vieira, 810','810','casa 1',
 UNLOCK TABLES;
 
 --
+-- Table structure for table `cash_flow`
+--
+
+DROP TABLE IF EXISTS `cash_flow`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cash_flow` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date_moviment` timestamp NOT NULL DEFAULT current_timestamp(),
+  `id_store` int(11) NOT NULL,
+  `id_hour` int(11) NOT NULL,
+  `id_cost` int(11) DEFAULT NULL,
+  `description` varchar(1000) NOT NULL,
+  `value` decimal(10,0) NOT NULL,
+  `type` int(11) NOT NULL COMMENT '1: entrada, 2: saída',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `cash_flow_FK` (`id_store`),
+  KEY `cash_flow_FK_1` (`id_hour`),
+  KEY `cash_flow_FK_2` (`id_cost`),
+  CONSTRAINT `cash_flow_FK` FOREIGN KEY (`id_store`) REFERENCES `loja` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `cash_flow_FK_1` FOREIGN KEY (`id_hour`) REFERENCES `hour` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `cash_flow_FK_2` FOREIGN KEY (`id_cost`) REFERENCES `cost` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cash_flow`
+--
+
+LOCK TABLES `cash_flow` WRITE;
+/*!40000 ALTER TABLE `cash_flow` DISABLE KEYS */;
+INSERT INTO `cash_flow` VALUES (3,'2022-02-01 01:57:34',16,83,NULL,'teste',1000,1,'2022-02-01 01:57:34',NULL),(4,'2022-01-19 04:00:00',20,85,0,'entrada de mensalidade',199,2,'2022-02-01 03:51:42','2022-02-01 13:27:33'),(6,'2022-01-19 04:00:00',19,87,0,'entrada de mensalidade',960,1,'2022-02-01 13:21:55',NULL),(7,'2022-01-19 04:00:00',23,87,0,'entrada de mensalidade',120,2,'2022-02-01 13:22:47',NULL),(8,'2022-01-19 04:00:00',19,87,0,'entrada de mensalidade',990,2,'2022-02-01 13:23:33',NULL);
+/*!40000 ALTER TABLE `cash_flow` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `cost`
 --
 
@@ -82,8 +120,8 @@ DROP TABLE IF EXISTS `dia`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `dia` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nrdia` varchar(1) NOT NULL,
-  `diasemana` varchar(15) NOT NULL,
+  `number_day` varchar(1) NOT NULL,
+  `week_day` varchar(15) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -99,36 +137,6 @@ INSERT INTO `dia` VALUES (1,'0','DOMINGO'),(2,'1','SEGUNDA-FEIRA'),(3,'2','TERÇ
 UNLOCK TABLES;
 
 --
--- Table structure for table `flxcaixa`
---
-
-DROP TABLE IF EXISTS `flxcaixa`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `flxcaixa` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `dtmovto` datetime DEFAULT NULL,
-  `diasemana` varchar(15) DEFAULT NULL,
-  `idloja` int(11) DEFAULT NULL,
-  `descricaohorario` varchar(15) DEFAULT NULL,
-  `idcusto` int(11) DEFAULT NULL,
-  `descricaocusto` varchar(45) DEFAULT NULL,
-  `vrlancto` decimal(2,0) DEFAULT NULL,
-  `obs` varchar(150) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `flxcaixa`
---
-
-LOCK TABLES `flxcaixa` WRITE;
-/*!40000 ALTER TABLE `flxcaixa` DISABLE KEYS */;
-/*!40000 ALTER TABLE `flxcaixa` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `hour`
 --
 
@@ -137,7 +145,7 @@ DROP TABLE IF EXISTS `hour`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hour` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `number_day` int(11) NOT NULL,
+  `number_day` int(11) NOT NULL COMMENT '0.1.2.3.4.5.6',
   `week_day` varchar(15) CHARACTER SET utf8mb4 NOT NULL,
   `description` varchar(20) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -152,7 +160,7 @@ CREATE TABLE `hour` (
 
 LOCK TABLES `hour` WRITE;
 /*!40000 ALTER TABLE `hour` DISABLE KEYS */;
-INSERT INTO `hour` VALUES (83,1,'Segunda-feira','HORARIO 2','2022-01-21 05:21:51',NULL),(85,4,'Quinta-feira','HORARIO 1','2022-01-21 05:21:51',NULL),(86,4,'Quinta-feira','HORARIO 3','2022-01-21 05:21:51',NULL),(87,3,'Quarta-feira','HORARIO 3','2022-01-21 05:21:51',NULL),(89,3,'terça-feira','Noturno','2022-01-21 16:10:49',NULL);
+INSERT INTO `hour` VALUES (83,1,'Segunda-feira','HORARIO 2','2022-01-21 05:21:51',NULL),(85,4,'Quinta-feira','HORARIO 1','2022-01-21 05:21:51',NULL),(86,4,'Quinta-feira','HORARIO 3','2022-01-21 05:21:51',NULL),(87,3,'Quarta-feira','HORARIO 3','2022-01-21 05:21:51',NULL),(89,2,'terça-feira','Noturno','2022-01-21 16:10:49','2022-01-28 01:45:37');
 /*!40000 ALTER TABLE `hour` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -172,12 +180,13 @@ CREATE TABLE `lists` (
   `net_value` decimal(10,0) DEFAULT NULL COMMENT 'valor liquido',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `date_moviment` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `hour_FK` (`id_hour`),
   KEY `lists_FK` (`id_store`),
   CONSTRAINT `hour_FK` FOREIGN KEY (`id_hour`) REFERENCES `hour` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `lists_FK` FOREIGN KEY (`id_store`) REFERENCES `loja` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -186,7 +195,7 @@ CREATE TABLE `lists` (
 
 LOCK TABLES `lists` WRITE;
 /*!40000 ALTER TABLE `lists` DISABLE KEYS */;
-INSERT INTO `lists` VALUES (2,83,16,100000,10000,50000,'2022-01-22 02:06:51',NULL),(3,89,21,12312,12312,12312,'2022-01-22 02:07:53',NULL);
+INSERT INTO `lists` VALUES (2,85,21,10000000,1000000,9000000,'2022-01-22 02:06:51','2022-01-24 00:11:46','2022-01-31 04:00:00'),(3,89,21,12312,12312,12312,'2022-01-22 02:07:53',NULL,'2022-01-23 04:00:00'),(4,83,16,100,20,80,'2022-01-23 23:50:18','2022-01-28 03:20:32','2022-01-17 04:00:00');
 /*!40000 ALTER TABLE `lists` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -199,7 +208,7 @@ DROP TABLE IF EXISTS `loja`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `loja` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nome_loja` varchar(35) CHARACTER SET utf8mb4 NOT NULL,
+  `nome_loja` varchar(35) NOT NULL,
   `valor_saldo` decimal(10,0) NOT NULL,
   `comissao` int(2) NOT NULL,
   `valor_aluguel` decimal(10,0) NOT NULL,
@@ -208,8 +217,12 @@ CREATE TABLE `loja` (
   `gratificacao_dia` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+  `code` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `loja_un` (`code`),
+  FULLTEXT KEY `nome_loja` (`nome_loja`,`code`),
+  FULLTEXT KEY `nome_loja_2` (`nome_loja`,`code`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -218,7 +231,7 @@ CREATE TABLE `loja` (
 
 LOCK TABLES `loja` WRITE;
 /*!40000 ALTER TABLE `loja` DISABLE KEYS */;
-INSERT INTO `loja` VALUES (16,'LOJA DO MIGUELAO',10,20,2,20,1,1,'2022-01-16 21:08:19','2022-01-19 06:22:11'),(19,'RONALDO',10,20,1200,20,200,20,'2022-01-16 21:08:19',NULL),(20,'LOJA TESTE luiz',10,10,1,1,1,1,'2022-01-17 11:33:14',NULL),(21,'Luiz Paulo Hammer',10,10,1,1,1,1,'2022-01-17 11:33:48',NULL),(22,'Luiz Paulo Hammer',10,10,1,1,1,1,'2022-01-17 11:33:53',NULL),(23,'Luiz Paulo Hammer',10,10,1,1,100,1,'2022-01-17 11:39:52',NULL),(24,'Luiz Paulo Hammer',10,10,1,1,100,123,'2022-01-17 11:41:12',NULL),(25,'Luiz Paulo Hammer',10,10,1,1,100,123,'2022-01-17 11:43:53',NULL);
+INSERT INTO `loja` VALUES (16,'LOJA DO MIGUELAO',10,20,2,20,1,1,'2022-01-16 21:08:19','2022-01-28 02:02:37','1'),(19,'RONALDO',10,20,1200,20,200,20,'2022-01-16 21:08:19','2022-01-28 02:02:37','2'),(20,'LOJA TESTE luiz',10,10,1,1,1,1,'2022-01-17 11:33:14','2022-01-28 02:02:37','3'),(21,'Luiz Paulo Hammer',10,10,1,1,1,1,'2022-01-17 11:33:48','2022-01-28 02:02:37','4'),(22,'Luiz Paulo Hammer',10,10,1,1,1,1,'2022-01-17 11:33:53','2022-01-28 02:02:37','5'),(23,'Luiz Paulo Hammer',10,10,1,1,100,1,'2022-01-17 11:39:52','2022-01-28 02:02:37','6'),(24,'Luiz Paulo Hammer',10,10,1,1,100,123,'2022-01-17 11:41:12','2022-01-28 02:02:37','7'),(25,'Luiz Paulo Hammer',10,10,1,1,100,123,'2022-01-17 11:43:53','2022-01-28 02:02:37','8'),(26,'LUIZ PAULO ECOBAL DA COSTA',10,10,1,10,1,2,'2022-01-28 02:13:16','2022-01-28 02:14:38','1234');
 /*!40000 ALTER TABLE `loja` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -302,4 +315,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-21 22:28:45
+-- Dump completed on 2022-02-01 10:44:51
