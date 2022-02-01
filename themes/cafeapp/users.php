@@ -52,7 +52,7 @@
         <p class="desc">Email</p>
         <p class="wrap"></p>
     </div>
-<?php if (isnt_empty($users)): ?>
+<?php if (isnt_empty($users, 'self')): ?>
     <?php foreach ($users as $user): ?>
         <article class="app_launch_item">
             <p class="desc"><?= $user->id; ?></p>

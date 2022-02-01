@@ -32,7 +32,7 @@
         <p class="desc">Tipo de movimento</p>
         <p class="wrap"></p>
     </div>
-    <?php if (isnt_empty($cashFlows)): ?>
+    <?php if (isnt_empty($cashFlows, 'self')): ?>
         <?php foreach ($cashFlows as $cash): ?>
             <article class="app_launch_item">
                 <p class="wrap"><?= $cash->id; ?></p>

@@ -30,23 +30,27 @@ function is_passwd(string $password): bool
 
 /**
  * Facilita a verificação do empty nas visões
- * @param $value
- * @param string $left
- * @param string $right
+ * Aceita strings, objetos, numeros e pontos flutuantes
+ *
+ * @param $value * Esse é o valor a ser verificado
+ * @param string $left * Se aqui for passado 'self' ele retornara o $value após a verificação
+ * @param string $right * aqui é o valor caso o valor ou o objeto seja vazio
  * @return mixed
  */
-function isnt_empty($value, string $left = "", string $right = "")
+function isnt_empty($value, ?string $left = "", string $right = "")
 {
 
     if ((mb_convert_case($left, MB_CASE_LOWER) === 'self') && !empty($value)) {
         $left = $value;
     }
 
-    if ((mb_convert_case($left, MB_CASE_LOWER) === '') || !empty($left)) {
-        return $value;
+    if (!is_object($value) && !is_object($left) && !is_array($value) && !is_array($left)) {
+        if ((mb_convert_case($left, MB_CASE_LOWER) === '') && !empty($left)) {
+            return $value;
+        }
     }
 
-    return (!empty($value) ? "{$left}" : $right);
+    return (!empty($value) && !empty($left) ? $left : $right);
 }
 
 /**
@@ -201,9 +205,9 @@ function redirect(string $url): void
 function money_fmt_br(float $money, bool $brl = false): string
 {
     if ($brl) {
-        $money = 'R$ ' . number_format($money, 2, ',','.');
+        $money = 'R$ ' . number_format($money, 2, ',', '.');
     } else {
-        $money = number_format($money, 2, ',','.');
+        $money = number_format($money, 2, ',', '.');
     }
     return $money;
 }

@@ -34,7 +34,7 @@
         <p class="price">Data de Criação</p>
         <p class="desc_right"></p>
     </div>
-    <?php if (isnt_empty($costCenters)): ?>
+    <?php if (isnt_empty($costCenters, 'self')): ?>
         <?php foreach ($costCenters as $center): ?>
             <article class="app_launch_item">
                 <p class="desc app_invoice_link transition">

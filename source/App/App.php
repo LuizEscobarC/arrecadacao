@@ -653,21 +653,22 @@ class App extends Controller
             false
         );
 
-        list($list, $search) = (new Lists())->listFilters($data);
+        list($list, $search, $total) = (new Lists())->listFilters($data);
 
         $page = (!empty($data['page']) ? $data['page'] : 1);
 
         $pager = (new Pager('/arrecadacao/app/listas/'));
         $pager->pager($list->count(), 20, $page);
 
+        $lists = $list->order('lists.date_moviment, s.nome_loja')
+            ->offset($pager->offset())
+            ->limit($pager->limit())
+            ->fetch(true);
 
         echo $this->view->render('lists', [
             'head' => $head,
-            'lists' => $list->order('lists.date_moviment, s.nome_loja')
-                ->offset($pager->offset())
-                ->limit($pager->limit())
-                ->fetch(true),
-            'allMoney' => (new Lists())->find(null, null, 'sum(total_value) as value')->fetch(),
+            'lists' => $lists,
+            'allMoney' => $total->fetch(),
             'paginator' => $pager->render(),
             'search' => ((object)$search ?? null)
         ]);
@@ -714,7 +715,8 @@ class App extends Controller
                 $list = $list->findById($data['id']);
             }
 
-            $list->bootstrap($data['id_hour'], $data['id_store'], $data['total_value'], $data['date_moviment']);
+            $list->bootstrap($data['id_hour'], $data['id_store'], str_replace(['.', ','], '', $data['total_value']),
+                ($data['date_moviment']));
 
             /** @var Lists $list */
             if (!$list->save()) {
@@ -800,7 +802,7 @@ class App extends Controller
         );
         $id = filter_var($data['id'], FILTER_VALIDATE_INT);
 
-       echo $this->view->render('cash-flow', [
+        echo $this->view->render('cash-flow', [
             'head' => $head,
             'cash' => (new CashFlow())->findById($id)
         ]);

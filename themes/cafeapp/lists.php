@@ -63,7 +63,7 @@
         <p class="desc_center">Valor de Comissão</p>
         <p class="wrap"></p>
     </div>
-    <?php if (isnt_empty($lists)): ?>
+    <?php if (isnt_empty($lists, 'self')): ?>
         <?php foreach ($lists as $list): ?>
             <article class="app_launch_item">
                 <p class="wrap"><?= $list->id; ?></p>
@@ -97,7 +97,7 @@
         <p class="desc"></p>
         <p></p>
         <p>Valor total:</p>
-        <p class="icon-thumbs-o-up">R$ <?= money_fmt_br($allMoney->value); ?></p>
+        <p class="icon-thumbs-o-up">R$ <?= money_fmt_br(($allMoney->total ?? "0")); ?></p>
     </div>
     <?= $paginator; ?>
 </section>

@@ -45,7 +45,7 @@
         <p class="price"></p>
     </div>
     <?php
-    if (isnt_empty($stores)):
+    if (isnt_empty($stores, 'self')):
         foreach ($stores as $store):
             /** @var \Source\Models\Store $store */
             ?>

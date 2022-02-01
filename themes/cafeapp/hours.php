@@ -52,7 +52,7 @@
         <p class="desc">Nome do horário</p>
         <p class="wrap"></p>
     </div>
-    <?php if (isnt_empty($hours)): ?>
+    <?php if (isnt_empty($hours, 'self')): ?>
         <?php foreach ($hours as $hour): ?>
             <article class="app_launch_item">
                 <p class="desc"><?= $hour->id; ?></p>
