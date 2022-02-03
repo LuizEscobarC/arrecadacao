@@ -6,12 +6,12 @@
     <form class="app_form" action="<?= url("/app/fluxo-de-caixa"); ?>" method="post">
         <div class="ajax_response"><?= flash(); ?></div>
 
-        <input type="text" name="id" value="<?= $cash->id; ?>">
+        <input type="hidden" name="id" value="<?= $cash->id; ?>">
 
         <div class="label_group">
             <label class="three_label">
                 <span class="field icon-thumb-tack">DATA DE MOVIMENTO:</span>
-                <input class="radius" value="<?= date_fmt($cash->date_moviment, 'Y-m-d'); ?>"
+                <input id="hour" class="radius" value="<?= date_fmt($cash->date_moviment, 'Y-m-d'); ?>"
                        rel="<?= url('/app/get_hour') ?>" type="date"
                        name="date_moviment"
                        required/>
@@ -48,7 +48,7 @@
             <select name="id_cost" id="select_page_center">
                 <option value="">Escolha</option>
                 <?php foreach ((new \Source\Models\Center())->find()->fetch(true) as $center): ?>
-                    <option value="<?= $center->id; ?>" <?= ($center->id == isnt_empty($cash->Cost()->id, 'self') ?
+                    <option value="<?= $center->id; ?>" <?= ($center->id == (!empty($cash->Cost() ?  $cash->Cost()->id : '')) ?
                         'selected' : ""); ?>>&ofcir; <?= $center->description; ?></option>
                 <?php endforeach; ?>
             </select>

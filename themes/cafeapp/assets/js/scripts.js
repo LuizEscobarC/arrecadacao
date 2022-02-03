@@ -293,10 +293,12 @@ $(function () {
     /*
     * AJAX GET HOUR
     */
-
     $('input#hour').change(function () {
         if ($('select#callback')) {
             $('select#callback').html('');
+        }
+        if ($('#label')) {
+            $('#label').html('');
         }
         $.ajax({
             url: $('input#hour').attr('rel'),
@@ -304,6 +306,9 @@ $(function () {
             data: $(this).serialize(),
             dataType: 'JSON',
             success: function (callback) {
+                $('p#label').html(callback[0]);
+
+                 callback.shift();
                 $('select#callback').append('<option value="0">Escolha</option>');
                 for (let i = 0, len = callback.length; i < len; ++i) {
                     $('select#callback').append('<option value="' + callback[i].id + '">' + callback[i].description + '</option>');
@@ -312,7 +317,7 @@ $(function () {
         });
     });
 
-    $('select#callback').change(function () {
+    /** $('select#callback').change(function () {
         let url = $(this).attr('rel') + '/' + $(this).find(':selected').attr('value');
 
         if ($('#label')) {
@@ -322,7 +327,7 @@ $(function () {
         $.getJSON(url, function (callback) {
             $('p#label').html(callback.week_day);
         });
-    });
+    }); */
 
 
     /* Select with search*/

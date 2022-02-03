@@ -4,7 +4,7 @@
         <section class="app_main_left">
             <article class="app_widget">
                 <header class="app_widget_title">
-                    <h2 class="icon-bar-chart">Controle: (7 dias)</h2>
+                    <h2 class="icon-bar-chart">Controle:(<small>útimos </small> 30 dias)</h2>
                 </header>
                 <div id="control"></div>
             </article>
@@ -83,62 +83,79 @@
 
 <?php $v->start("scripts"); ?>
     <script type="text/javascript">
-        Highcharts.setOptions({
-            lang: {
-                decimalPoint: ',',
-                thousandsSep: '.'
-            }
-        });
-        Highcharts.chart('control', {
-            chart: {
-                type: 'areaspline',
-                spacingBottom: 0,
-                spacingTop: 5,
-                spacingLeft: 0,
-                spacingRight: 0,
-                height: (9 / 16 * 100) + '%'
-            },
-            title: null,
-            xAxis: {
-                categories: [
-                    '22/11/2018',
-                    '23/11/2018',
-                    '24/11/2018',
-                    '25/11/2018',
-                    '26/11/2018',
-                    '27/11/2018',
-                    '28/11/2018'
-                ],
-                minTickInterval: 2
-            },
-            yAxis: {
-                allowDecimals: true,
-                title: null,
-            },
-            tooltip: {
-                shared: true,
-                valueDecimals: 2,
-                valuePrefix: 'R$ '
-            },
-            credits: {
-                enabled: false
-            },
-            plotOptions: {
-                areaspline: {
-                    fillOpacity: 0.5
+        $(function () {
+            Highcharts.setOptions({
+                lang: {
+                    decimalPoint: ',',
+                    thousandsSep: '.'
                 }
-            },
-            series: [{
-                name: 'Receitas',
-                data: [1250, 700, 0, 350, 1000, 580, 300],
-                color: '#61DDBC',
-                lineColor: '#36BA9B'
-            }, {
-                name: 'Despesas',
-                data: [300, 299, 1250, 1000, 300, 0, 0],
-                color: '#F76C82',
-                lineColor: '#D94352'
-            }]
+            });
+
+            var chart = Highcharts.chart('control', {
+                chart: {
+                    type: 'areaspline',
+                    spacingBottom: 0,
+                    spacingTop: 5,
+                    spacingLeft: 0,
+                    spacingRight: 0,
+                    height: (9 / 16 * 100) + '%'
+                },
+                title: null,
+                xAxis: {
+                    categories: [<?= $chart->date_moviment;?>],
+                    minTickInterval: 1
+                },
+                yAxis: {
+                    allowDecimals: true,
+                    title: null,
+                },
+                tooltip: {
+                    shared: true,
+                    valueDecimals: 2,
+                    valuePrefix: 'R$ '
+                },
+                credits: {
+                    enabled: false
+                },
+                plotOptions: {
+                    areaspline: {
+                        fillOpacity: 0.5
+                    }
+                },
+                series: [{
+                    name: 'entrada',
+                    data: [<?= $chart->income;?>],
+                    color: '#61DDBC',
+                    lineColor: '#36BA9B'
+                }, {
+                    name: 'saida',
+                    data: [<?= $chart->expense;?>],
+                    color: '#F76C82',
+                    lineColor: '#D94352'
+                }]
+            });
+
+            function test() {
+                setTimeout(function () {
+                    $.post('<?= url("/app/ajax_grap");?>', function (callback) {
+                        if (callback.chart) {
+                            chart.update({
+                                xAxis: {
+                                    categories: callback.chart.date_moviment
+                                },
+                                series: [{
+                                    data: callback.chart.income
+                                }, {
+                                    data: callback.chart.expense
+                                }]
+                            });
+                        }
+                    }, "json");
+                test();
+                }, 2000);
+            }
+        test();
         });
+
     </script>
 <?php $v->end(); ?>

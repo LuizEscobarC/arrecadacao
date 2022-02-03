@@ -32,12 +32,12 @@ function is_passwd(string $password): bool
  * Facilita a verificação do empty nas visões
  * Aceita strings, objetos, numeros e pontos flutuantes
  *
- * @param $value * Esse é o valor a ser verificado
- * @param string $left * Se aqui for passado 'self' ele retornara o $value após a verificação
- * @param string $right * aqui é o valor caso o valor ou o objeto seja vazio
+ * @param mixed $value * Esse é o valor a ser verificado
+ * @param string|null $left * Se aqui for passado 'self' ele retornara o $value após a verificação
+ * @param mixed $right * aqui é o valor caso o valor ou o objeto seja vazio
  * @return mixed
  */
-function isnt_empty($value, ?string $left = "", string $right = "")
+function isnt_empty($value,  $left = "", $right = "")
 {
 
     if ((mb_convert_case($left, MB_CASE_LOWER) === 'self') && !empty($value)) {

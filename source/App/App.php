@@ -53,9 +53,28 @@ class App extends Controller
             false
         );
 
+        //CHART
+        $chartData = (new CashFlow())->chartData();
+        //END CHART
+
+
         echo $this->view->render("home", [
-            "head" => $head
+            "head" => $head,
+            "chart" => $chartData,
         ]);
+    }
+
+    public function ajaxGrap()
+    {
+
+        $chartData = (new CashFlow())->chartData();
+        $categories = str_replace("'", "", explode(",", $chartData->date_moviment));
+        $callback["chart"] = [
+            "categories" => $categories,
+            "income" => array_map("abs", explode(",", $chartData->income)),
+            "expense" => array_map("abs", explode(",", $chartData->expense))
+        ];
+        echo json_encode($callback);
     }
 
     /**
@@ -598,9 +617,10 @@ class App extends Controller
     {
         $getDayNumber = weekDay($data['date_moviment'], true);
         $dataDay = (new Hour())->findByNumberDay($getDayNumber);
-        $i = 0;
+        $i = 1;
 
         foreach ($dataDay as $item) {
+            $callback[0] = $item->week_day;
             $callback[$i]['id'] = $item->id;
             $callback[$i]['description'] = $item->description;
             $i++;
@@ -609,17 +629,20 @@ class App extends Controller
     }
 
     /**
+     * Codando descobri uma forma mais simples, caso eu venha usar futuramente, vai estar comentado: de luiz para futuras
+     * manutenções
      * IT LOAD WEEK DAY WITH AJAX TO FORM
      * @param array|null $data
      * @return void
+     * public function getWeekDay(?array $data): void
+     * {
+     * $id = filter_var($data['id'], FILTER_VALIDATE_INT);
+     * $weekDay = (new Hour())->findById($id)->week_day;
+     * $callback['week_day'] = $weekDay;
+     * echo json_encode($callback);
+     * }
      */
-    public function getWeekDay(?array $data): void
-    {
-        $id = filter_var($data['id'], FILTER_VALIDATE_INT);
-        $weekDay = (new Hour())->findById($id)->week_day;
-        $callback['week_day'] = $weekDay;
-        echo json_encode($callback);
-    }
+
 
     /**
      * IT REMOVES CURRENT HOUR OF TABLE WITH ONE CLICK
@@ -761,12 +784,7 @@ class App extends Controller
             false
         );
 
-        //list($list, $search) = (new Lists())->listFilters($data);
-        $cashFlows = (new CashFlow())->find(null, null,
-            'cash_flow.*, h.week_day, h.number_day, h.description as hour, s.nome_loja, cc.description as cost')
-            ->join('hour h', 'h.id', 'cash_flow.id_hour')
-            ->join('loja s', 's.id', 'cash_flow.id_store')
-            ->join('cost cc', 'cc.id', 'cash_flow.id_cost', 'LEFT');
+        list($cashFlows, $search, $total) = (new CashFlow())->listFilters($data);
 
         $page = (!empty($data['page']) ? $data['page'] : 1);
 
@@ -780,9 +798,9 @@ class App extends Controller
                 ->offset($pager->offset())
                 ->limit($pager->limit())
                 ->fetch(true),
-            'allMoney' => (new $cashFlows())->find(null, null, 'sum(value) as value')->fetch(),
+            'allMoney' => isnt_empty($total->fetch(), 'self', (object)['total' => '0,00']),
             'paginator' => $pager->render(),
-            'search' => ((object)'$search' ?? null)
+            'search' => ((object)$search ?? null)
         ]);
     }
 
@@ -801,6 +819,7 @@ class App extends Controller
             false
         );
         $id = filter_var($data['id'], FILTER_VALIDATE_INT);
+
 
         echo $this->view->render('cash-flow', [
             'head' => $head,

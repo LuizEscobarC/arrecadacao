@@ -18,6 +18,7 @@ $route->namespace("Source\App");
  */
 $route->group(null);
 $route->get("/", "Web:login");
+$route->post("/app/ajax_grap", "App:ajaxGrap");
 
 //auth
 $route->group(null);
