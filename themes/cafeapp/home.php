@@ -12,50 +12,65 @@
             <div class="app_main_left_fature">
                 <article class="app_widget app_widget_balance">
                     <header class="app_widget_title">
-                        <h2 class="icon-calendar-minus-o">Receber:</h2>
+                        <h2 class="icon-calendar-minus-o">Recebeu:</h2>
                     </header>
                     <div class="app_widget_content">
-                        <?php for ($i = 0; $i < 2; $i++): ?>
-                            <?= $v->insert("views/balance", ["month" => $i, "status" => "positive"]); ?>
-                        <?php endfor; ?>
-                        <a href="<?= url("app/receber"); ?>" title="Receitas"
-                           class="app_widget_more transition">+ Receitas</a>
+                        <?php foreach ($incomes as $income): ?>
+                            <?= $v->insert("views/balance", [
+                                "id" => $income->id,
+                                "month" => $income->date_moviment,
+                                "status" => "positive",
+                                'description' => $income->description,
+                                'value' => $income->value
+                            ]); ?>
+                        <?php endforeach; ?>
+                        <p title="Receitas"
+                           class="app_widget_more transition">+ Receitas</p>
                     </div>
                 </article>
 
                 <article class="app_widget app_widget_balance">
                     <header class="app_widget_title">
-                        <h2 class="icon-calendar-check-o">Pagar:</h2>
+                        <h2 class="icon-calendar-check-o">Saíu:</h2>
                     </header>
                     <div class="app_widget_content">
-                        <?php for ($i = 0; $i < 3; $i++): ?>
-                            <?= $v->insert("views/balance", ["month" => $i, "status" => "negative"]); ?>
-                        <?php endfor; ?>
-                        <a href="<?= url("app/pagar"); ?>" title="Despesas"
-                           class="app_widget_more transition">+ Despesas</a>
+                        <?php foreach ($expenses as $expense): ?>
+                            <?= $v->insert("views/balance",
+                                [
+                                    "id" => $expense->id,
+                                    "month" => $expense->date_moviment,
+                                    "status" => "negative",
+                                    'description' => $expense->description,
+                                    'value' => $expense->value
+                                ]); ?>
+                        <?php endforeach; ?>
+                        <p title="Despesas"
+                           class="app_widget_more transition">+ Despesas</p>
                     </div>
                 </article>
             </div>
         </section>
 
         <section class="app_main_right">
-            <ul class="app_widget_shortcuts">
+            <!-- <ul class="app_widget_shortcuts">
                 <li class="income radius transition" data-modalopen=".app_modal_income">
                     <p class="icon-plus-circle">Receita</p>
                 </li>
                 <li class="expense radius transition" data-modalopen=".app_modal_expense">
                     <p class="icon-plus-circle">Despesa</p>
                 </li>
-            </ul>
+            </ul> -->
 
             <article class="app_flex gradient-green">
                 <header class="app_flex_title">
-                    <h2 class="icon-briefcase">Casa</h2>
+                    <h2 class="icon-briefcase">Faturamento (<small>mês</small>)</h2>
                 </header>
-                <p class="app_flex_amount">R$ 1.285,00</p>
+                <p class="app_flex_amount"><?= money_fmt_br(isnt_empty($totalMonth, 'self', '0,00'), true); ?></p>
                 <p class="app_flex_balance">
-                    <span class="income">Receitas: R$ 12,520.00</span>
-                    <span class="expense">Despesas: R$ 11,000.00</span>
+                    <span class="income">Receitas: <?= money_fmt_br(isnt_empty($bothValues->total_incomes, 'self',
+                            '0,00'), true); ?></span>
+                    <span class="expense">Despesas: <?= money_fmt_br(isnt_empty($bothValues->total_expenses, 'self',
+                            '0,00'), true); ?></span>
                 </p>
             </article>
 
@@ -151,10 +166,11 @@
                             });
                         }
                     }, "json");
-                test();
+                    test();
                 }, 2000);
             }
-        test();
+
+            test();
         });
 
     </script>

@@ -57,10 +57,27 @@ class App extends Controller
         $chartData = (new CashFlow())->chartData();
         //END CHART
 
+        $numberDays = (new \DateTime('now'))->format('d');
+
+        $expenses = (new CashFlow())->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '2022-03-01' AND type = 2",
+            null, 'value, description, date_moviment, id')->fetch(true);
+
+        $incomes = (new CashFlow())->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '2022-03-01' AND type = 1",
+            null, 'value, description, date_moviment, id')->fetch(true);
+
+        $totalBilling = (($totalIncomes = (new CashFlow())->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '2022-03-01' AND type = 1",
+            null, "sum(value) as total")->fetch()->total) - ($totalExpenses = (new CashFlow())->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '2022-03-01' AND type = 2",
+            null, "sum(value) as total")->fetch()->total));
+
 
         echo $this->view->render("home", [
             "head" => $head,
             "chart" => $chartData,
+            //data, nome e valor
+            "expenses" => $expenses,
+            "incomes" => $incomes,
+            "totalMonth" => $totalBilling,
+            'bothValues' => (object)['total_incomes' => $totalIncomes, 'total_expenses' => $totalExpenses]
         ]);
     }
 
