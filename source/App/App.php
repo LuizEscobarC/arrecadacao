@@ -69,7 +69,6 @@ class App extends Controller
             null, "sum(value) as total")->fetch()->total) - ($totalExpenses = (new CashFlow())->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '2022-03-01' AND type = 2",
             null, "sum(value) as total")->fetch()->total));
 
-
         echo $this->view->render("home", [
             "head" => $head,
             "chart" => $chartData,
@@ -87,7 +86,7 @@ class App extends Controller
         $chartData = (new CashFlow())->chartData();
         $categories = str_replace("'", "", explode(",", $chartData->date_moviment));
         $callback["chart"] = [
-            "categories" => $categories,
+            "date_moviment" => $categories,
             "income" => array_map("abs", explode(",", $chartData->income)),
             "expense" => array_map("abs", explode(",", $chartData->expense))
         ];
@@ -805,19 +804,18 @@ class App extends Controller
 
         $page = (!empty($data['page']) ? $data['page'] : 1);
 
-        $pager = (new Pager('/arrecadacao/app/fluxos-de-caixa'));
+        $pager = (new Pager('/arrecadacao/app/fluxos-de-caixa/'));
         $pager->pager($cashFlows->count(), 20, $page);
-
 
         echo $this->view->render('cash-flows', [
             'head' => $head,
             'cashFlows' => $cashFlows->order('cash_flow.date_moviment, h.number_day, s.nome_loja')
-                ->offset($pager->offset())
                 ->limit($pager->limit())
+                ->offset($pager->offset())
                 ->fetch(true),
-            'allMoney' => isnt_empty($total->fetch(), 'self', (object)['total' => '0,00']),
+            'allMoney' => isnt_empty($total, 'self', (object)['total' => '0.00']),
             'paginator' => $pager->render(),
-            'search' => ((object)$search ?? null)
+            'search' => ((object)$search ?? (new \stdClass()))
         ]);
     }
 
@@ -851,7 +849,7 @@ class App extends Controller
      */
     public function saveCashFlow(?array $data): void
     {
-        if (!empty($data)) {
+        if (!in_array('', $data)) {
             $cash = (new CashFlow());
 
             if (!empty($data['id'])) {
@@ -863,7 +861,7 @@ class App extends Controller
                 $data["id_store"],
                 $data["id_hour"],
                 $data["description"],
-                $data["value"],
+                money_fmt_app($data["value"]),
                 $data["type"],
                 $data["id_cost"]
             );
@@ -874,6 +872,8 @@ class App extends Controller
                 $json['message'] = $this->message->success("Lançamento atualizado com sucesso!")->render();
                 $json['redirect'] = url("/app/fluxos-de-caixa");
             }
+        } else {
+            $json['message'] = $this->message->warning("Todos os campos são necessários!")->render();
         }
 
         echo json_encode($json);

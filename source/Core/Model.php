@@ -246,12 +246,14 @@ abstract class Model
      */
     protected function create(array $data): ?int
     {
+
         try {
             $columns = implode(", ", array_keys($data));
             $values = ":" . implode(", :", array_keys($data));
 
             $stmt = Connect::getInstance()->prepare("INSERT INTO " . static::$entity . " ({$columns}) VALUES ({$values})");
             $stmt->execute($this->filter($data));
+
 
             return Connect::getInstance()->lastInsertId();
         } catch (\PDOException $exception) {
@@ -290,10 +292,12 @@ abstract class Model
      */
     public function save(): bool
     {
+
         if (!$this->required()) {
             $this->message->warning("Preencha todos os campos para continuar");
             return false;
         }
+
 
         /** Update */
         if (!empty($this->id)) {
@@ -310,7 +314,6 @@ abstract class Model
             $id = $this->create($this->safe());
             if ($this->fail()) {
                 $this->message->error("Erro ao cadastrar, verifique os dados");
-                var_dump($this->fail());
                 return false;
             }
         }
@@ -375,7 +378,7 @@ abstract class Model
     {
         $filter = [];
         foreach ($data as $key => $value) {
-            $filter[$key] = (is_null($value) ? null : filter_var($value, FILTER_DEFAULT));
+            $filter[$key] = (is_null($value) ? null : filter_var($value, FILTER_SANITIZE_STRIPPED));
         }
         return $filter;
     }

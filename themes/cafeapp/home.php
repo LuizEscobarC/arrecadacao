@@ -12,18 +12,20 @@
             <div class="app_main_left_fature">
                 <article class="app_widget app_widget_balance">
                     <header class="app_widget_title">
-                        <h2 class="icon-calendar-minus-o">Recebeu:</h2>
+                        <h2 class="icon-calendar-minus-o">Entrou:</h2>
                     </header>
                     <div class="app_widget_content">
-                        <?php foreach ($incomes as $income): ?>
-                            <?= $v->insert("views/balance", [
-                                "id" => $income->id,
-                                "month" => $income->date_moviment,
-                                "status" => "positive",
-                                'description' => $income->description,
-                                'value' => $income->value
-                            ]); ?>
-                        <?php endforeach; ?>
+                        <?php if (!empty($incomes)): ?>
+                            <?php foreach ($incomes as $income): ?>
+                                <?= $v->insert("views/balance", [
+                                    "id" => $income->id,
+                                    "month" => $income->date_moviment,
+                                    "status" => "positive",
+                                    'description' => $income->description,
+                                    'value' => $income->value
+                                ]); ?>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                         <p title="Receitas"
                            class="app_widget_more transition">+ Receitas</p>
                     </div>
@@ -34,16 +36,18 @@
                         <h2 class="icon-calendar-check-o">Saíu:</h2>
                     </header>
                     <div class="app_widget_content">
-                        <?php foreach ($expenses as $expense): ?>
-                            <?= $v->insert("views/balance",
-                                [
-                                    "id" => $expense->id,
-                                    "month" => $expense->date_moviment,
-                                    "status" => "negative",
-                                    'description' => $expense->description,
-                                    'value' => $expense->value
-                                ]); ?>
-                        <?php endforeach; ?>
+                        <?php if (!empty($expenses)): ?>
+                            <?php foreach ($expenses as $expense): ?>
+                                <?= $v->insert("views/balance",
+                                    [
+                                        "id" => $expense->id,
+                                        "month" => $expense->date_moviment,
+                                        "status" => "negative",
+                                        'description' => $expense->description,
+                                        'value' => $expense->value
+                                    ]); ?>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                         <p title="Despesas"
                            class="app_widget_more transition">+ Despesas</p>
                     </div>
@@ -65,12 +69,13 @@
                 <header class="app_flex_title">
                     <h2 class="icon-briefcase">Faturamento (<small>mês</small>)</h2>
                 </header>
-                <p class="app_flex_amount"><?= money_fmt_br(isnt_empty($totalMonth, 'self', '0,00'), true); ?></p>
+
+                <p class="app_flex_amount"><?= money_fmt_br(isnt_empty($totalMonth, 'self', '0.00'), true); ?></p>
                 <p class="app_flex_balance">
                     <span class="income">Receitas: <?= money_fmt_br(isnt_empty($bothValues->total_incomes, 'self',
-                            '0,00'), true); ?></span>
+                            '0.00'), true); ?></span>
                     <span class="expense">Despesas: <?= money_fmt_br(isnt_empty($bothValues->total_expenses, 'self',
-                            '0,00'), true); ?></span>
+                            '0.00'), true); ?></span>
                 </p>
             </article>
 

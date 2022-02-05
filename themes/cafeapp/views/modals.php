@@ -459,7 +459,7 @@
 
             <div class="al-center">
                 <div>
-                    <button class="btn btn_inline radius transition icon-pencil-square-o">Atualizar</button>
+                    <button class="btn btn_inline radius transition icon-pencil-square-o">Lançar</button>
                 </div>
             </div>
         </form>

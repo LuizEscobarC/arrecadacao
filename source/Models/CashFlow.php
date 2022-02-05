@@ -2,6 +2,7 @@
 
 namespace Source\Models;
 
+use Composer\Package\Loader\ValidatingArrayLoader;
 use Source\Core\Model;
 use Source\Models\CafeApp\AppInvoice;
 
@@ -16,7 +17,7 @@ class CashFlow extends Model
     public function __construct()
     {
         parent::__construct('cash_flow', ['id', 'created_at', 'updated_at'],
-            ['date_moviment', 'id_store', 'id_hour', 'description', 'value', 'type']);
+            ['date_moviment', 'id_store', 'id_hour', 'description', 'value', 'type', 'id_cost']);
     }
 
     /**
@@ -34,9 +35,9 @@ class CashFlow extends Model
         int $idStore,
         int $idHour,
         string $description,
-        string $value,
+        float $value,
         int $type,
-        ?string $idCost
+        string $idCost
     ): CashFlow {
         $this->date_moviment = $dateMoviment;
         $this->id_store = $idStore;
@@ -119,12 +120,15 @@ class CashFlow extends Model
 
             // para pegar o totalizador de valor dinâmico com filtro
             $total = clone $this->find(null, null,
-                'cash_flow.*, h.week_day, h.number_day, h.description as hour, s.nome_loja, cc.description as cost, sum(value) as total')
-                ->join('hour h', 'h.id', 'cash_flow.id_hour')
-                ->join('loja s', 's.id', 'cash_flow.id_store')
-                ->join('cost cc', 'cc.id', 'cash_flow.id_cost', 'LEFT');
-
-            $total->putQuery($where, ' WHERE ');
+                "(SELECT SUM(value) FROM cash_flow c 
+                    inner join hour h on h.id = c.id_hour 
+                    inner join loja s on s.id = c.id_store
+                    left join cost cc on cc.id = c.id_cost WHERE type = 1 AND {$where}) AS income,
+                 (SELECT SUM(value) FROM cash_flow c 
+                    join hour h on h.id = c.id_hour 
+                    join loja s on s.id = c.id_store
+                    left join cost cc on cc.id = c.id_cost WHERE type = 2 AND {$where}) AS expense"
+            );
 
             $this->find(null, null,
                 'cash_flow.*, h.week_day, h.number_day, h.description as hour, s.nome_loja, cc.description as cost')
@@ -135,7 +139,9 @@ class CashFlow extends Model
             $this->putQuery($where, ' WHERE ');
 
         } else {
-            $total = clone $this->find(null, null, 'sum(value) as total')
+            $total = clone $this->find(null, null,
+                "(SELECT SUM(value) FROM cash_flow WHERE type = 1 ) AS income,
+                 (SELECT SUM(value) FROM cash_flow WHERE type = 2 ) AS expense")
                 ->join('hour h', 'h.id', 'cash_flow.id_hour')
                 ->join('loja s', 's.id', 'cash_flow.id_store')
                 ->join('cost cc', 'cc.id', 'cash_flow.id_cost', 'LEFT');
@@ -149,6 +155,15 @@ class CashFlow extends Model
             $search['search_store'] = null;
             $search['search_hour'] = null;
             $search['search_date'] = null;
+        }
+
+        if (!empty($total)) {
+            $total = $total->fetch();
+            if (empty($total->income)) {
+                $total = -abs($total->expense);
+            } else {
+                $total = $total->income - $total->expense;
+            }
         }
         return [$this, $search, $total];
     }
@@ -172,11 +187,11 @@ class CashFlow extends Model
         $numberDays = (new \DateTime('now'))->format('d');
 
         $chart = $this
-            ->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '2022-03-01' GROUP BY DATE(created_at)",
+            ->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '2022-02-30' GROUP BY day(date_moviment)",
                 null,
-                "   DATE_FORMAT(created_at, '%d') AS due_date,
-                    (SELECT SUM(value) FROM cash_flow WHERE type = 1 AND DATE_FORMAT(created_at, '%d') = due_date) AS income,
-                    (SELECT SUM(value) FROM cash_flow WHERE type = 2 AND DATE_FORMAT(created_at, '%d') = due_date ) AS expense
+                "   DATE_FORMAT(date_moviment, '%d') AS due_date,
+                    (SELECT SUM(value) FROM cash_flow WHERE type = 1 AND DATE_FORMAT(date_moviment, '%d') = due_date) AS income,
+                    (SELECT SUM(value) FROM cash_flow WHERE type = 2 AND DATE_FORMAT(date_moviment, '%d') = due_date ) AS expense
                 "
             )->fetch(true);
 
@@ -188,11 +203,10 @@ class CashFlow extends Model
             foreach ($chart as $chartItem) {
                 $chartCategories[] = $chartItem->due_date;
 
-                    $chartExpense[] = $chartItem->expense;
-                    $chartIncome[] = $chartItem->income;
+                $chartExpense[] = $chartItem->expense;
+                $chartIncome[] = $chartItem->income;
 
             }
-
 
 
             $chartData->date_moviment = "'" . implode("','", $chartCategories) . "'";

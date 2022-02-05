@@ -15,7 +15,7 @@
                 &ofcir; Selecione uma loja
             </option>
             <?php foreach ((new \Source\Models\Store())->find()->fetch(true) as $store): ?>
-                <option <?= ($search->search_store == $store->nome_loja ? 'selected' : ""); ?>
+                <option <?= (($search->search_store) == $store->nome_loja ? 'selected' : ""); ?>
                         value="<?= $store->nome_loja; ?>">
                     &ofcir; <?= $store->nome_loja; ?></option>
             <?php endforeach; ?>
@@ -97,7 +97,7 @@
         <p class="desc"></p>
         <p></p>
         <p>Valor total:</p>
-        <p class="icon-thumbs-o-up">R$ <?= money_fmt_br($allMoney->total); ?></p>
+        <p class="icon-thumbs-o-up"><?= money_fmt_br((!empty($allMoney) ? $allMoney : '0.00'), true); ?></p>
     </div>
     <?= $paginator; ?>
 </section>
