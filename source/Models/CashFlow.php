@@ -111,7 +111,7 @@ class CashFlow extends Model
             if ($search['search_date']) {
                 $date = str_replace('/', '-', $search['search_date']);
                 $date = date_fmt_app($date);
-                $where[] = "lists.date_moviment = '{$date}'";
+                $where[] = "cash_flow.date_moviment = '{$date}'";
             } else {
                 $search['search_date'] = null;
             }
@@ -157,13 +157,16 @@ class CashFlow extends Model
             $search['search_date'] = null;
         }
 
-        if (!empty($total)) {
+
+        if (!empty($total->income) && !empty($total->expense)) {
             $total = $total->fetch();
-            if (empty($total->income)) {
+            if (empty($total->income) && !empty($total->expense)) {
                 $total = -abs($total->expense);
             } else {
                 $total = $total->income - $total->expense;
             }
+        } else {
+            $total = null;
         }
         return [$this, $search, $total];
     }

@@ -813,7 +813,7 @@ class App extends Controller
                 ->limit($pager->limit())
                 ->offset($pager->offset())
                 ->fetch(true),
-            'allMoney' => isnt_empty($total, 'self', (object)['total' => '0.00']),
+            'allMoney' => isnt_empty($total, 'self', '0.00'),
             'paginator' => $pager->render(),
             'search' => ((object)$search ?? (new \stdClass()))
         ]);

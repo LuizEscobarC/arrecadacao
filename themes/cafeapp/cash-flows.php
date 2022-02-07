@@ -55,13 +55,13 @@
 <section class="app_launch_box">
     <div class="app_launch_item header">
         <p class="wrap">ID</p>
-        <p class="wrap">dia da semana</p>
-        <p class="desc">descrição lançamento</p>
-        <p class="desc">Horário desejado</p>
-        <p class="desc">Centro de Custo</p>
         <p class="date">Horário de Movimentação</p>
+        <p class="wrap">dia da semana</p>
+        <p class="desc">Horário desejado</p>
         <p class="desc">Loja</p>
+        <p class="desc">Centro de Custo</p>
         <p class="price">Valor de movimento</p>
+        <p class="desc">descrição lançamento</p>
         <p class="desc">Tipo de movimento</p>
         <p class="wrap"></p>
     </div>
@@ -69,18 +69,18 @@
         <?php foreach ($cashFlows as $cash): ?>
             <article class="app_launch_item">
                 <p class="wrap"><?= $cash->id; ?></p>
+                <p class="date"><?= date_fmt($cash->date_moviment, 'd/m/Y') . ' ' . $cash->week_day; ?></p>
                 <p class="wrap app_invoice_link transition">
                     <a title="Ver Lista" href="<?= url("/app/horario/{$cash->id}"); ?>"><?= $cash->week_day; ?></a>
                 </p>
-                <p class="desc font_80_percent"><?= str_limit_words($cash->description, 4); ?></p>
                 <p class="desc"><?= $cash->hour; ?></p>
-                <p class="desc"><?= $cash->cost; ?></p>
-                <p class="date"><?= date_fmt($cash->date_moviment, 'd/m/Y') . ' ' . $cash->week_day; ?></p>
                 <p class="desc"><?= $cash->nome_loja; ?></p>
+                <p class="desc"><?= $cash->cost; ?></p>
                 <p class="price">
                     <span>R$</span>
                     <span><?= money_fmt_br($cash->value); ?></span>
                 </p>
+                <p class="desc font_80_percent"><?= str_limit_words($cash->description, 4); ?></p>
                 <p class="desc">
                 <span <?= ($cash->type == 1 ? ' title="Receber" class="check income color_green icon-thumbs-o-up transition"' :
                     ' title="Receber" class="check income icon-thumbs-o-down color_red transition"'); ?>><?= ($cash->type == 1 ?
@@ -97,7 +97,7 @@
         <p class="desc"></p>
         <p></p>
         <p>Valor total:</p>
-        <p class="icon-thumbs-o-up"><?= money_fmt_br((!empty($allMoney) ? $allMoney : '0.00'), true); ?></p>
+        <p class="icon-thumbs-o-up"><?= money_fmt_br($allMoney); ?></p>
     </div>
     <?= $paginator; ?>
 </section>
