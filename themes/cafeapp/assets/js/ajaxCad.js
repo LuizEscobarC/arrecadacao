@@ -2,10 +2,10 @@ $(function () {
     //ajax form
     $("form:not('.ajax_off')").submit(function (e) {
         e.preventDefault();
-        var form = $(this);
-        var load = $(".ajax_load");
-        var flashClass = "ajax_response";
-        var flash = $("." + flashClass);
+        const form = $(this);
+        const load = $(".ajax_load");
+        const flashClass = "ajax_response";
+        const flash = $("." + flashClass);
 
         form.ajaxSubmit({
             url: form.attr("action"),

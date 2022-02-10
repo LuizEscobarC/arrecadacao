@@ -1,3 +1,4 @@
+const $body = $("body");
 $(function () {
     var effecttime = 200;
 
@@ -17,7 +18,6 @@ $(function () {
         }
     });
 
-    const $body = $("body");
     $body.on('click', "#sidebar", function (e) {
         var clicked = $(this);
         const $appDrop = $(".app_drop");
@@ -194,106 +194,70 @@ $(function () {
     $(".mask-doc").mask('000.000.000-00', {reverse: true});
     $(".mask-day").mask('00', {reverse: true});
 
+    // BEGIN REMOVE ENTITIES
+
+    /## REMOVE ENTITY DRY FUNCTION ##/
+    function remove($this, dataAttr, confirmText) {
+        var remove = confirm(confirmText);
+
+        if (remove === true) {
+            $.post($this.data(dataAttr), function (response) {
+                //redirect
+                if (response.redirect) {
+                    window.location.href = response.redirect;
+                }
+            }, "json");
+        }
+    }
+
     /*
      *  APP HOUR REMOVE
      */
-    $("[data-hourremove]").click(function (e) {
-        var remove = confirm("ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir esse horário?");
-
-        if (remove === true) {
-            $.post($(this).data("hourremove"), function (response) {
-                //redirect
-                if (response.redirect) {
-                    window.location.href = response.redirect;
-                }
-            }, "json");
-        }
+    $("[data-hourremove]").click(function () {
+        remove($(this), "hourremove", "ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir esse horário?");
     })
 
     /*
      *  APP USER REMOVE
      */
-    $("[data-userremove]").click(function (e) {
-        var remove = confirm("ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir esse usuário?");
-
-        if (remove === true) {
-            $.post($(this).data("userremove"), function (response) {
-                //redirect
-                if (response.redirect) {
-                    window.location.href = response.redirect;
-                }
-            }, "json");
-        }
-    })
+    $("[data-userremove]").click(function () {
+            remove($(this), "userremove", "ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir esse usuário?");
+    });
 
     /*
-     *  APP USER REMOVE
+     *  APP CENTER REMOVE
      */
-    $("[data-centerremove]").click(function (e) {
-        var remove = confirm("ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir esse centro de custo?");
-
-        if (remove === true) {
-            $.post($(this).data("centerremove"), function (response) {
-                //redirect
-                if (response.redirect) {
-                    window.location.href = response.redirect;
-                }
-            }, "json");
-        }
-    })
+    $("[data-centerremove]").click(function () {
+        remove($(this), "centerremove", "ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir esse centro de custo?");
+    });
 
     /*
      *  APP STORE REMOVE
      */
-    $("[data-storeremove]").click(function (e) {
-        var remove = confirm("ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir essa loja?");
-
-        if (remove === true) {
-            $.post($(this).data("storeremove"), function (response) {
-                //redirect
-                if (response.redirect) {
-                    window.location.href = response.redirect;
-                }
-            }, "json");
-        }
-    })
+    $("[data-storeremove]").click(function () {
+        remove($(this), "storeremove", "ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir essa loja?");
+    });
 
     /*
-     *  APP STORE REMOVE
+     *  APP LIST REMOVE
      */
-    $("[data-listremove]").click(function (e) {
-        var remove = confirm("ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir essa lista?");
-
-        if (remove === true) {
-            $.post($(this).data("listremove"), function (response) {
-                //redirect
-                if (response.redirect) {
-                    window.location.href = response.redirect;
-                }
-            }, "json");
-        }
-    })
+    $("[data-listremove]").click(function () {
+        remove($(this), "listremove", "ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir essa lista?");
+    });
 
     /*
-     *  APP STORE REMOVE
+     *  APP CASH-FLOW REMOVE
      */
-    $("[data-cashremove]").click(function (e) {
-        var remove = confirm("ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir esse lançamento?");
+    $("[data-cashremove]").click(function () {
+        remove($(this), "cashremove", "ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir esse lançamento?");
+    });
 
-        if (remove === true) {
-            $.post($(this).data("cashremove"), function (response) {
-                //redirect
-                if (response.redirect) {
-                    window.location.href = response.redirect;
-                }
-            }, "json");
-        }
-    })
+    // END REMOVE ENTITIES
 
     /*
     * AJAX GET HOUR
     */
-    $('input#hour').change(function () {
+    $ajaxGetHour = $body.on('change', 'input#hour', function () {
         if ($('select#callback')) {
             $('select#callback').html('');
         }
@@ -356,6 +320,36 @@ $(function () {
         width: '100%',
         placeholder: 'Escolha uma loja',
     });
+
+    // BEGIN COMO DEFAULT ELE SETA OS INPUTS DE DATA DOS CADASTROS COM A DATA ATUAL
+    $body.on('click', '#date_now', function() {
+        const data = new Date();
+        let dia = String(data.getDate()).padStart(2, '0');
+        let mes = String(data.getMonth() + 1).padStart(2, '0');
+        let ano = data.getFullYear();
+        dataAtual = ano + '-' + mes + '-' + dia;
+        $('#hour').attr('value', dataAtual);
+        setTimeout(
+            function () {
+                $.ajax({
+                    url: $('input#hour').attr('rel'),
+                    type: 'POST',
+                    data: $('input#hour').serialize(),
+                    dataType: 'JSON',
+                    success: function (callback) {
+                        $('p#label').html(callback[0]);
+
+                        callback.shift();
+                        $('select#callback').append('<option value="0">Escolha</option>');
+                        for (let i = 0, len = callback.length; i < len; ++i) {
+                            $('select#callback').append('<option value="' + callback[i].id + '">' + callback[i].description + '</option>');
+                        }
+                    }
+                });
+            }, 1000);
+    })
+    // END DEFAULT HOUR
+
 
 
 });

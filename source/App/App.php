@@ -222,7 +222,7 @@ class App extends Controller
             $hour->destroy();
         }
         $this->message->success("Tudo pronto {$this->user->first_name}, usuário removido com sucesso!")->flash();
-        $json['redirect'] = url('/app');
+        $json['redirect'] = url('/app/usuarios');
         echo json_encode($json);
     }
 
@@ -397,7 +397,7 @@ class App extends Controller
             $hour->destroy();
         }
         $this->message->success("Tudo pronto {$this->user->first_name}, loja removida com sucesso!")->flash();
-        $json['redirect'] = url('/app');
+        $json['redirect'] = url('/app/lojas');
         echo json_encode($json);
     }
 
@@ -507,7 +507,7 @@ class App extends Controller
             $center->destroy();
         }
         $this->message->success("Tudo pronto {$this->user->first_name}, centro de custo removido com sucesso!")->flash();
-        $json['redirect'] = url('/app');
+        $json['redirect'] = url('/app/centros-de-custo');
         echo json_encode($json);
     }
 
@@ -672,7 +672,7 @@ class App extends Controller
             $hour->destroy();
         }
         $this->message->success("Tudo pronto {$this->user->first_name}, horário removido com sucesso!")->flash();
-        $json['redirect'] = url('/app');
+        $json['redirect'] = url('/app/horarios');
         echo json_encode($json);
     }
 
@@ -784,7 +784,7 @@ class App extends Controller
             $list->destroy();
         }
         $this->message->success("Tudo pronto {$this->user->first_name}, lista de custo removido com sucesso!")->flash();
-        $json['redirect'] = url('/app');
+        $json['redirect'] = url('/app/listas');
         echo json_encode($json);
     }
 

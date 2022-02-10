@@ -51,6 +51,8 @@
         Novo lançamento
     </div>
 </div>
+<div class="ajax_response"><?= flash(); ?></div>
+
 
 <section class="app_launch_box">
     <div class="app_launch_item header">
