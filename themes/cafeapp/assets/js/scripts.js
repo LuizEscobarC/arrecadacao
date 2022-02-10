@@ -1,4 +1,5 @@
 const $body = $("body");
+const $inputHour = $('input#hour');
 $(function () {
     var effecttime = 200;
 
@@ -265,7 +266,7 @@ $(function () {
             $('#label').html('');
         }
         $.ajax({
-            url: $('input#hour').attr('rel'),
+            url: $inputHour.attr('rel'),
             type: 'POST',
             data: $(this).serialize(),
             dataType: 'JSON',
@@ -332,9 +333,9 @@ $(function () {
         setTimeout(
             function () {
                 $.ajax({
-                    url: $('input#hour').attr('rel'),
+                    url: $inputHour.attr('rel'),
                     type: 'POST',
-                    data: $('input#hour').serialize(),
+                    data: $inputHour.serialize(),
                     dataType: 'JSON',
                     success: function (callback) {
                         $('p#label').html(callback[0]);
