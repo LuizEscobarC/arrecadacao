@@ -11,7 +11,7 @@
     <form class="ajax_off app_launch_form_filter app_form" action="<?= url('/app/listas'); ?>" method="post">
 
         <select name="search_store" id="select_page_store" class="operator">
-            <option value="">
+            <option value="0">
                 &ofcir; Selecione uma loja
             </option>
             <?php foreach ((new \Source\Models\Store())->find()->fetch(true) as $store): ?>
@@ -22,7 +22,7 @@
         </select>
 
         <select name="search_hour" id="select_page_hour" class="operator">
-            <option value="">
+            <option value="0">
                 &ofcir; Selecione um horário
             </option>
             <?php foreach ((new \Source\Models\Hour())->find()->fetch(true) as $hour): ?>

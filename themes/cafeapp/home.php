@@ -27,7 +27,7 @@
                             <?php endforeach; ?>
                         <?php endif; ?>
                         <p title="Receitas"
-                           class="app_widget_more transition">+ Receitas</p>
+                           class="app_widget_more transition">Últimos 5 lançamentos</p>
                     </div>
                 </article>
 
@@ -49,7 +49,7 @@
                             <?php endforeach; ?>
                         <?php endif; ?>
                         <p title="Despesas"
-                           class="app_widget_more transition">+ Despesas</p>
+                           class="app_widget_more transition">Últimos 5 lançamentos</p>
                     </div>
                 </article>
             </div>

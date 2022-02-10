@@ -60,10 +60,10 @@ class App extends Controller
         $numberDays = (new \DateTime('now'))->format('d');
 
         $expenses = (new CashFlow())->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '2022-03-01' AND type = 2",
-            null, 'value, description, date_moviment, id')->fetch(true);
+            null, 'value, description, date_moviment, id')->limit('5')->fetch(true);
 
         $incomes = (new CashFlow())->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '2022-03-01' AND type = 1",
-            null, 'value, description, date_moviment, id')->fetch(true);
+            null, 'value, description, date_moviment, id')->limit('5')->fetch(true);
 
         $totalBilling = (($totalIncomes = (new CashFlow())->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '2022-03-01' AND type = 1",
             null, "sum(value) as total")->fetch()->total) - ($totalExpenses = (new CashFlow())->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '2022-03-01' AND type = 2",
@@ -110,7 +110,7 @@ class App extends Controller
         $user = new User();
         $page = (!empty($data['page']) ? $data['page'] : 1);
 
-        $pager = (new Pager('/arrecadacao/app/usuarios/'));
+        $pager = (new Pager(url('/app/usuarios/')));
         $pager->pager($user->find()->count(), 20, $page);
 
         echo $this->view->render("users", [
@@ -488,7 +488,7 @@ class App extends Controller
                 $json['message'] = $center->message()->render();
             } else {
                 $json['message'] = $this->message->success('Centro de custo atualizado com sucesso!')->render();
-                $json['redirect'] = url("/app/centros-de-custo");
+                $json['redirect'] = url("/app/centro-de-custo/{$data['id']}");
             }
         }
 
@@ -617,7 +617,7 @@ class App extends Controller
                 $json['message'] = $hour->message()->render();
             } else {
                 $json['message'] = $this->message->success('Horário de custo atualizado com sucesso!')->render();
-                $json['redirect'] = url("/app/horarios");
+                $json['redirect'] = url("/app/horario/{$data['id']}");
             }
         }
 
@@ -749,20 +749,23 @@ class App extends Controller
         if (!empty($data)) {
             //atualizar
             $list = (new Lists());
-
             if (!empty($data['id'])) {
                 $list = $list->findById($data['id']);
             }
 
-            $list->bootstrap($data['id_hour'], $data['id_store'], str_replace(['.', ','], '', $data['total_value']),
-                ($data['date_moviment']));
+            $list->bootstrap(
+                $data['id_hour'],
+                $data['id_store'],
+                money_fmt_app($data['total_value']),
+                ($data['date_moviment'])
+            );
 
             /** @var Lists $list */
             if (!$list->save()) {
                 $json['message'] = $list->message()->render();
             } else {
                 $json['message'] = $this->message->success('Lista atualizado com sucesso!')->render();
-                $json['redirect'] = url("/app/listas");
+                $json['redirect'] = url("/app/lista/{$data['id']}");
             }
         }
 
@@ -870,7 +873,7 @@ class App extends Controller
                 $json['message'] = $cash->message()->render();
             } else {
                 $json['message'] = $this->message->success("Lançamento atualizado com sucesso!")->render();
-                $json['redirect'] = url("/app/fluxos-de-caixa");
+                $json['redirect'] = url("/app/fluxo-de-caixa/{$data['id']}");
             }
         } else {
             $json['message'] = $this->message->warning("Todos os campos são necessários!")->render();

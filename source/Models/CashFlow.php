@@ -35,7 +35,7 @@ class CashFlow extends Model
         int $idStore,
         int $idHour,
         string $description,
-        float $value,
+        string $value,
         int $type,
         string $idCost
     ): CashFlow {
@@ -187,24 +187,38 @@ class CashFlow extends Model
         $chartData->expense = "0,0,0,0,0";
         $chartData->income = "0,0,0,0,0";
 
-        $numberDays = (new \DateTime('now'))->format('d');
+        // BEGIN BUILDA O IN () DE MESES DA QUERY
+        $m = date_fmt('now', '-m');
+        $buildIn = '';
+        for ($i = 1; $i <= 31; $i++) {
+            if ($i < 10  && $i !== 31) {
+                $buildIn .= "0{$i}{$m}, ";
+            } elseif ($i !== 31) {
+                $buildIn .= "{$i}{$m}, ";
+            }
+            if ($i === 31) {
+                $buildIn .= "{$i}{$m}";
+            }
+        }
+        // END BUILD
 
         $chart = $this
-            ->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '2022-02-30' GROUP BY day(date_moviment)",
+            ->find("DATE_FORMAT(date_moviment, '%m-%d') in ({$buildIn})",
                 null,
-                "   DATE_FORMAT(date_moviment, '%d') AS due_date,
-                    (SELECT SUM(value) FROM cash_flow WHERE type = 1 AND DATE_FORMAT(date_moviment, '%d') = due_date) AS income,
-                    (SELECT SUM(value) FROM cash_flow WHERE type = 2 AND DATE_FORMAT(date_moviment, '%d') = due_date ) AS expense
+                "   distinct DATE_FORMAT(date_moviment, '%d/%m') AS date,
+                    (SELECT SUM(value) FROM cash_flow WHERE type = 1 AND DATE_FORMAT(date_moviment, '%d/%m') = date) AS income,
+                    (SELECT SUM(value) FROM cash_flow WHERE type = 2 AND DATE_FORMAT(date_moviment, '%d/%m') = date ) AS expense
                 "
-            )->fetch(true);
+            )->order('date_moviment')->fetch(true);
 
 
+        // BEGIN FORMATA EM STRING SEPARADO POR VIRGULAS PARA O GRÁFICO
         if ($chart) {
             $chartCategories = [];
             $chartExpense = [];
             $chartIncome = [];
             foreach ($chart as $chartItem) {
-                $chartCategories[] = $chartItem->due_date;
+                $chartCategories[] = $chartItem->date;
 
                 $chartExpense[] = $chartItem->expense;
                 $chartIncome[] = $chartItem->income;
@@ -216,6 +230,7 @@ class CashFlow extends Model
             $chartData->expense = implode(",", array_map("abs", $chartExpense));
             $chartData->income = implode(",", array_map("abs", $chartIncome));
         }
+        // END FORMATA
 
         return $chartData;
     }
