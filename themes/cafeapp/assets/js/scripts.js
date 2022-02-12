@@ -1,7 +1,45 @@
 const $body = $("body");
-const $inputHour = $('input#hour');
 $(function () {
     var effecttime = 200;
+
+    // BEGIN FUNCTIONS
+
+    /## GET HOUR DRY FUNCTION ##/
+
+    function getHours(inputSelect) {
+        $.ajax({
+            url: inputSelect.attr('rel'),
+            type: 'POST',
+            data: inputSelect.serialize(),
+            dataType: 'JSON',
+            success: function (callback) {
+                $('p#label').html(callback[0]);
+                callback.shift();
+                $('select#callback').append('<option value="0">Escolha</option>');
+                for (let i = 0, len = callback.length; i < len; ++i) {
+                    $('select#callback').append('<option value="' + callback[i].id + '">' + callback[i].description + '</option>');
+                }
+            }
+        });
+    }
+
+    /## REMOVE ENTITY DRY FUNCTION ##/
+
+    function remove($this, dataAttr, confirmText) {
+        var remove = confirm(confirmText);
+
+        if (remove === true) {
+            $.post($this.data(dataAttr), function (response) {
+                //redirect
+                if (response.redirect) {
+                    window.location.href = response.redirect;
+                }
+            }, "json");
+        }
+    }
+
+    // END FUNCTIONS
+
 
     /*
      * MOBILE MENU
@@ -197,20 +235,6 @@ $(function () {
 
     // BEGIN REMOVE ENTITIES
 
-    /## REMOVE ENTITY DRY FUNCTION ##/
-    function remove($this, dataAttr, confirmText) {
-        var remove = confirm(confirmText);
-
-        if (remove === true) {
-            $.post($this.data(dataAttr), function (response) {
-                //redirect
-                if (response.redirect) {
-                    window.location.href = response.redirect;
-                }
-            }, "json");
-        }
-    }
-
     /*
      *  APP HOUR REMOVE
      */
@@ -222,7 +246,7 @@ $(function () {
      *  APP USER REMOVE
      */
     $("[data-userremove]").click(function () {
-            remove($(this), "userremove", "ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir esse usuário?");
+        remove($(this), "userremove", "ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir esse usuário?");
     });
 
     /*
@@ -258,28 +282,14 @@ $(function () {
     /*
     * AJAX GET HOUR
     */
-    $ajaxGetHour = $body.on('change', 'input#hour', function () {
+    $body.on('change', 'input.hour', function () {
         if ($('select#callback')) {
             $('select#callback').html('');
         }
         if ($('#label')) {
             $('#label').html('');
         }
-        $.ajax({
-            url: $inputHour.attr('rel'),
-            type: 'POST',
-            data: $(this).serialize(),
-            dataType: 'JSON',
-            success: function (callback) {
-                $('p#label').html(callback[0]);
-
-                 callback.shift();
-                $('select#callback').append('<option value="0">Escolha</option>');
-                for (let i = 0, len = callback.length; i < len; ++i) {
-                    $('select#callback').append('<option value="' + callback[i].id + '">' + callback[i].description + '</option>');
-                }
-            }
-        });
+        getHours($(this));
     });
 
     /** $('select#callback').change(function () {
@@ -296,61 +306,24 @@ $(function () {
 
 
     /* Select with search*/
-    $("select#select_page").select2({
+    $("select.select2Input").select2({
         width: '100%',
         placeholder: 'Escolha uma loja',
 
-    });
-
-    $("select#select_page2").select2({
-        width: '100%',
-        placeholder: 'Escolha uma loja',
-    });
-
-    $("select#select_page_hour").select2({
-        width: '150',
-        placeholder: 'Escolha um horário',
-    });
-
-    $("select#select_page_store").select2({
-        width: '150',
-        placeholder: 'Escolha uma loja',
-    });
-
-    $("select#select_page_center").select2({
-        width: '100%',
-        placeholder: 'Escolha uma loja',
     });
 
     // BEGIN COMO DEFAULT ELE SETA OS INPUTS DE DATA DOS CADASTROS COM A DATA ATUAL
-    $body.on('click', '#date_now', function() {
+    if (window.location.toString() === 'http://www.localhost/arrecadacao/app/cadastrar-lista' || window.location.toString() === 'http://www.localhost/arrecadacao/app/cadastrar-fluxo-de-caixa') {
         const data = new Date();
-        let dia = String(data.getDate()).padStart(2, '0');
-        let mes = String(data.getMonth() + 1).padStart(2, '0');
-        let ano = data.getFullYear();
+        const dia = String(data.getDate()).padStart(2, '0');
+        const mes = String(data.getMonth() + 1).padStart(2, '0');
+        const ano = data.getFullYear();
         dataAtual = ano + '-' + mes + '-' + dia;
-        $('#hour').attr('value', dataAtual);
-        setTimeout(
-            function () {
-                $.ajax({
-                    url: $inputHour.attr('rel'),
-                    type: 'POST',
-                    data: $inputHour.serialize(),
-                    dataType: 'JSON',
-                    success: function (callback) {
-                        $('p#label').html(callback[0]);
-
-                        callback.shift();
-                        $('select#callback').append('<option value="0">Escolha</option>');
-                        for (let i = 0, len = callback.length; i < len; ++i) {
-                            $('select#callback').append('<option value="' + callback[i].id + '">' + callback[i].description + '</option>');
-                        }
-                    }
-                });
-            }, 1000);
-    })
+        const hourInput = $('input.hour');
+        hourInput.attr('value', dataAtual);
+        getHours(hourInput)
+    }
     // END DEFAULT HOUR
-
 
 
 });

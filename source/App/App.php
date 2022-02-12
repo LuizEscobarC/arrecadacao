@@ -153,6 +153,20 @@ class App extends Controller
         ]);
     }
 
+    public function createUser(): void
+    {
+        $head = $this->seo->render(
+            "Cadastrar usuário - " . CONF_SITE_NAME,
+            CONF_SITE_DESC,
+            url(),
+            theme("/assets/images/share.jpg"),
+            false
+        );
+        echo $this->view->render("creates/user", [
+            "head" => $head
+        ]);
+    }
+
 
     /**
      * APP REGISTER USER |  IT UPDATES OR CREATES CURRENT USER OF THE TABLE DEPENDING ON IF HAVE ID OR NOT
@@ -343,6 +357,20 @@ class App extends Controller
         ]);
     }
 
+    public function createStore(): void
+    {
+        $head = $this->seo->render(
+            "Cadastrar Loja - " . CONF_SITE_NAME,
+            CONF_SITE_DESC,
+            url(),
+            theme("/assets/images/share.jpg"),
+            false
+        );
+        echo $this->view->render("creates/store", [
+            "head" => $head
+        ]);
+    }
+
     /**
      *  IT UPDATES OR CREATES CURRENT STORE OF THE TABLE DEPENDING ON IF HAVE ID OR NOT
      * @param array|null $data
@@ -465,6 +493,20 @@ class App extends Controller
         ]);
     }
 
+    public function createCost(): void
+    {
+        $head = $this->seo->render(
+            "Cadastrar Centro de Custo - " . CONF_SITE_NAME,
+            CONF_SITE_DESC,
+            url(),
+            theme("/assets/images/share.jpg"),
+            false
+        );
+        echo $this->view->render("creates/cost", [
+            "head" => $head
+        ]);
+    }
+
     /**
      *  IT UPDATES OR CREATES CURRENT COST CENTER OF THE TABLE DEPENDING ON IF HAVE ID OR NOT
      * @param array $data
@@ -475,7 +517,9 @@ class App extends Controller
 
         $data = filter_var_array($data, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-        if (!empty($data)) {
+        $data_required = $data;
+        unset($data_required['description']);
+        if (!in_array('', $data_required)) {
             //atualizar
             $center = (new Center());
 
@@ -488,7 +532,6 @@ class App extends Controller
                 $json['message'] = $center->message()->render();
             } else {
                 $json['message'] = $this->message->success('Centro de custo atualizado com sucesso!')->render();
-                $json['redirect'] = url("/app/centro-de-custo/{$data['id']}");
             }
         }
 
@@ -566,6 +609,20 @@ class App extends Controller
         ]);
     }
 
+    public function createHour(): void
+    {
+        $head = $this->seo->render(
+            "Cadastrar Horário - " . CONF_SITE_NAME,
+            CONF_SITE_DESC,
+            url(),
+            theme("/assets/images/share.jpg"),
+            false
+        );
+        echo $this->view->render("creates/hour", [
+            "head" => $head
+        ]);
+    }
+
     /**
      *  IT UPDATES OR CREATES CURRENT HOUR OF THE TABLE DEPENDING ON IF HAVE ID OR NOT
      * @param array|null $data
@@ -617,7 +674,6 @@ class App extends Controller
                 $json['message'] = $hour->message()->render();
             } else {
                 $json['message'] = $this->message->success('Horário de custo atualizado com sucesso!')->render();
-                $json['redirect'] = url("/app/horario/{$data['id']}");
             }
         }
 
@@ -699,7 +755,8 @@ class App extends Controller
         $pager = (new Pager('/arrecadacao/app/listas/'));
         $pager->pager($list->count(), 20, $page);
 
-        $lists = $list->order('lists.date_moviment, s.nome_loja')
+        /** @var Lists $list */
+        $lists = $list->order('lists.date_moviment DESC, s.nome_loja ASC')
             ->offset($pager->offset())
             ->limit($pager->limit())
             ->fetch(true);
@@ -736,6 +793,20 @@ class App extends Controller
         ]);
     }
 
+    public function createList(): void
+    {
+        $head = $this->seo->render(
+            "Cadastrar Lista - " . CONF_SITE_NAME,
+            CONF_SITE_DESC,
+            url(),
+            theme("/assets/images/share.jpg"),
+            false
+        );
+        echo $this->view->render("creates/lists", [
+            "head" => $head
+        ]);
+    }
+
     /**
      *  IT UPDATES OR CREATES CURRENT LISTS OF THE TABLE DEPENDING ON IF HAVE ID OR NOT
      * @param array $data
@@ -765,7 +836,6 @@ class App extends Controller
                 $json['message'] = $list->message()->render();
             } else {
                 $json['message'] = $this->message->success('Lista atualizado com sucesso!')->render();
-                $json['redirect'] = url("/app/lista/{$data['id']}");
             }
         }
 
@@ -812,7 +882,7 @@ class App extends Controller
 
         echo $this->view->render('cash-flows', [
             'head' => $head,
-            'cashFlows' => $cashFlows->order('cash_flow.date_moviment, h.number_day, s.nome_loja')
+            'cashFlows' => $cashFlows->order('cash_flow.date_moviment DESC, s.nome_loja ASC')
                 ->limit($pager->limit())
                 ->offset($pager->offset())
                 ->fetch(true),
@@ -845,6 +915,20 @@ class App extends Controller
         ]);
     }
 
+    public function createCashFlow(): void
+    {
+        $head = $this->seo->render(
+            "Cadastrar Fluxo de Caixa - " . CONF_SITE_NAME,
+            CONF_SITE_DESC,
+            url(),
+            theme("/assets/images/share.jpg"),
+            false
+        );
+        echo $this->view->render("creates/cash-flow", [
+            "head" => $head
+        ]);
+    }
+
     /**
      *  IT UPDATES OR CREATES CURRENT CASH FLOW OF THE TABLE DEPENDING ON IF HAVE ID OR NOT
      * @param array|null $data
@@ -852,7 +936,7 @@ class App extends Controller
      */
     public function saveCashFlow(?array $data): void
     {
-        if (!in_array('', $data)) {
+        if (!empty($data)) {
             $cash = (new CashFlow());
 
             if (!empty($data['id'])) {
@@ -873,7 +957,6 @@ class App extends Controller
                 $json['message'] = $cash->message()->render();
             } else {
                 $json['message'] = $this->message->success("Lançamento atualizado com sucesso!")->render();
-                $json['redirect'] = url("/app/fluxo-de-caixa/{$data['id']}");
             }
         } else {
             $json['message'] = $this->message->warning("Todos os campos são necessários!")->render();

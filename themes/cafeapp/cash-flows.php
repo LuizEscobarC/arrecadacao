@@ -10,7 +10,7 @@
     </div>
     <form class="ajax_off app_launch_form_filter app_form" action="<?= url('/app/fluxos-de-caixa'); ?>" method="post">
 
-        <select name="search_store" id="select_page_store" class="operator">
+        <select name="search_store" class="select2Input operator">
             <option value="">
                 &ofcir; Selecione uma loja
             </option>
@@ -21,7 +21,7 @@
             <?php endforeach; ?>
         </select>
 
-        <select name="search_hour" id="select_page_hour" class="operator">
+        <select name="search_hour" class="select2Input operator">
             <option value="">
                 &ofcir; Selecione um horário
             </option>
@@ -46,10 +46,10 @@
 
     <!--<div class="app_launch_btn expense radius transition icon-plus-circle" data-modalopen=".app_modal_expense">
         Botão sem função
-    </div>-->
+    </div>
     <div class="app_launch_btn income radius transition icon-plus-circle" data-modalopen=".app_modal_cash">
         Novo lançamento
-    </div>
+    </div>-->
 </div>
 <div class="ajax_response"><?= flash(); ?></div>
 

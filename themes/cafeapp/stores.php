@@ -25,10 +25,10 @@
 
     <!--<div class="app_launch_btn expense radius transition icon-plus-circle" data-modalopen=".app_modal_expense">
         Botão sem função
-    </div>-->
+    </div>
     <div class="app_launch_btn income radius transition icon-plus-circle" data-modalopen=".app_modal_store">
         Nova loja
-    </div>
+    </div>-->
 </div>
 <div class="ajax_response"><?= flash(); ?></div>
 

@@ -9,7 +9,7 @@
         <div class="label_group">
             <label class="three_label">
                 <span class="field icon-thumb-tack">Data de movimentação:</span>
-                <input class="radius" value="<?= date_fmt($list->date_moviment, 'Y-m-d'); ?>" id="hour"
+                <input class="radius hour" value="<?= date_fmt($list->date_moviment, 'Y-m-d'); ?>"
                        rel="<?= url('/app/get_hour') ?>" type="date" name="date_moviment"
                        required/>
             </label>
@@ -29,7 +29,7 @@
 
         <label>
             <span class="field icon-briefcase">Loja:</span>
-            <select name="id_store"  id="select_page" class="operator">
+            <select name="id_store" class="select2Input operator">
                 <?php foreach ((new \Source\Models\Store())->find()->fetch(true) as $store): ?>
                     <option <?= ($list->id_store == $store->id ? 'selected' : ""); ?> value="<?= $store->id; ?>">
                         &ofcir; <?= $store->nome_loja; ?></option>
@@ -74,5 +74,5 @@
 </div>
 
 <?= $v->start('scripts'); ?>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <?= $v->end(); ?>

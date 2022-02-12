@@ -13,8 +13,8 @@ class Lists extends Model
     }
 
     public function bootstrap(
-        int $descriptionHour,
-        int $idStore,
+        string $descriptionHour,
+        string $idStore,
         string $totalValue,
         string $dateMoviment
     ): Lists {

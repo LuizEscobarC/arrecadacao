@@ -349,7 +349,7 @@
             <div class="label_group">
                 <label class="three_label">
                     <span class="field icon-thumb-tack">DATA DE MOVIMENTO:</span>
-                    <input class="radius" id="hour" rel="<?= url('/app/get_hour') ?>" type="date" name="date_moviment"
+                    <input class="radius hour" rel="<?= url('/app/get_hour') ?>" type="date" name="date_moviment"
                            required/>
                 </label>
 
@@ -367,7 +367,7 @@
 
             <label class="">
                 <span class="field icon-briefcase">Loja:</span>
-                <select name="id_store" id="select_page2">
+                <select name="id_store" class="select2Input">
                     <?php foreach ((new \Source\Models\Store())->find()->fetch(true) as $store): ?>
                         <option value="<?= $store->id; ?>">&ofcir; <?= $store->nome_loja; ?></option>
                     <?php endforeach; ?>
@@ -398,7 +398,7 @@
             <div class="label_group">
                 <label class="three_label">
                     <span class="field icon-thumb-tack">DATA DE MOVIMENTO:</span>
-                    <input class="radius" id="hour" rel="<?= url('/app/get_hour') ?>" type="date"
+                    <input class="radius hour" rel="<?= url('/app/get_hour') ?>" type="date"
                            name="date_moviment"
                            required/>
                 </label>
@@ -416,7 +416,7 @@
 
             <label>
                 <span class="field icon-briefcase">Loja:</span>
-                <select name="id_store" id="select_page2">
+                <select name="id_store" class="select2Input">
                     <option value="">Escolha</option>
                     <?php foreach ((new \Source\Models\Store())->find()->fetch(true) as $store): ?>
                         <option value="<?= $store->id; ?>">&ofcir; <?= $store->nome_loja; ?></option>
@@ -427,7 +427,7 @@
             <label>
                 <span class="field icon-briefcase">Centro de custo:<small
                             class="font_80_percent">Opcional</small></span>
-                <select name="id_cost" id="select_page_center">
+                <select name="id_cost" class="select2Input">
                     <option value="">Escolha</option>
                     <?php foreach ((new \Source\Models\Center())->find()->fetch(true) as $center): ?>
                         <option value="<?= $center->id; ?>">&ofcir; <?= $center->description; ?></option>

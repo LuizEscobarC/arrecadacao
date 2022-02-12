@@ -4,7 +4,6 @@ namespace Source\Models;
 
 use Composer\Package\Loader\ValidatingArrayLoader;
 use Source\Core\Model;
-use Source\Models\CafeApp\AppInvoice;
 
 /**
  * CLASSE DA TABELA CASH-FLOW
@@ -17,7 +16,7 @@ class CashFlow extends Model
     public function __construct()
     {
         parent::__construct('cash_flow', ['id', 'created_at', 'updated_at'],
-            ['date_moviment', 'id_store', 'id_hour', 'description', 'value', 'type', 'id_cost']);
+            ['date_moviment', 'id_store', 'id_hour', 'value', 'type', 'id_cost']);
     }
 
     /**
@@ -32,11 +31,11 @@ class CashFlow extends Model
      */
     public function bootstrap(
         string $dateMoviment,
-        int $idStore,
-        int $idHour,
-        string $description,
+        string $idStore,
+        string $idHour,
+        ?string $description,
         string $value,
-        int $type,
+        string $type,
         string $idCost
     ): CashFlow {
         $this->date_moviment = $dateMoviment;

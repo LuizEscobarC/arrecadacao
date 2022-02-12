@@ -40,6 +40,7 @@ $route->get("/fatura/{invoice_id}", "App:invoice");
 
 /** USER */
 $route->get("/perfil/{id}", "App:profile");
+$route->get("/cadastrar-usuario", "App:createUser");
 $route->post("/perfil", "App:profile");
 $route->get("/usuarios", "App:users");
 $route->get("/usuarios/{page}", "App:users");
@@ -49,6 +50,7 @@ $route->get("/sair", "App:logout");
 
 /** STORES */
 $route->get('/lojas', 'App:stores');
+$route->get('/cadastrar-loja', 'App:createStore');
 $route->get('/lojas/{page}', 'App:stores');
 $route->post('/lojas', 'App:stores');
 $route->get('/loja/{id}', 'App:store');
@@ -58,6 +60,7 @@ $route->post('/remove-store/{id}', 'App:removeStore');
 
 /** COST CENTER */
 $route->get('/centros-de-custo', 'App:costCenters');
+$route->get('/cadastrar-centro-de-custo', 'App:createCost');
 $route->get('/centros-de-custo/{page}', 'App:costCenters');
 $route->post('/centros-de-custo', 'App:costCenters');
 $route->get('/centro-de-custo/{id}', 'App:costCenter');
@@ -67,6 +70,7 @@ $route->post('/remove-center/{id}', 'App:removeCenter');
 
 /** HOURS */
 $route->get('/horarios', 'App:hours');
+$route->get('/cadastrar-horario', 'App:createHour');
 $route->get('/horarios/{page}', 'App:hours');
 $route->get('/horario/{id}', 'App:hour');
 $route->post('/horario', 'App:saveHour');
@@ -75,6 +79,7 @@ $route->post('/remove-hour/{id}', 'App:removeHour');
 
 /** LISTS */
 $route->get('/listas', 'App:lists');
+$route->get('/cadastrar-lista', 'App:createList');
 $route->get('/listas/{page}', 'App:lists');
 $route->post('/listas', 'App:lists');
 $route->get('/lista/{id}', 'App:list');
@@ -83,6 +88,7 @@ $route->post('/remove-list/{id}', 'App:removeList');
 
 /** FINANCES */
 $route->get('/fluxos-de-caixa', 'App:cashFlows');
+$route->get('/cadastrar-fluxo-de-caixa', 'App:createCashFlow');
 $route->get('/fluxos-de-caixa/{page}', 'App:cashFlows');
 $route->post('/fluxos-de-caixa', 'App:cashFlows');
 $route->get('/fluxo-de-caixa/{id}', 'App:cashFlow');
