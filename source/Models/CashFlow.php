@@ -157,8 +157,7 @@ class CashFlow extends Model
         }
 
 
-        if (!empty($total->income) && !empty($total->expense)) {
-            $total = $total->fetch();
+        if ($total = $total->fetch()) {
             if (empty($total->income) && !empty($total->expense)) {
                 $total = -abs($total->expense);
             } else {

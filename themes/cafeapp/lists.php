@@ -93,11 +93,22 @@
             </article>
         <?php endforeach; ?>
     <?php endif; ?>
-    <div class="app_launch_item footer">
+    <div class=" app_launch_item footer">
         <p class="desc"></p>
         <p></p>
-        <p>Valor total:</p>
-        <p class="icon-thumbs-o-up">R$ <?= money_fmt_br(($allMoney->total ?? "0")); ?></p>
+        <p class="font_80_percent jus">Valor total:</p>
+        <p class=" font_80_percent icon-thumbs-o-up">R$ <?= money_fmt_br(($allMoney->total ?? "0")); ?></p>
+    </div><div class=" app_launch_item footer">
+        <p class="desc"></p>
+        <p></p>
+        <p class="font_80_percent">Valor total de comissão:</p>
+        <p class=" font_80_percent icon-thumbs-o-up">R$ <?= money_fmt_br(($allMoney->total_comission ?? "0")); ?></p>
+    </div><div class=" app_launch_item footer">
+
+        <p class="desc"></p>
+        <p></p>
+        <p class="font_80_percent" >Valor líquido total:</p>
+        <p class=" font_80_percent icon-thumbs-o-up">R$ <?= money_fmt_br(($allMoney->total_net ?? "0")); ?></p>
     </div>
     <?= $paginator; ?>
 </section>

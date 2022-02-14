@@ -16,8 +16,7 @@
     <header class="app_header">
         <h1><a class="icon-bar-chart transition" href="<?= url("/app"); ?>" title="IH">IHSistema</a></h1>
         <ul class="app_header_widget">
-            <li data-modalopen=".app_modal_contact" class="radius transition icon-life-ring">Precisa de ajuda?</li>
-            <li data-mobilemenu="open" class="app_header_widget_mobile radius transition icon-menu icon-notext"></li>
+            <li class="radius transition icon-life-ring" > <a href='<?= url('app'); ?>' style="text-decoration: none" class="color_green">INÍCIO</a></li>
         </ul>
     </header>
 

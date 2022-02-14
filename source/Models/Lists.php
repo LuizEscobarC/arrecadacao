@@ -13,8 +13,8 @@ class Lists extends Model
     }
 
     public function bootstrap(
-        string $descriptionHour,
-        string $idStore,
+        int $descriptionHour,
+        int $idStore,
         string $totalValue,
         string $dateMoviment
     ): Lists {
@@ -83,7 +83,8 @@ class Lists extends Model
             $where = implode(' AND ', $where);
 
             // para pegar o totalizador de valor dinâmico com filtro
-            $total = clone $this->find(null, null, 'lists.*, h.week_day , h.description, s.nome_loja, sum(total_value) as total')
+            $total = clone $this->find(null, null, 'lists.*, h.week_day , h.description, s.nome_loja, sum(total_value) as total, sum(comission_value) 
+                    as total_comission, sum(net_value) as total_net')
                 ->join('hour h', 'lists.id_hour', 'h.id')
                 ->join('loja s', 'lists.id_store', 's.id');
 
@@ -96,7 +97,8 @@ class Lists extends Model
             $this->putQuery($where, ' WHERE ');
 
         } else {
-             $total = clone $this->find(null, null, 'sum(total_value) as total')
+             $total = clone $this->find(null, null, 'sum(total_value) as total, sum(comission_value) 
+                    as total_comission, sum(net_value) as total_net')
                  ->join('hour h', 'lists.id_hour', 'h.id')
                  ->join('loja s', 'lists.id_store', 's.id');
 

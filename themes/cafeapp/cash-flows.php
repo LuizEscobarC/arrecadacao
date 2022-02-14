@@ -95,11 +95,11 @@
             </article>
         <?php endforeach; ?>
     <?php endif; ?>
-    <div class="app_launch_item footer">
+    <div class="font_80_percent app_launch_item footer">
         <p class="desc"></p>
         <p></p>
-        <p>Valor total:</p>
-        <p class="icon-thumbs-o-up"><?= money_fmt_br($allMoney); ?></p>
+        <p class="font_80_percent">Valor total:</p>
+        <p class="font_80_percent icon-thumbs-o-up"><?= money_fmt_br($allMoney); ?></p>
     </div>
     <?= $paginator; ?>
 </section>

@@ -313,7 +313,7 @@ $(function () {
     });
 
     // BEGIN COMO DEFAULT ELE SETA OS INPUTS DE DATA DOS CADASTROS COM A DATA ATUAL
-    if (window.location.toString() === 'http://www.localhost/arrecadacao/app/cadastrar-lista' || window.location.toString() === 'http://www.localhost/arrecadacao/app/cadastrar-fluxo-de-caixa') {
+    if (window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-lista' || window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-fluxo-de-caixa') {
         const data = new Date();
         const dia = String(data.getDate()).padStart(2, '0');
         const mes = String(data.getMonth() + 1).padStart(2, '0');
