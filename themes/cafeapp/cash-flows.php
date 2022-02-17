@@ -33,7 +33,7 @@
         </select>
 
         <input list="datelist" type="text" value="<?= $search->search_date; ?>" class="radius mask-date"
-               name="search_date" placeholder="Dia da criação">
+               name="search_date" placeholder="Data de Movimento">
         <datalist id="datelist">
             <?php for ($range = 1; $range <= 30; $range++):
                 $date = date("d/m/Y", strtotime("+{$range} month")); ?>

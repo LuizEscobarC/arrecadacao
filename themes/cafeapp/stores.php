@@ -11,7 +11,7 @@
                placeholder="Nome da loja/código">
 
         <input list="datelist" type="text" value="<?= $search; ?>" class="radius " name="day"
-               placeholder="Dia da criação">
+               placeholder="Data de movimento">
         <datalist id="datelist">
             <?php for ($range = 1; $range <= date('d'); $range++):
                 $date = date("d", strtotime("{$range} day")); ?>

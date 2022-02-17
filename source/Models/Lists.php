@@ -75,7 +75,7 @@ class Lists extends Model
             if ($search['search_date']) {
                 $date = str_replace('/', '-', $search['search_date']);
                 $date = date_fmt_app($date);
-                $where[] = "lists.date_moviment = '{$date}'";
+                $where[] = "DATE(lists.date_moviment) = DATE('{$date}')";
             } else {
                 $search['search_date'] = null;
             }

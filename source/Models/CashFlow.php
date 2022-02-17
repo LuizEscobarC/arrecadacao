@@ -110,7 +110,7 @@ class CashFlow extends Model
             if ($search['search_date']) {
                 $date = str_replace('/', '-', $search['search_date']);
                 $date = date_fmt_app($date);
-                $where[] = "cash_flow.date_moviment = '{$date}'";
+                $where[] = "DATE(cash_flow.date_moviment) = DATE('{$date}')";
             } else {
                 $search['search_date'] = null;
             }

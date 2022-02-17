@@ -8,7 +8,7 @@
     </div>
     <form class="ajax_off app_launch_form_filter app_form" action="<?= url('/app/centros-de-custo'); ?>" method="post">
         <input list="datelist" type="text" value="<?= $search; ?>" class="radius mask-day" name="day"
-               placeholder="Dia da criação">
+               placeholder="Data de movimento">
         <datalist id="datelist">
             <?php for ($range = 1; $range <= date('d'); $range++):
                 $date = date("d", strtotime("{$range} day")); ?>
@@ -31,7 +31,7 @@
     <div class="app_launch_item header">
         <p class="desc">descrição</p>
         <p class="emit">Emitir</p>
-        <p class="price">Data de Criação</p>
+        <p class="price">Data de Movimento</p>
         <p class="desc_right"></p>
     </div>
     <?php if (isnt_empty($costCenters, 'self')): ?>
