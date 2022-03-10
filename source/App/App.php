@@ -10,10 +10,15 @@ use Source\Models\CashFlow;
 use Source\Models\Center;
 use Source\Models\Hour;
 use Source\Models\Lists;
+use Source\Models\Moviment;
 use Source\Models\Report\Access;
 use Source\Models\Report\Online;
 use Source\Models\Store;
 use Source\Models\User;
+use Source\Support\Filters\FiltersCashFlow;
+use Source\Support\Filters\FiltersLists;
+use Source\Support\Filters\FiltersMoviment;
+use Source\Support\HourManager;
 use Source\Support\Message;
 use Source\Support\Pager;
 
@@ -46,7 +51,7 @@ class App extends Controller
     public function home(): void
     {
         $head = $this->seo->render(
-            "Olá {$this->user->first_name}. Vamos controlar? - " . CONF_SITE_NAME,
+            "Olá {$this->user->first_name}. - " . CONF_SITE_NAME,
             CONF_SITE_DESC,
             url(),
             theme("/assets/images/share.jpg"),
@@ -58,16 +63,20 @@ class App extends Controller
         //END CHART
 
         $numberDays = (new \DateTime('now'))->format('d');
+        $numberMonthNow = 1 + ((int)(new \DateTime('now'))->format('m'));
+        $numberYearNow = (new \DateTime('now'))->format('Y');
 
-        $expenses = (new CashFlow())->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '2022-03-01' AND type = 2",
+
+        $expenses = (new CashFlow())->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '{$numberYearNow}-{$numberMonthNow}-01' AND type = 2",
             null, 'value, description, date_moviment, id')->limit('5')->fetch(true);
 
-        $incomes = (new CashFlow())->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '2022-03-01' AND type = 1",
+        $incomes = (new CashFlow())->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '{$numberYearNow}-{$numberMonthNow}-01' AND type = 1",
             null, 'value, description, date_moviment, id')->limit('5')->fetch(true);
 
-        $totalBilling = (($totalIncomes = (new CashFlow())->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '2022-03-01' AND type = 1",
-            null, "sum(value) as total")->fetch()->total) - ($totalExpenses = (new CashFlow())->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '2022-03-01' AND type = 2",
-            null, "sum(value) as total")->fetch()->total));
+        $totalBilling = (($totalIncomes = (new CashFlow())->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '{$numberYearNow}-{$numberMonthNow}-01' AND type = 1",
+                null,
+                "sum(value) as total")->fetch()->total) - ($totalExpenses = (new CashFlow())->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '{$numberYearNow}-{$numberMonthNow}-01' AND type = 2",
+                null, "sum(value) as total")->fetch()->total));
 
         echo $this->view->render("home", [
             "head" => $head,
@@ -311,8 +320,8 @@ class App extends Controller
         }
         $page = (!empty($data['page']) ? $data['page'] : 1);
 
-        $pager = (new Pager('/arrecadacao/app/lojas/'));
-        $pager->pager($stores->count(), 5, $page);
+        $pager = (new Pager(url('/app/lojas/')));
+        $pager->pager($stores->count(), 20, $page);
         echo $this->view->render("stores", [
             "head" => $head,
             'stores' => $stores
@@ -456,7 +465,7 @@ class App extends Controller
 
         $page = (!empty($data['page']) ? $data['page'] : 1);
 
-        $pager = (new Pager('/arrecadacao/app/centro-de-custos/'));
+        $pager = (new Pager(url('/app/centro-de-custos/')));
         $pager->pager($center->count(), 20, $page);
 
         echo $this->view->render('cost-centers', [
@@ -572,7 +581,7 @@ class App extends Controller
         $hour = new Hour();
         $page = (!empty($data['page']) ? $data['page'] : 1);
 
-        $pager = (new Pager('/arrecadacao/app/usuarios/'));
+        $pager = (new Pager(url('/app/usuarios/')));
         $pager->pager($hour->find()->count(), 20, $page);
 
         echo $this->view->render('hours', [
@@ -687,17 +696,21 @@ class App extends Controller
      */
     public function getHour(array $data): void
     {
-        $getDayNumber = weekDay($data['date_moviment'], true);
-        $dataDay = (new Hour())->findByNumberDay($getDayNumber);
-        $i = 1;
-
-        foreach ($dataDay as $item) {
-            $callback[0] = $item->week_day;
-            $callback[$i]['id'] = $item->id;
-            $callback[$i]['description'] = $item->description;
-            $i++;
-        }
+        // classe responsavel por retornar um horário e dia da semana
+        $callback = HourManager::getHourByDate($data);
         echo json_encode($callback);
+    }
+
+    public function getList(array $data): void
+    {
+        $callback = (new Lists())->findByStoreHour($data['id_store'], $data['id_hour']);
+        echo json_encode($callback);
+    }
+
+    public function getStore(array $data): void
+    {
+        $callback = (new Store())->findById($data['id_store']);
+        echo json_encode($callback->data());
     }
 
     /**
@@ -748,11 +761,12 @@ class App extends Controller
             false
         );
 
-        list($list, $search, $total) = (new Lists())->listFilters($data);
+        // Classes que se responsabilizam pelos filtros e modelos
+        list($list, $search, $total) = ($list = new Lists())->filter(new FiltersLists($list), $data);
 
         $page = (!empty($data['page']) ? $data['page'] : 1);
 
-        $pager = (new Pager('/arrecadacao/app/listas/'));
+        $pager = (new Pager(url('/app/listas/')));
         $pager->pager($list->count(), 20, $page);
 
         /** @var Lists $list */
@@ -873,11 +887,12 @@ class App extends Controller
             false
         );
 
-        list($cashFlows, $search, $total) = (new CashFlow())->listFilters($data);
+        list($cashFlows, $search, $total) = ($cash = new CashFlow())->filter(new FiltersCashFlow($cash), $data);
+        //($moviment = new Moviment())->filter((new FiltersMoviment($moviment)), $data);
 
         $page = (!empty($data['page']) ? $data['page'] : 1);
 
-        $pager = (new Pager('/arrecadacao/app/fluxos-de-caixa/'));
+        $pager = (new Pager(url('/app/fluxos-de-caixa/')));
         $pager->pager($cashFlows->count(), 20, $page);
 
         echo $this->view->render('cash-flows', [
@@ -888,7 +903,7 @@ class App extends Controller
                 ->fetch(true),
             'allMoney' => isnt_empty($total, 'self', '0.00'),
             'paginator' => $pager->render(),
-            'search' => ((object)$search ?? (new \stdClass()))
+            'search' => (object)$search
         ]);
     }
 
@@ -979,6 +994,146 @@ class App extends Controller
         $this->message->success("Tudo pronto {$this->user->first_name}, lançamento removido com sucesso!")->flash();
         $json['redirect'] = url('/app/fluxos-de-caixa');
         echo json_encode($json);
+    }
+
+    public function movimentations(?array $data): void
+    {
+        $head = $this->seo->render(
+            "Movimentação - " . CONF_SITE_NAME,
+            CONF_SITE_DESC,
+            url('/app/movimentacoes'),
+            theme("/assets/images/share.jpg"),
+            false
+        );
+
+        list($moviments, $search, $total) = ($moviment = new Moviment())->filter((new FiltersMoviment($moviment)), $data);
+
+        $page = (!empty($data['page']) ? $data['page'] : 1);
+
+        $pager = (new Pager(url('/app/movimentacoes/')));
+        $pager->pager($moviments->count(), 20, $page);
+        echo $this->view->render('moviments', [
+            'head' => $head,
+            'moviments' => $moviments->order('moviment.date_moviment DESC, s.nome_loja ASC')
+                ->limit($pager->limit())
+                ->offset($pager->offset())
+                ->fetch(true),
+            'allMoney' => isnt_empty($total, 'self', '0.00'),
+            'paginator' => $pager->render(),
+            'search' => (object)$search
+        ]);
+    }
+
+    public function moviment()
+    {
+
+    }
+
+    public function createMoviment()
+    {
+        $head = $this->seo->render(
+            "Cadastrar Movimentação - " . CONF_SITE_NAME,
+            CONF_SITE_DESC,
+            url(),
+            theme("/assets/images/share.jpg"),
+            false
+        );
+        echo $this->view->render("creates/moviment", [
+            "head" => $head
+        ]);
+    }
+
+    public function saveMoviment(?array $data): void
+    {
+        if (!empty($data)) {
+            $messageError = '';
+
+
+            $list = (new Lists());
+            if (!empty($data['id_list'])) {
+                $list = $list->findById($data['id_list']);
+            }
+            $list->total_value = money_fmt_app($data['beat_value']);
+            $list->date_moviment = $data['date_moviment'];
+            if (!$list->save()) {
+                $messageError .= $list->message()->getText();
+            }
+
+            $store = (new Store());
+            if (!empty($data['id_store'])) {
+                $store = $store->findById($data['id_store']);
+            }
+            $store->valor_saldo = money_fmt_app($data['new_value']);
+            if (!$store->save()) {
+                $messageError .= $store->message()->getText();
+            }
+
+            $cash = (new CashFlow());
+
+            if (!empty($data['id_cash'])) {
+                $cash = $cash->findById($data['id_cash']);
+            }
+
+            $cash->bootstrap(
+                $data["date_moviment"],
+                $data["id_store"],
+                $data["id_hour"],
+                ($list->description ?? '') . ' Entrada de ' . ($store->nome_loja ?? 'loja'),
+                money_fmt_app($data["get_value"]),
+                1,
+                null
+            );
+            if (!$cash->save()) {
+                $messageError .= $cash->message()->getText();
+            }
+
+            $cash->bootstrap(
+                $data["date_moviment"],
+                $data["id_store"],
+                $data["id_hour"],
+                ' A ' . ($store->nome_loja ?? 'loja') . ' teve uma movimentação',
+                money_fmt_app($data["expend"]),
+                2,
+                null
+            );
+            if (!$cash->save()) {
+                $messageError .= $cash->message()->getText();
+            }
+
+            $moviment = (new Moviment());
+            if (!empty($data['id'])) {
+                $moviment = $moviment->findById($data['id']);
+            }
+            $moviment->bootstrap(
+                $data['date_moviment'],
+                $data['id_store'],
+                $data['id_hour'],
+                money_fmt_app($data['beat_value']),
+                money_fmt_app($data['paying_now']),
+                money_fmt_app($data['expend']),
+                money_fmt_app($data['last_value']),
+                money_fmt_app($data['get_value']),
+                money_fmt_app($data['new_value'])
+            );
+
+            if (empty($messageError)) {
+                if ($moviment->save()) {
+                    $json['message'] = $this->message->success("Movimento atualizado com sucesso!")->render();
+                }
+            } else {
+                $json['message'] = $this->message->error($messageError);
+            }
+
+        } else {
+            $json['message'] = $this->message->warning("Todos os campos são necessários!")->render();
+        }
+
+        echo json_encode($json);
+    }
+
+    public function removeMoviment()
+    {
+
     }
 
 }

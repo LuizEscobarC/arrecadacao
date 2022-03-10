@@ -95,9 +95,20 @@ $route->get('/fluxo-de-caixa/{id}', 'App:cashFlow');
 $route->post('/fluxo-de-caixa', 'App:saveCashFlow');
 $route->post('/remove-cash-flow/{id}', 'App:removeCashFlow');
 
+/** MOVIMENTS */
+$route->get('/movimentacoes', 'App:movimentations');
+$route->get('/cadastrar-movimentacao', 'App:createMoviment');
+$route->get('/movimentacoes/{page}', 'App:movimentations');
+$route->post('/movimentacoes', 'App:movimentations');
+$route->get('/movimentacao/{id}', 'App:moviment');
+$route->post('/movimentacao', 'App:saveMoviment');
+$route->post('/remove-moviment/{id}', 'App:removeMoviment');
+
 
 /** SHARED */
 $route->post('/get_hour', 'App:getHour');
+$route->post('/get_list', 'App:getList');
+$route->post('/get_store', 'App:getStore');
 $route->get('/get_week_day/{id}', 'App:getWeekDay');
 
 /** OPTIN */

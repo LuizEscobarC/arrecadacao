@@ -23,6 +23,43 @@ $(function () {
         });
     }
 
+    function getList(inputSelect, idHour, idStore) {
+        $.ajax({
+            url: inputSelect.attr('rel'),
+            type: 'POST',
+            data: '&id_hour=' + idHour + '&id_store=' + idStore,
+            dataType: 'JSON',
+            success: function (callback) {
+                if (callback === null) {
+                    window.location.reload();
+                }
+                let totalValue = parseFloat(callback.total_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
+                let comissionValue = parseFloat(callback.comission_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
+                let netValue = parseFloat(callback.net_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
+
+                $('input[name=id_list]').val(callback.id);
+                $('.total_value').html(totalValue)
+                $('input[name=total_value]').val(totalValue);
+                $('.comission_value').html(`${callback.comission_value}%`);
+                $('input[name=comission_value]').val(comissionValue);
+                $('.net_value').html(netValue);
+                $('input[name=net_value]').val(netValue);
+            }
+        });
+    }
+
+    function getStoreValueNow(inputSelect) {
+        $.ajax({
+            url: inputSelect.data().url,
+            type: 'POST',
+            data: inputSelect.serialize(),
+            dataType: 'JSON',
+            success: function (callback) {
+                $('.last_value').html(parseFloat(callback.valor_saldo).toLocaleString('pt-br', {minimumFractionDigits: 2}));
+            }
+        });
+    }
+
     /## REMOVE ENTITY DRY FUNCTION ##/
 
     function remove($this, dataAttr, confirmText) {
@@ -292,6 +329,75 @@ $(function () {
         getHours($(this));
     });
 
+    /*
+    * AJAX GET LIST
+    */
+
+    $body.on('change', 'select.store_select', function () {
+        getList($(this), $('#callback').val(), $('.store_select').val());
+        getStoreValueNow($(this));
+    });
+
+    /*
+    * VALOR RECOLHIDO CALCULO
+    */
+
+    // BEGIN MOVIMENTS CALCS
+
+
+    function calc(value, $this) {
+        let input = $('input[name=' + value + ']');
+        if (input.val()) {
+            // VALOR DESPESAS
+            const expense = parseFloat($($this).val().replaceAll('.', '').replace(',', '.'));
+            // VALOR DINHEIRO
+            const paying = parseFloat(input.val().replaceAll('.', '').replace(',', '.'));
+            /* Valor reclohido + despesas*/
+            // VALOR RECOLHIDO
+            const getValue = (paying + expense);
+            // VALOR RECOLHIDO EM BRL
+            const getValueBr = getValue.toLocaleString('pt-br', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            /* Valor a acertar é o valor líquido da lista*/
+            // VALOR LÍQUIDO | VALOR ACERTAR
+            const netValue = $('p.net_value').text();
+            /* Ao final o saldo anterior e o saldo atual que é a mesma coisa, recebe o novo saldo do calculo*/
+            // VALOR ANTERIOR | SALDO ATUAL
+            const last_val = $('p.last_value');
+
+            $('input[name=last_value]').val(parseFloat(last_val.text()).toLocaleString('pt-br', {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+            $('input[name=expense]').val(expense);
+            $('input[name=get_value]').val(getValueBr);
+            $('.get_value').html(getValueBr);
+            if (last_val.text() && netValue) {
+                // É o valor que tem que ser abatido  com o valor recolhido + o valor de despesas
+                // VALOR A ACERTAR | VALOR LIQUIDO
+                const beatValue = (getValue - parseFloat(netValue));
+                const beatValueBrl = beatValue.toLocaleString('pt-br', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                // NOVO VALOR ATUAL | SALDO ANTERIOR
+                const newValue = (parseFloat(last_val.text().replaceAll('.', '').replace(',', '.')) + beatValue)
+                    .toLocaleString('pt-br', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                if (beatValue && newValue) {
+                    $('p.beat_value').html(beatValueBrl);
+                    $('.new_value').html(newValue);
+                    $('input[name=beat_value]').val(beatValueBrl);
+                    $('input[name=new_value]').val(newValue);
+                }
+            } else {
+                alert('Por favor escolha a loja e preencha os campos (valor dinheiro e valor despesas)!');
+            }
+        }
+    }
+
+    $body.on('keyup', 'input[name=expend]', function () {
+        calc('paying_now', this);
+    });
+
+    $body.on('keyup', 'input[name=paying_now]', function () {
+        calc('paying_now', 'input[name=expend]');
+    });
+    // END MOVIMENT CALCS
+
+
     /** $('select#callback').change(function () {
         let url = $(this).attr('rel') + '/' + $(this).find(':selected').attr('value');
 
@@ -307,13 +413,11 @@ $(function () {
 
     /* Select with search*/
     $("select.select2Input").select2({
-        width: '100%',
-        placeholder: 'Escolha uma loja',
-
+        width: '100%'
     });
 
     // BEGIN COMO DEFAULT ELE SETA OS INPUTS DE DATA DOS CADASTROS COM A DATA ATUAL
-    if (window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-lista' || window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-fluxo-de-caixa') {
+    if (window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-lista' || window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-fluxo-de-caixa' || window.location.toString() === 'http://www.localhost/arrecadacao/app/cadastrar-movimentacao') {
         const data = new Date();
         const dia = String(data.getDate()).padStart(2, '0');
         const mes = String(data.getMonth() + 1).padStart(2, '0');
