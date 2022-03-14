@@ -8,5 +8,5 @@ interface FilterInterface
 {
     public function __construct(Model $model);
 
-    public function listFilters(?array $data): array;
+    public function listFilters(?array $filters, array $type, array $keysSql): array;
 }

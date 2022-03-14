@@ -38,7 +38,7 @@ $(function () {
                 let netValue = parseFloat(callback.net_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
 
                 $('input[name=id_list]').val(callback.id);
-                $('.total_value').html(totalValue)
+                $('.total_value').html(totalValue);
                 $('input[name=total_value]').val(totalValue);
                 $('.comission_value').html(`${callback.comission_value}%`);
                 $('input[name=comission_value]').val(comissionValue);
@@ -347,12 +347,17 @@ $(function () {
 
     function calc(value, $this) {
         let input = $('input[name=' + value + ']');
+        //Case o input esteja vazio, para não retornar NaN
+        if ($('input[name=expend]').val() === '') {
+            $('input[name=expend]').val(0);
+        }
         if (input.val()) {
             // VALOR DESPESAS
             const expense = parseFloat($($this).val().replaceAll('.', '').replace(',', '.'));
             // VALOR DINHEIRO
             const paying = parseFloat(input.val().replaceAll('.', '').replace(',', '.'));
             /* Valor reclohido + despesas*/
+
             // VALOR RECOLHIDO
             const getValue = (paying + expense);
             // VALOR RECOLHIDO EM BRL
@@ -364,15 +369,22 @@ $(function () {
             // VALOR ANTERIOR | SALDO ATUAL
             const last_val = $('p.last_value');
 
-            $('input[name=last_value]').val(parseFloat(last_val.text()).toLocaleString('pt-br', {minimumFractionDigits: 2, maximumFractionDigits: 2}));
-            $('input[name=expense]').val(expense);
+
+            $('input[name=last_value]').val(parseFloat(last_val.text()).toLocaleString('pt-br', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }));
+            $('input[name=net_value]').val(netValue);
             $('input[name=get_value]').val(getValueBr);
             $('.get_value').html(getValueBr);
             if (last_val.text() && netValue) {
                 // É o valor que tem que ser abatido  com o valor recolhido + o valor de despesas
                 // VALOR A ACERTAR | VALOR LIQUIDO
                 const beatValue = (getValue - parseFloat(netValue));
-                const beatValueBrl = beatValue.toLocaleString('pt-br', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                const beatValueBrl = beatValue.toLocaleString('pt-br', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
                 // NOVO VALOR ATUAL | SALDO ANTERIOR
                 const newValue = (parseFloat(last_val.text().replaceAll('.', '').replace(',', '.')) + beatValue)
                     .toLocaleString('pt-br', {minimumFractionDigits: 2, maximumFractionDigits: 2});
@@ -394,6 +406,45 @@ $(function () {
 
     $body.on('keyup', 'input[name=paying_now]', function () {
         calc('paying_now', 'input[name=expend]');
+    });
+
+    /* Não envia o formulário informando se quer ou não adicionar um prémio, após a escolha clicando novamente o
+    formulário é enviado*/
+    $body.on('click', 'button', function () {
+        const labelInput = $('label.prize_input');
+        if (labelInput.attr('style')) {
+            if (!$(this).attr('data-submit')) {
+                event.preventDefault();
+                const prize = window.confirm('Houve premio na loja? Deseja adicionar o valor premio?');
+                if (prize) {
+                    labelInput.removeAttr('style');
+                }
+            }
+            $(this).attr('data-submit', 'true');
+        } else if ($('input[name=prize]').val()) {
+            const store_value = $('.last_value').text();
+            if (!(store_value < 0)) {
+                const negativeValue = window.confirm('Deseja abater o saldo da loja?');
+                if (negativeValue) {
+                    const prizeInput = $('input[name=prize]').val();
+                    if (prizeInput) {
+                        const beatPrize = $('.get_value').text();
+                        $('label.prize_output').html(
+                            `<span class="field icon-leanpub">Valor de Abate Premio:</span>
+                            <p class="app_widget_title beat_prize">${beatPrize}</p>
+                            <input type="hidden" name="beat_prize" value="${beatPrize}">`);
+                    } else {
+                        alert('Por favor, digite o valor do premio!');
+                    }
+                }
+
+
+            }
+
+        } else {
+            event.preventDefault();
+        }
+
     });
     // END MOVIMENT CALCS
 

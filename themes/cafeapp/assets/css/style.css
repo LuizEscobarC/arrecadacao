@@ -763,6 +763,11 @@ body {
     text-align: left;
 }
 
+.app_launch_item p.desc.moviment {
+    flex-basis: 7.5%;
+    text-align: left;
+}
+
 .app_launch_item p.desc_center {
     flex-basis: 30%;
     text-align: center;
@@ -792,6 +797,13 @@ body {
 }
 
 .app_launch_item .price {
+    display: flex;
+    align-items: center;
+    flex-basis: 9.5%;
+    flex-wrap: wrap;
+}
+
+.app_launch_item .price .moviment {
     display: flex;
     justify-content: space-around;
     align-items: center;

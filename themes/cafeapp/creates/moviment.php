@@ -58,6 +58,7 @@
             <label class="three_label">
                 <span class="field icon-leanpub">(lista)Valor Líquido:</span>
                 <p class="app_widget_title net_value"></p>
+                <input type="hidden" name="net_value">
             </label>
         </div>
 
@@ -80,24 +81,36 @@
         </div>
 
         <div class="label_group">
-            <label class="three_label">
+            <label >
                 <span class="field icon-leanpub">Saldo Horário:</span>
                 <p class="app_widget_title beat_value"></p>
                 <input type="hidden" name="beat_value"/>
             </label>
 
-            <label class="three_label">
+            <label>
                 <span class="field icon-leanpub">Novo Saldo:</span>
                 <p class="app_widget_title new_value"></p>
                 <input type="hidden" name="new_value"/>
 
             </label>
+
             <!--
             <label class="three_label">
                 <span class="field icon-leanpub">Valor Premio:</span>
                 <input class="radius mask-money" type="text" name="value" placeholder="Ex: 999"
                        required/>
             </label> -->
+        </div>
+        <div class="label_group">
+            <label style="opacity: 0" class="prize_input">
+                <span class="field icon-leanpub">Valor Premio:</span>
+                <input class="radius mask-money" type="text" name="prize" placeholder="Ex: 999"
+                       required/>
+            </label>
+
+            <label class="prize_output">
+
+            </label>
         </div>
 
         <div class="al-center">

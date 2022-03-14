@@ -3,36 +3,63 @@
 namespace Source\Support\Filters;
 
 use Source\Models\MoldelInterfaces\FilterInterface;
+use Source\Models\Moviment;
 
 class FiltersMoviment extends FilterQuery implements FilterInterface
 {
-    protected $model;
 
-    public function listFilters(?array $data): array
+    public function listFilters(?array $filters, array $type, array $keySql): array
     {
-        $search = $this->filterSanitaze($data);
-        $where = false;
-        if (!empty($search)) {
-            if (!empty($search['search_store'])) {
-                $this->like("s.nome_loja", $search['search_store']);
-            }
-            if (!empty($search['search_hour'])) {
-                $this->like("h.description", $search['search_hour']);
-            }
-            if (!empty($search['search_date'])) {
-                $date = str_replace('/', '-', $search['search_date']);
-                $date = date_fmt_app($date);
-                $this->equal("DATE(moviment.date_moviment)", "DATE('{$date}')");
-            }
-            $where = $this->implode();
-        } else {
-            $search['search_date'] = null;
-            $search['search_hour'] = null;
-            $search['search_store'] = null;
-        }
+        $typeIterator = 0;
+        if ($filters = $this->filterSanitaze($filters)) {
+            foreach ($filters as $filterKey => $value) {
+                if (empty($value)) {
+                    $filters[$filterKey] = '';
+                    continue;
+                }
+                $filters[$filterKey] = $value;
 
+                foreach($keySql as $searchName => $key) {
+                    if ($searchName == $filterKey) {
+                        $keyWhere = $key;
+                    }
+                }
+
+                switch ($type[$typeIterator]) {
+                    case 'like':
+                        $this->like($keyWhere, $value);
+                        break;
+                    case 'equal':
+                        $this->equal($keyWhere, $value);
+                        break;
+                    case 'different':
+                        $this->different($keyWhere, $value);
+                        break;
+                    case 'between':
+                        $this->between('', '', '');
+                        break;
+                }
+
+                $typeIterator++;
+            }
+        }
+        $where = $this->implode();
+        // lista os movimentos
         // para pegar o totalizador de valor dinâmico com filtro
-        $total = clone $this->model->find(null, null,
+        $total = $this->total($where);
+        $this->find($where);
+
+        if ($total = $total->fetch()) {
+            return [$this->model, $filters, $total];
+        } else {
+            return [];
+        }
+    }
+
+    public function total(?string $where): Moviment
+    {
+        // para pegar o totalizador de valor dinâmico com filtro
+        $total = (new Moviment())->find(null, null,
             'sum(new_value) as total_new_value, sum(beat_value) as
              total_beat_value, sum(paying_now) as total_paying_now, 
              sum(expend) as total_expend, sum(get_value) as total_get_value,
@@ -43,7 +70,11 @@ class FiltersMoviment extends FilterQuery implements FilterInterface
         if ($where) {
             $total->putQuery($where, ' WHERE ');
         }
+        return $total;
+    }
 
+    public function find(?string $where): void
+    {
         $this->model->find(null, null,
             'moviment.*, h.week_day, h.number_day, h.description as hour, s.nome_loja')
             ->join('hour h', 'h.id', 'moviment.id_hour')
@@ -51,12 +82,6 @@ class FiltersMoviment extends FilterQuery implements FilterInterface
 
         if ($where) {
             $this->model->putQuery($where, ' WHERE ');
-        }
-
-        if ($total = $total->fetch()) {
-            return [$this->model, $search, $total];
-        } else {
-            return [];
         }
     }
 }

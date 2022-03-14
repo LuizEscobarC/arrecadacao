@@ -2,8 +2,9 @@
     <a class="pointer icon-home radius transition open" id="sidebar" title="Dashboard">MOVIMENTAÇÃO DIÁRIA</a>
     <div class="app_drop">
         <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/cadastrar-lista"); ?>">Cadastrar Listas do horário</a>
-        <a class="pointer radius transition" title="Dashboard" href="">Cadastrar Acerto de Loja</a>
+        <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/cadastrar-movimentacao"); ?>">Cadastrar Acerto de Loja</a>
         <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/listas"); ?>">Listas do Horário</a>
+        <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/movimentacoes"); ?>">Acertos de Loja</a>
         <a class="pointer radius transition open" id="sidebar_children2" title="Dashboard">Relatórios</a>
         <div class="app_drop_children2">
             <a class="pointer radius transition" title="Dashboard" href="<?= url("/app"); ?>">opção 1</a>
