@@ -1126,7 +1126,7 @@ class App extends Controller
                 money_fmt_app($data['last_value']),
                 money_fmt_app($data['get_value']),
                 money_fmt_app($data['new_value']),
-                money_fmt_app($data['prize']),
+                (!empty($data['prize']) ? money_fmt_app($data['prize']) : null),
                 (!empty($data['beat_prize']) ? money_fmt_app($data['beat_prize']) : null)
             );
 

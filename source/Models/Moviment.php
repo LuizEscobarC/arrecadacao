@@ -34,8 +34,8 @@ class Moviment extends Model
         string $lastValue,
         string $getValue,
         string $newValue,
-        string $prize,
-        string $beatPrize
+        ?string $prize,
+        ?string $beatPrize
     ) {
         $this->date_moviment = $dateMoviment;
         $this->id_store = $idStore;

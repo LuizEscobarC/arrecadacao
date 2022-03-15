@@ -348,9 +348,6 @@ $(function () {
     function calc(value, $this) {
         let input = $('input[name=' + value + ']');
         //Case o input esteja vazio, para não retornar NaN
-        if ($('input[name=expend]').val() === '') {
-            $('input[name=expend]').val(0);
-        }
         if (input.val()) {
             // VALOR DESPESAS
             const expense = parseFloat($($this).val().replaceAll('.', '').replace(',', '.'));
@@ -370,7 +367,7 @@ $(function () {
             const last_val = $('p.last_value');
 
 
-            $('input[name=last_value]').val(parseFloat(last_val.text()).toLocaleString('pt-br', {
+            $('input[name=last_value]').val(last_val.text().toLocaleString('pt-br', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
             }));
@@ -380,20 +377,21 @@ $(function () {
             if (last_val.text() && netValue) {
                 // É o valor que tem que ser abatido  com o valor recolhido + o valor de despesas
                 // VALOR A ACERTAR | VALOR LIQUIDO
-                const beatValue = (getValue - parseFloat(netValue));
-                const beatValueBrl = beatValue.toLocaleString('pt-br', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
+                const beatValue = (getValue - parseFloat(netValue.replaceAll('.','').replace(',','.')));
+
                 // NOVO VALOR ATUAL | SALDO ANTERIOR
                 const newValue = (parseFloat(last_val.text().replaceAll('.', '').replace(',', '.')) + beatValue)
                     .toLocaleString('pt-br', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-                if (beatValue && newValue) {
+
+                    const beatValueBrl = beatValue.toLocaleString('pt-br', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
                     $('p.beat_value').html(beatValueBrl);
                     $('.new_value').html(newValue);
                     $('input[name=beat_value]').val(beatValueBrl);
                     $('input[name=new_value]').val(newValue);
-                }
+
             } else {
                 alert('Por favor escolha a loja e preencha os campos (valor dinheiro e valor despesas)!');
             }
@@ -411,23 +409,13 @@ $(function () {
     /* Não envia o formulário informando se quer ou não adicionar um prémio, após a escolha clicando novamente o
     formulário é enviado*/
     $body.on('click', 'button#moviment_btn', function () {
-        const labelInput = $('label.prize_input');
-        if (labelInput.attr('style')) {
-            if (!$(this).attr('data-submit')) {
-                event.preventDefault();
-                const prize = window.confirm('Houve premio na loja? Deseja adicionar o valor premio?');
-                if (prize) {
-                    labelInput.removeAttr('style');
-                }
-            }
-            $(this).attr('data-submit', 'true');
-        } else if ($('input[name=prize]').val()) {
-            const store_value = $('.last_value').text();
-            if (!(store_value < 0)) {
+        const inputPrize = $('input[name=prize]');
+        if (inputPrize.val()) {
+            const store_value = parseFloat($('.last_value').text().replaceAll('.','').replace(',', '.'));
+            if (store_value < 0) {
                 const negativeValue = window.confirm('Deseja abater o saldo da loja?');
                 if (negativeValue) {
-                    const prizeInput = $('input[name=prize]').val();
-                    if (prizeInput) {
+                    if (inputPrize) {
                         const beatPrize = $('.get_value').text();
                         $('label.prize_output').html(
                             `<span class="field icon-leanpub">Valor de Abate Premio:</span>
@@ -437,12 +425,7 @@ $(function () {
                         alert('Por favor, digite o valor do premio!');
                     }
                 }
-
-
             }
-
-        } else {
-            event.preventDefault();
         }
 
     });
