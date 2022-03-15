@@ -3,8 +3,7 @@
 namespace Source\Models;
 
 use Source\Core\Model;
-use Source\Models\MoldelInterfaces\FilterInterface;
-use Source\Support\Filters\FiltersMoviment;
+use Source\Support\Filters\FilterMoviment;
 
 class Moviment extends Model
 {
@@ -72,6 +71,7 @@ class Moviment extends Model
 
     public function filter(array $data): array
     {
+        // Se os filtros não foram submitados o padrão é adicionado a classe
         if (!empty($data)) {
             //formatando se existir
             if (!empty($data['search_date'])) {
@@ -82,11 +82,26 @@ class Moviment extends Model
         } else {
             $filters = ['search_store' => '', 'search_hour' => '', 'search_date' => ''];
         }
-        return (new FiltersMoviment($this))->listFilters($filters, ['like', 'like', 'equal'],
+        // passo o modelo e os filtros vazios ou não
+        $filterClass = new FilterMoviment($this, $filters);
+
+        $arrayFilterReturn = $filterClass->where(['like', 'like', 'equal'],
             [
                 'search_store' => 's.nome_loja',
                 'search_hour' => 'h.description',
                 'search_date' => "DATE(moviment.date_moviment)"
-            ]);
+            ])
+            ->find(['moviment.*', 'h.week_day', 'h.number_day', 'h.description as hour', 's.nome_loja']);
+
+        $total = $filterClass->total([
+            'new_value' => 'total_new_value',
+            'beat_value' => 'total_beat_value',
+            'paying_now' => 'total_paying_now',
+            'expend' => 'total_expend',
+            'get_value' => 'total_get_value',
+            'last_value' => 'total_last_value'
+        ], new Moviment());
+
+        return array_merge($arrayFilterReturn, [$total]);
     }
 }

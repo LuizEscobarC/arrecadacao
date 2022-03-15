@@ -4,7 +4,7 @@ namespace Source\Support\Filters;
 
 use Source\Core\Model;
 
-class FiltersLists extends Filter
+class FilterMoviment extends Filter
 {
     public function find(array $columns): array
     {
@@ -14,8 +14,8 @@ class FiltersLists extends Filter
         $select = implode(', ', $arraySelects);
 
         $this->model->find(null, null, $select)
-            ->join('hour h', 'lists.id_hour', 'h.id')
-            ->join('loja s', 'lists.id_store', 's.id');
+            ->join('hour h', 'h.id', 'moviment.id_hour')
+            ->join('loja s', 's.id', 'moviment.id_store');
         if ($this->implode) {
             $this->model->putQuery($this->implode, ' WHERE ');
         }
@@ -31,8 +31,8 @@ class FiltersLists extends Filter
 
         // para pegar o totalizador de valor dinâmico com filtro
         $total = ((!empty($model) ? $model : $this->model))->find(null, null, $select)
-            ->join('hour h', 'lists.id_hour', 'h.id')
-            ->join('loja s', 'lists.id_store', 's.id');;
+            ->join('hour h', 'h.id', 'moviment.id_hour')
+            ->join('loja s', 's.id', 'moviment.id_store');
 
         if ($this->implode) {
             $total->putQuery($this->implode, ' WHERE ');

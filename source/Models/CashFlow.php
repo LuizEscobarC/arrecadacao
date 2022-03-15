@@ -4,6 +4,7 @@ namespace Source\Models;
 
 use Source\Core\Model;
 use Source\Models\MoldelInterfaces\FilterInterface;
+use Source\Support\Filters\FiltersCashFlow;
 
 /**
  * CLASSE DA TABELA CASH-FLOW
@@ -87,9 +88,39 @@ class CashFlow extends Model
         return null;
     }
 
-    public function filter(FilterInterface $filter, array $data): array
+    public function filter( array $data): array
     {
-        return $filter->listFilters($data);
+        if (!empty($data)) {
+            if (!empty($data['search_date'])) {
+                $date = str_replace('/', '-', $data['search_date']);
+                $data['search_date'] = "DATE('" . date_fmt_app($date) . "')";
+            }
+            $filters = $data;
+        } else {
+            $filters = ['search_store' => '', 'search_hour' => '', 'search_date' => ''];
+        }
+
+        $filterClass = new FiltersCashFlow($this, $filters);
+
+        $arrayFilterReturn = $filterClass->where(['like', 'like', 'equal'],
+            [
+                'search_store' => 's.nome_loja',
+                'search_hour' => 'h.description',
+                'search_date' => 'DATE(cash_flow.date_moviment)'
+            ])
+            ->find([
+                'cash_flow.*',
+                'h.week_day',
+                'h.number_day',
+                'h.description as hour',
+                's.nome_loja',
+                'cc.description as cost'
+            ]);
+
+        $total = $filterClass->total([
+            'value' => 'total_value'
+        ], new CashFlow());
+        return array_merge($arrayFilterReturn, [$total]);
     }
 
     /**

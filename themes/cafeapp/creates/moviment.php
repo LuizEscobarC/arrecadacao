@@ -104,8 +104,7 @@
         <div class="label_group">
             <label style="opacity: 0" class="prize_input">
                 <span class="field icon-leanpub">Valor Premio:</span>
-                <input class="radius mask-money" type="text" name="prize" placeholder="Ex: 999"
-                       required/>
+                <input class="radius mask-money" type="text" name="prize" placeholder="Ex: 999"/>
             </label>
 
             <label class="prize_output">
@@ -115,7 +114,7 @@
 
         <div class="al-center">
             <div>
-                <button class="btn btn_inline radius transition icon-pencil-square-o">Lançar</button>
+                <button class="btn btn_inline radius transition icon-pencil-square-o" id="moviment_btn">Lançar</button>
             </div>
         </div>
     </form>

@@ -5,7 +5,8 @@
 <div class="app_launch_header">
     <div class="app_flex_title">
         <h2>
-            <a class="color_white font_80_percent icon-user padding_btn transition gradient gradient-green gradient-hover radius box-shadow"
+            <a class="color_white font_80_percent icon-user padding_btn transition
+            gradient gradient-green gradient-hover radius box-shadow"
                title="usuários">R. de lançamentos</a></h2>
     </div>
     <form class="ajax_off app_launch_form_filter app_form" action="<?= url('/app/movimentacoes'); ?>" method="post">
@@ -65,7 +66,8 @@
         <p class="price moviment">Valor Dinheiro</p>
         <p class="price moviment">Valor Despesas</p>
         <p class="price moviment">Valor Recolhido</p>
-        <p class="price moviment">Valor anterior</p>
+        <p class="price moviment">Valor Anterior</p>
+        <p class="price moviment">Valor Prêmio</p>
         <p class="wrap moviment"></p>
     </div>
     <?php if (isnt_empty($moviments, 'self')): ?>
@@ -100,6 +102,10 @@
                 <p class="price moviment">
                     <span>R$</span>
                     <span><?= money_fmt_br($moviment->last_value); ?></span>
+                </p>
+                <p class="price moviment">
+                    <span>R$</span>
+                    <span><?= money_fmt_br($moviment->prize); ?></span>
                 </p>
                 <p class="wrap moviment gradient gradient-red font_80_percent gradient-hover transition radius">
                     <a class="color_white " style="text-decoration: none;"

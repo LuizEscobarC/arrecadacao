@@ -17,7 +17,7 @@ use Source\Models\Store;
 use Source\Models\User;
 use Source\Support\Filters\FiltersCashFlow;
 use Source\Support\Filters\FiltersLists;
-use Source\Support\Filters\FiltersMoviment;
+use Source\Support\Filters\Filter;
 use Source\Support\HourManager;
 use Source\Support\Message;
 use Source\Support\Pager;
@@ -762,7 +762,7 @@ class App extends Controller
         );
 
         // Classes que se responsabilizam pelos filtros e modelos
-        list($list, $search, $total) = ($list = new Lists())->filter(new FiltersLists($list), $data);
+        list($list, $search, $total) = (new Lists())->filter($data);
 
         $page = (!empty($data['page']) ? $data['page'] : 1);
 
@@ -778,7 +778,7 @@ class App extends Controller
         echo $this->view->render('lists', [
             'head' => $head,
             'lists' => $lists,
-            'allMoney' => $total->fetch(),
+            'allMoney' => $total,
             'paginator' => $pager->render(),
             'search' => ((object)$search ?? null)
         ]);
@@ -887,8 +887,8 @@ class App extends Controller
             false
         );
 
-        list($cashFlows, $search, $total) = ($cash = new CashFlow())->filter(new FiltersCashFlow($cash), $data);
-        //($moviment = new Moviment())->filter((new FiltersMoviment($moviment)), $data);
+        list($cashFlows, $search, $total) = (new CashFlow())->filter($data);
+        //($moviment = new Moviment())->filter((new Filter($moviment)), $data);
 
         $page = (!empty($data['page']) ? $data['page'] : 1);
 

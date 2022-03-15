@@ -40,7 +40,7 @@ $(function () {
                 $('input[name=id_list]').val(callback.id);
                 $('.total_value').html(totalValue);
                 $('input[name=total_value]').val(totalValue);
-                $('.comission_value').html(`${callback.comission_value}%`);
+                $('.comission_value').html(comissionValue);
                 $('input[name=comission_value]').val(comissionValue);
                 $('.net_value').html(netValue);
                 $('input[name=net_value]').val(netValue);
@@ -410,7 +410,7 @@ $(function () {
 
     /* Não envia o formulário informando se quer ou não adicionar um prémio, após a escolha clicando novamente o
     formulário é enviado*/
-    $body.on('click', 'button', function () {
+    $body.on('click', 'button#moviment_btn', function () {
         const labelInput = $('label.prize_input');
         if (labelInput.attr('style')) {
             if (!$(this).attr('data-submit')) {

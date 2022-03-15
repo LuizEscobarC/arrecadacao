@@ -18,6 +18,11 @@ use Source\Core\Model;
      */
     protected $model;
 
+    /*
+     * @var string|null
+     */
+    protected $implode;
+
     /**
      * @param Model $model
      */
@@ -96,7 +101,8 @@ use Source\Core\Model;
         if (empty($this->dataFilter)) {
             return null;
         }
-        return implode($operator, $this->dataFilter);
+        $this->implode = implode($operator, $this->dataFilter);
+        return $this->implode;
     }
 
     /**
@@ -106,7 +112,7 @@ use Source\Core\Model;
      */
     protected function filterSanitaze(array $data): array
     {
-        $data = filter_var_array($data, FILTER_SANITIZE_STRIPPED);
+        $data = filter_var_array($data, FILTER_DEFAULT);
         return $data;
     }
 }

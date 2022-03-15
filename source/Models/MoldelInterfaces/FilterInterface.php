@@ -6,7 +6,9 @@ use Source\Core\Model;
 
 interface FilterInterface
 {
-    public function __construct(Model $model);
+    public function __construct(Model $model, ?array $filters);
 
-    public function listFilters(?array $filters, array $type, array $keysSql): array;
+    public function find(array $columns): array;
+
+    public function where(array $type, array $keySql);
 }
