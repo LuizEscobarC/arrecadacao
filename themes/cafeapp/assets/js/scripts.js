@@ -32,6 +32,7 @@ $(function () {
             success: function (callback) {
                 if (callback === null) {
                     window.location.reload();
+                    $(window).scrollTop(0);
                 }
                 let totalValue = parseFloat(callback.total_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
                 let comissionValue = parseFloat(callback.comission_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
@@ -393,7 +394,7 @@ $(function () {
                     $('input[name=new_value]').val(newValue);
 
             } else {
-                alert('Por favor escolha a loja e preencha os campos (valor dinheiro e valor despesas)!');
+                alert('Nome da Loja e Horário são necessários!');
             }
         }
     }
