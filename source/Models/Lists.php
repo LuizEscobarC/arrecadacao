@@ -54,6 +54,9 @@ class Lists extends Model
 
     public function filter(array $data): array
     {
+        if (!empty($data['page'])) {
+            array_pop($data);
+        }
         if (!empty($data)) {
             if (!empty($data['search_date'])) {
                 $date = str_replace('/', '-', $data['search_date']);

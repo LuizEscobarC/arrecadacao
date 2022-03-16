@@ -21,7 +21,7 @@
 
             <label class="three_label">
                 <span class="field icon-briefcase"> Horário:</span>
-                <select name="id_hour" id="callback" class="box-shadow required-input" rel="<?= url("/app/get_week_day") ?>" required>
+                <select name="id_hour" class="callback" class="box-shadow required-input" rel="<?= url("/app/get_week_day") ?>" required>
                 </select>
             </label>
         </div>

@@ -20,7 +20,7 @@
 
             <label class="three_label">
                 <span class="field icon-briefcase"> HORÁRIO:</span>
-                <select name="id_hour" id="callback" rel="<?= url("/app/get_week_day") ?>">
+                <select name="id_hour" class="callback" rel="<?= url("/app/get_week_day") ?>">
                 </select>
             </label>
         </div>

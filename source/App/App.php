@@ -107,7 +107,7 @@ class App extends Controller
      * @param array $data
      * @return void
      */
-    public function users(array $data): void
+    public function users(?array $data): void
     {
         $head = $this->seo->render(
             "Meu perfil - " . CONF_SITE_NAME,
@@ -568,7 +568,7 @@ class App extends Controller
      * IT PRESENTES THE REGISTERS OF HOUR TABLE
      * @return void
      */
-    public function hours(): void
+    public function hours(?array $data): void
     {
         $head = $this->seo->render(
             "Horários - " . CONF_SITE_NAME,
@@ -578,16 +578,14 @@ class App extends Controller
             false
         );
 
-        $hour = new Hour();
+        $hour = (new Hour())->find();
         $page = (!empty($data['page']) ? $data['page'] : 1);
 
-        $pager = (new Pager(url('/app/usuarios/')));
-        $pager->pager($hour->find()->count(), 20, $page);
-
+        $pager = (new Pager(url('/app/horarios/')));
+        $pager->pager($hour->count(), 15, $page);
         echo $this->view->render('hours', [
             'head' => $head,
-            'hours' => $hour->find()
-                ->order('week_day')
+            'hours' => $hour->order('number_day')
                 ->limit($pager->limit())
                 ->offset($pager->offset())
                 ->fetch(true),

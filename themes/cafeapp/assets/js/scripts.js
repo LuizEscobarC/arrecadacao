@@ -15,9 +15,9 @@ $(function () {
             success: function (callback) {
                 $('p#label').html(callback[0]);
                 callback.shift();
-                $('select#callback').append('<option value="">Escolha</option>');
+                $('select.callback').append('<option value="">Escolha</option>');
                 for (let i = 0, len = callback.length; i < len; ++i) {
-                    $('select#callback').append('<option value="' + callback[i].id + '">' + callback[i].description + '</option>');
+                    $('select.callback').append('<option value="' + callback[i].id + '">' + callback[i].description + '</option>');
                 }
             }
         });
@@ -330,8 +330,8 @@ $(function () {
     * AJAX GET HOUR
     */
     $body.on('change', 'input.hour', function () {
-        if ($('select#callback')) {
-            $('select#callback').html('');
+        if ($('select.callback')) {
+            $('select.callback').html('');
         }
         if ($('#label')) {
             $('#label').html('');
@@ -343,9 +343,11 @@ $(function () {
     * AJAX GET LIST
     */
 
-    $body.on('change', 'select.store_select', function () {
-        getList($(this), $('#callback').val(), $('.store_select').val());
-        getStoreValueNow($(this));
+    $body.on('change', 'select.store_select, select.callback', function () {
+        const storeSelect = $('select.store_select');
+        const hourSelect = $('select.callback');
+        getList(storeSelect, hourSelect.val(), storeSelect.val());
+        getStoreValueNow(storeSelect);
     });
 
     /*
@@ -513,7 +515,7 @@ $(function () {
     // END MOVIMENT CALCS
 
 
-    /** $('select#callback').change(function () {
+    /** $('select.callback').change(function () {
         let url = $(this).attr('rel') + '/' + $(this).find(':selected').attr('value');
 
         if ($('#label')) {

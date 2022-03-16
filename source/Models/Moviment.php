@@ -110,6 +110,9 @@ class Moviment extends Model
 
     public function filter(array $data): array
     {
+        if (!empty($data['page'])) {
+            array_pop($data);
+        }
         // Se os filtros não foram submitados o padrão é adicionado a classe
         if (!empty($data)) {
             //formatando se existir
