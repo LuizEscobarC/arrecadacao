@@ -5,6 +5,7 @@ namespace Source\App;
 use Composer\Package\Loader\ValidatingArrayLoader;
 use Source\Core\Connect;
 use Source\Core\Controller;
+use Source\Core\View;
 use Source\Models\Auth;
 use Source\Models\CashFlow;
 use Source\Models\Center;
@@ -150,12 +151,18 @@ class App extends Controller
 
         $id = (filter_var($data['id'], FILTER_VALIDATE_INT) ? $data['id'] : null);
 
-        if (empty($id) || !$id) {
-            $this->message->error('Erro ao tentar acessar o usuário, por favor entre em contato com o desenvolvedor.')
-                ->flash();
-            redirect('/app/usuarios');
+        if (empty($id) || empty((new User())->findById($id))) {
+            $cafeWeb = (new View());
+            echo $cafeWeb->render("not-found", [
+                "head" => $head,
+                'error' => (object)[
+                    'entity' => 'Esse usuário',
+                    'linkTitle' => 'Voltar a navegar',
+                    'link' => url('/app/usuarios')
+                ]
+            ]);
+            return;
         }
-
         echo $this->view->render("profile", [
             "head" => $head,
             'user' => (new User())->findById($data['id'])
@@ -339,18 +346,6 @@ class App extends Controller
      */
     public function store(array $data): void
     {
-        if (empty($data['id'])) {
-            $json['message'] = $this->message->error('Loja sem identificação, por favor contate o desenvolvedor!')->render();
-            echo json_encode($json);
-            return;
-        }
-
-        if (!$id = filter_var($data['id'], FILTER_VALIDATE_INT)) {
-            $json['message'] = $this->message->error('Escolha uma loja válida!')->render();
-            echo json_encode($json);
-            return;
-        }
-
         $head = $this->seo->render(
             "Loja - " . CONF_SITE_NAME,
             CONF_SITE_DESC,
@@ -358,6 +353,21 @@ class App extends Controller
             theme("/assets/images/share.jpg"),
             false
         );
+        $id = (filter_var($data['id'], FILTER_VALIDATE_INT) ? $data['id'] : null);
+
+        if (empty($id) || empty((new Store())->findById($id))) {
+            $cafeWeb = (new View());
+            echo $cafeWeb->render("not-found", [
+                "head" => $head,
+                'error' => (object)[
+                    'entity' => 'Essa Loja',
+                    'linkTitle' => 'Voltar a navegar',
+                    'link' => url('/app/lojas')
+                ]
+            ]);
+            return;
+        }
+
         $store = (new Store())->findById($id);
 
         echo $this->view->render("store", [
@@ -486,7 +496,7 @@ class App extends Controller
      */
     public function costCenter(array $data): void
     {
-        $id = filter_var($data['id'], FILTER_VALIDATE_INT);
+        $id = (filter_var($data['id'], FILTER_VALIDATE_INT) ? $data['id'] : null);
 
         $head = $this->seo->render(
             "Centro de Custo - " . CONF_SITE_NAME,
@@ -495,6 +505,19 @@ class App extends Controller
             theme("/assets/images/share.jpg"),
             false
         );
+
+        if (empty($id) || empty((new Center())->findById($id))) {
+            $cafeWeb = (new View());
+            echo $cafeWeb->render("not-found", [
+                "head" => $head,
+                'error' => (object)[
+                    'entity' => 'Esse centro de custo',
+                    'linkTitle' => 'Voltar a navegar',
+                    'link' => url('/app/centro-de-custo')
+                ]
+            ]);
+            return;
+        }
 
         echo $this->view->render('cost-center', [
             'head' => $head,
@@ -600,7 +623,7 @@ class App extends Controller
      */
     public function hour(?array $data): void
     {
-        $id = filter_var($data['id'], FILTER_VALIDATE_INT);
+        $id = (filter_var($data['id'], FILTER_VALIDATE_INT) ? $data['id']: null);
 
         $head = $this->seo->render(
             "Horário - " . CONF_SITE_NAME,
@@ -609,6 +632,19 @@ class App extends Controller
             theme("/assets/images/share.jpg"),
             false
         );
+
+        if (empty($id) || empty((new Hour())->findById($id))) {
+            $cafeWeb = (new View());
+            echo $cafeWeb->render("not-found", [
+                "head" => $head,
+                'error' => (object)[
+                    'entity' => 'Esse horário',
+                    'linkTitle' => 'Voltar a navegar',
+                    'link' => url('/app/horarios')
+                ]
+            ]);
+            return;
+        }
 
         echo $this->view->render('hour', [
             'head' => $head,
@@ -767,15 +803,13 @@ class App extends Controller
         $pager = (new Pager(url('/app/listas/')));
         $pager->pager($list->count(), 20, $page);
 
-        /** @var Lists $list */
-        $lists = $list->order('lists.date_moviment DESC, s.nome_loja ASC')
-            ->offset($pager->offset())
-            ->limit($pager->limit())
-            ->fetch(true);
 
         echo $this->view->render('lists', [
             'head' => $head,
-            'lists' => $lists,
+            'lists' => $list->order('lists.date_moviment DESC, s.nome_loja ASC')
+                ->limit($pager->limit())
+                ->offset($pager->offset())
+                ->fetch(true),
             'allMoney' => $total,
             'paginator' => $pager->render(),
             'search' => ((object)$search ?? null)
@@ -789,7 +823,7 @@ class App extends Controller
      */
     public function list(?array $data): void
     {
-        $id = filter_var($data['id'], FILTER_VALIDATE_INT);
+        $id = (filter_var($data['id'], FILTER_VALIDATE_INT) ? $data['id'] : null);
 
         $head = $this->seo->render(
             "Lista - " . CONF_SITE_NAME,
@@ -798,6 +832,19 @@ class App extends Controller
             theme("/assets/images/share.jpg"),
             false
         );
+
+        if (empty($id) || empty((new Lists())->findById($id))) {
+            $cafeWeb = (new View());
+            echo $cafeWeb->render("not-found", [
+                "head" => $head,
+                'error' => (object)[
+                    'entity' => 'Essa Lista',
+                    'linkTitle' => 'Voltar a navegar',
+                    'link' => url('/app/listas')
+                ]
+            ]);
+            return;
+        }
 
         echo $this->view->render('list', [
             'head' => $head,
@@ -919,7 +966,20 @@ class App extends Controller
             theme("/assets/images/share.jpg"),
             false
         );
-        $id = filter_var($data['id'], FILTER_VALIDATE_INT);
+        $id = (filter_var($data['id'], FILTER_VALIDATE_INT) ? $data['id'] : null);
+
+        if (empty($id) || empty((new CashFlow())->findById($id))) {
+            $cafeWeb = (new View());
+            echo $cafeWeb->render("not-found", [
+                "head" => $head,
+                'error' => (object)[
+                    'entity' => 'Esse lançamento',
+                    'linkTitle' => 'Voltar a navegar',
+                    'link' => url('/app/fluxos-de-caixa')
+                ]
+            ]);
+            return;
+        }
 
 
         echo $this->view->render('cash-flow', [
@@ -1033,7 +1093,20 @@ class App extends Controller
             false
         );
 
-        $id = filter_var($data['id'], FILTER_VALIDATE_INT);
+        $id = (filter_var($data['id'], FILTER_VALIDATE_INT) ? $data['id'] : null);
+
+        if (empty($id) || empty((new Moviment())->findById($id))) {
+            $cafeWeb = (new View());
+            echo $cafeWeb->render("not-found", [
+                "head" => $head,
+                'error' => (object)[
+                    'entity' => 'Essa movimentação',
+                    'linkTitle' => 'Voltar a navegar',
+                    'link' => url('/app/movimentacoes')
+                ]
+            ]);
+            return;
+        }
 
         echo $this->view->render('moviment', [
             'head' => $head,

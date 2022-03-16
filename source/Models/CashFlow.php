@@ -105,7 +105,11 @@ class CashFlow extends Model
 
         $filterClass = new FiltersCashFlow($this, $filters);
 
-        $arrayFilterReturn = $filterClass->where(['like', 'like', 'equal'],
+        $arrayFilterReturn = $filterClass->where([
+            'search_store' => 'like',
+            'search_hour' => 'like',
+            'search_date' => 'equal'
+        ],
             [
                 'search_store' => 's.nome_loja',
                 'search_hour' => 'h.description',

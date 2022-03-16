@@ -33,7 +33,7 @@ Abstract class Filter extends FilterQuery implements FilterInterface
                     }
                 }
 
-                switch ($type[$typeIterator]) {
+                switch ($type[$filterKey]) {
                     case 'like':
                         $this->like($keyWhere, $value);
                         break;
@@ -50,27 +50,11 @@ Abstract class Filter extends FilterQuery implements FilterInterface
 
                 $typeIterator++;
             }
-
-            $this->implode();
         }
+        $this->implode();
         return $this;
     }
 
-    protected function total(array $columnsAndAliases, Model $model = null)
-    {
-        foreach ($columnsAndAliases as $column => $alias) {
-            $arraySelects[] = "sum({$column}) as {$alias}";
-        }
-        $select = implode(', ', $arraySelects);
-
-        // para pegar o totalizador de valor dinâmico com filtro
-        $total = ((!empty($model) ? $model : $this->model))->find(null, null, $select);
-
-        if ($this->implode) {
-            $total->putQuery($this->implode, ' WHERE ');
-        }
-        return $total->fetch();
-    }
 
     public function find(array $columns): array
     {
@@ -79,7 +63,9 @@ Abstract class Filter extends FilterQuery implements FilterInterface
         }
         $select = implode(', ', $arraySelects);
 
-        $this->model->find(null, null, $select);
+        $this->model->find(null, null, $select)
+            ->join('hour h', 'h.id', 'moviment.id_hour')
+            ->join('loja s', 's.id', 'moviment.id_store');
         if ($this->implode) {
             $this->model->putQuery($this->implode, ' WHERE ');
         }

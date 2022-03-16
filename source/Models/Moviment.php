@@ -127,7 +127,11 @@ class Moviment extends Model
         // passo o modelo e os filtros vazios ou não
         $filterClass = new FilterMoviment($this, $filters);
 
-        $arrayFilterReturn = $filterClass->where(['like', 'like', 'equal'],
+        $arrayFilterReturn = $filterClass->where([
+            'search_store' => 'like',
+            'search_hour' => 'like',
+            'search_date' => 'equal'
+        ],
             [
                 'search_store' => 's.nome_loja',
                 'search_hour' => 'h.description',

@@ -55,12 +55,13 @@ class Lists extends Model
     public function filter(array $data): array
     {
         if (!empty($data['page'])) {
-            array_pop($data);
+            array_pop($data['page']);
         }
+
         if (!empty($data)) {
             if (!empty($data['search_date'])) {
                 $date = str_replace('/', '-', $data['search_date']);
-                $data['search_date'] = "DATE('" . date_fmt_app($date) . "')";
+                $data['search_date'] = "DATE('" . date_fmt($date, 'Y-m-d') . "')";
             }
             $filters = $data;
         } else {
@@ -69,11 +70,15 @@ class Lists extends Model
 
         $filterClass = new FiltersLists($this, $filters);
 
-        $arrayFilterReturn = $filterClass->where(['like', 'like', 'equal'],
+        $arrayFilterReturn = $filterClass->where([
+            'search_store' => 'like',
+            'search_hour' => 'like',
+            'search_date' => 'equal'
+        ],
             [
                 'search_store' => 's.nome_loja',
                 'search_hour' => 'h.description',
-                'search_date' => 'DATE(cash_flow.date_moviment)'
+                'search_date' => 'DATE(lists.date_moviment)'
             ])
             ->find([
                 'lists.*',

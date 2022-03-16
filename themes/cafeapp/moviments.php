@@ -16,7 +16,7 @@
                 &ofcir; Selecione uma loja
             </option>
             <?php foreach ((new \Source\Models\Store())->find()->fetch(true) as $store): ?>
-                <option <?= (($search->search_store) == $store->nome_loja ? 'selected' : ""); ?>
+                <option <?= (($search->search_store) == $store->nome_loja && $search->search_store !== '' ? 'selected' : ""); ?>
                     value="<?= $store->nome_loja; ?>">
                     &ofcir; <?= $store->nome_loja; ?></option>
             <?php endforeach; ?>

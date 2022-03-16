@@ -32,7 +32,7 @@ class FiltersLists extends Filter
         // para pegar o totalizador de valor dinâmico com filtro
         $total = ((!empty($model) ? $model : $this->model))->find(null, null, $select)
             ->join('hour h', 'lists.id_hour', 'h.id')
-            ->join('loja s', 'lists.id_store', 's.id');;
+            ->join('loja s', 'lists.id_store', 's.id');
 
         if ($this->implode) {
             $total->putQuery($this->implode, ' WHERE ');
