@@ -109,7 +109,7 @@
                 </p>
                 <p class="wrap moviment gradient gradient-red font_80_percent gradient-hover transition radius">
                     <a class="color_white " style="text-decoration: none;"
-                       href="<?= url("/app/fluxo-de-caixa/{$moviment->id}") ?>">Editar</a>
+                       href="<?= url("/app/movimentacao/{$moviment->id}") ?>">Visualizar</a>
                 </p>
             </article>
         <?php endforeach; ?>

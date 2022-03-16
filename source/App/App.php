@@ -1022,8 +1022,23 @@ class App extends Controller
         ]);
     }
 
-    public function moviment()
+    public function moviment(array $data): void
     {
+
+        $head = $this->seo->render(
+            "Movimentação - " . CONF_SITE_NAME,
+            CONF_SITE_DESC,
+            url("/app/movimentacao/{$data['id']}"),
+            theme("/assets/images/share.jpg"),
+            false
+        );
+
+        $id = filter_var($data['id'], FILTER_VALIDATE_INT);
+
+        echo $this->view->render('moviment', [
+            'head' => $head,
+            'moviment' => (new Moviment())->findById($id)
+        ]);
 
     }
 
@@ -1174,9 +1189,15 @@ class App extends Controller
         echo json_encode($json);
     }
 
-    public function removeMoviment()
+    public function removeMoviment(array $data): void
     {
-
+        $moviment = (new Moviment())->findById($data['id']);
+        if ($moviment) {
+            $moviment->destroy();
+        }
+        $this->message->success("Tudo pronto {$this->user->first_name}, movimento removido com sucesso!")->flash();
+        $json['redirect'] = url('/app/fluxos-de-caixa');
+        echo json_encode($json);
     }
 
 }

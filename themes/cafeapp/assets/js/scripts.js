@@ -324,6 +324,13 @@ $(function () {
         remove($(this), "cashremove", "ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir esse lançamento?");
     });
 
+    /*
+     *  APP MOVIMENT REMOVE
+     */
+    $("[data-moviment-remove]").click(function () {
+        remove($(this), "moviment-remove", "ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir essa movimentação?");
+    });
+
     // END REMOVE ENTITIES
 
     /*
