@@ -87,12 +87,15 @@ class Lists extends Model
         return array_merge($arrayFilterReturn, [$total]);
     }
 
-    public function findByStoreHour(int $idStore, int $idHour): ?\stdClass
+    public function findByStoreHour(int $idStore, ?string $idHour): ?\stdClass
     {
-        $this->find('id_hour = :h AND id_store = :s',
-            "&h={$idHour}&s={$idStore}");
-        if (empty($this->fetch())) {
-            $this->message->error('Não existe uma lista cadastrada para a loja e o horário especificado.')->flash();
+        if (!empty($idHour)) {
+            $this->find('id_hour = :h AND id_store = :s',
+                "&h={$idHour}&s={$idStore}");
+            if (empty($this->fetch())) {
+                return null;
+            }
+        } else {
             return null;
         }
         return $this->fetch()->data();

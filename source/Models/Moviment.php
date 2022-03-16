@@ -35,7 +35,9 @@ class Moviment extends Model
         string $getValue,
         string $newValue,
         ?string $prize,
-        ?string $beatPrize
+        ?string $beatPrize,
+        ?string $prizeStore,
+        ?string $prizeOffice
     ) {
         $this->date_moviment = $dateMoviment;
         $this->id_store = $idStore;
@@ -48,6 +50,8 @@ class Moviment extends Model
         $this->new_value = $newValue;
         $this->prize = $prize;
         $this->beat_prize = $beatPrize;
+        $this->prize_store = $prizeStore;
+        $this->prize_office = $prizeOffice;
         return $this;
     }
 
@@ -67,6 +71,41 @@ class Moviment extends Model
             return (new Store())->findById($this->id_store);
         }
         return null;
+    }
+
+    public function requiredMoviment(?array $data): ?string
+    {
+        $fields = [];
+        foreach (static::$required as $field) {
+            if (empty($data[$field]) && ($data[$field] !== 0 || $data[$field] !== '0')) {
+                $fields[] = $field;
+            }
+        }
+        if (!empty($fields)) {
+            foreach ($fields as $value) {
+                switch ($value) {
+                    case 'id_hour':
+                        $fildsArray[] = 'Horário';
+                        break;
+                    case 'id_store':
+                        $fildsArray[] = 'Nome da Loja';
+                        break;
+                    case 'date_moviment':
+                        $fildsArray[] = 'Data de movimento';
+                        break;
+                    case 'paying_now':
+                        $fildsArray[] = 'Valor Dinheiro';
+                        break;
+                    case 'expend':
+                        $fildsArray[] = 'Valor Despesa';
+                        break;
+                }
+            }
+            $message = 'Os seguintes campos são necessários: ' . implode(', ', $fildsArray) . ".";
+            return $this->message->warning($message)->render();
+        } else {
+            return null;
+        }
     }
 
     public function filter(array $data): array

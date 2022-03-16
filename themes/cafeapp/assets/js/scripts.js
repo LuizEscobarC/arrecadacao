@@ -15,7 +15,7 @@ $(function () {
             success: function (callback) {
                 $('p#label').html(callback[0]);
                 callback.shift();
-                $('select#callback').append('<option value="0">Escolha</option>');
+                $('select#callback').append('<option value="">Escolha</option>');
                 for (let i = 0, len = callback.length; i < len; ++i) {
                     $('select#callback').append('<option value="' + callback[i].id + '">' + callback[i].description + '</option>');
                 }
@@ -30,15 +30,24 @@ $(function () {
             data: '&id_hour=' + idHour + '&id_store=' + idStore,
             dataType: 'JSON',
             success: function (callback) {
-                if (callback === null) {
-                    window.location.reload();
-                    $(window).scrollTop(0);
-                }
-                let totalValue = parseFloat(callback.total_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
-                let comissionValue = parseFloat(callback.comission_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
-                let netValue = parseFloat(callback.net_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
+                let totalValue = null;
+                let comissionValue = null;
+                let netValue = null;
 
-                $('input[name=id_list]').val(callback.id);
+                if (callback) {
+                    totalValue = parseFloat(callback.total_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
+                    comissionValue = parseFloat(callback.comission_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
+                    netValue = parseFloat(callback.net_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
+                    $('input[name=id_list]').val(callback.id);
+                } else {
+                    const message = `<div class="message info icon-info">Não existe uma lista para a loja neste horário.</div>`;
+                    $('.ajax_response').html(message).fadeIn(300);
+                    totalValue = 0;
+                    comissionValue = 0;
+                    netValue = 0;
+                    $('input[name=id_list]').val('');
+                }
+
                 $('.total_value').html(totalValue);
                 $('input[name=total_value]').val(totalValue);
                 $('.comission_value').html(comissionValue);
@@ -378,20 +387,20 @@ $(function () {
             if (last_val.text() && netValue) {
                 // É o valor que tem que ser abatido  com o valor recolhido + o valor de despesas
                 // VALOR A ACERTAR | VALOR LIQUIDO
-                const beatValue = (getValue - parseFloat(netValue.replaceAll('.','').replace(',','.')));
+                const beatValue = (getValue - parseFloat(netValue.replaceAll('.', '').replace(',', '.')));
 
                 // NOVO VALOR ATUAL | SALDO ANTERIOR
                 const newValue = (parseFloat(last_val.text().replaceAll('.', '').replace(',', '.')) + beatValue)
                     .toLocaleString('pt-br', {minimumFractionDigits: 2, maximumFractionDigits: 2});
 
-                    const beatValueBrl = beatValue.toLocaleString('pt-br', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    });
-                    $('p.beat_value').html(beatValueBrl);
-                    $('.new_value').html(newValue);
-                    $('input[name=beat_value]').val(beatValueBrl);
-                    $('input[name=new_value]').val(newValue);
+                const beatValueBrl = beatValue.toLocaleString('pt-br', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+                $('p.beat_value').html(beatValueBrl);
+                $('.new_value').html(newValue);
+                $('input[name=beat_value]').val(beatValueBrl);
+                $('input[name=new_value]').val(newValue);
 
             } else {
                 alert('Nome da Loja e Horário são necessários!');
@@ -410,24 +419,95 @@ $(function () {
     /* Não envia o formulário informando se quer ou não adicionar um prémio, após a escolha clicando novamente o
     formulário é enviado*/
     $body.on('click', 'button#moviment_btn', function () {
-        const inputPrize = $('input[name=prize]');
-        if (inputPrize.val()) {
-            const store_value = parseFloat($('.last_value').text().replaceAll('.','').replace(',', '.'));
-            if (store_value < 0) {
+        event.preventDefault();
+        let inputPrize = $('input[name=prize]').val();
+        if (inputPrize) {
+            inputPrize = parseFloat(inputPrize.replaceAll('.', '').replace(',', '.'));
+            // VALOR DESPESAS
+            const expense = parseFloat($('input[name=expend]').val().replaceAll('.', '').replace(',', '.'));
+            // VALOR DINHEIRO
+            const paying = parseFloat($('input[name=paying_now]').val().replaceAll('.', '').replace(',', '.'));
+            /* Valor reclohido + despesas*/
+            // VALOR RECOLHIDO
+            const getValue = (paying + expense);
+            /* Valor a acertar é o valor líquido da lista*/
+            // VALOR LÍQUIDO | VALOR ACERTAR
+            const netValue = $('p.net_value').text();
+            /* Ao final o saldo anterior e o saldo atual que é a mesma coisa, recebe o novo saldo do calculo*/
+            // VALOR ANTERIOR | SALDO ATUAL
+            const last_val = $('p.last_value');
+            // VALOR A ACERTAR | VALOR LIQUIDO
+            const beatValue = (getValue - parseFloat(netValue.replaceAll('.', '').replace(',', '.')));
+            // NOVO VALOR ATUAL | SALDO ANTERIOR
+            const storeNewValue = (parseFloat(last_val.text().replaceAll('.', '').replace(',', '.')) + beatValue);
+
+            if (storeNewValue < 0) {
                 const negativeValue = window.confirm('Deseja abater o saldo da loja?');
                 if (negativeValue) {
-                    if (inputPrize) {
-                        const beatPrize = $('.get_value').text();
-                        $('label.prize_output').html(
-                            `<span class="field icon-leanpub">Valor de Abate Premio:</span>
-                            <p class="app_widget_title beat_prize">${beatPrize}</p>
-                            <input type="hidden" name="beat_prize" value="${beatPrize}">`);
+                    const storeValuePositive = Math.abs(storeNewValue);
+                    let prizeOffice = null;
+                    let prizeStore = null;
+                    let beatPrize = null;
+                    let newStoreValue = null;
+
+                    if (storeValuePositive < inputPrize) {
+                        prizeOffice = inputPrize - storeValuePositive;
+                        prizeStore = storeValuePositive;
+                        beatPrize = storeValuePositive;
+                        newStoreValue = 0;
+                    } else if (storeValuePositive > inputPrize) {
+                        prizeOffice = 0;
+                        prizeStore = inputPrize;
+                        beatPrize = inputPrize;
+                        newStoreValue = -Math.abs((storeValuePositive - inputPrize));
                     } else {
-                        alert('Por favor, digite o valor do premio!');
+                        prizeOffice = 0;
+                        prizeStore = inputPrize;
+                        beatPrize = inputPrize;
+                        newStoreValue = 0;
                     }
+                    const newStoreValueBrl = newStoreValue.toLocaleString('pt-br', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+                    const beatPrizeBrl = beatPrize.toLocaleString('pt-br', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+                    const prizeOfficeBrl = prizeOffice.toLocaleString('pt-br', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+                    const prizeStoreBrl = prizeStore.toLocaleString('pt-br', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+
+                    $('.new_value').text(newStoreValueBrl);
+                    $('input[name=new_value]').text(newStoreValueBrl);
+
+                    $('label.prize_output').html(
+                        `<span class="field icon-leanpub">Valor de Abate Premio:</span>
+                            <p class="app_widget_title beat_prize">${beatPrize}</p>
+                            <input type="hidden" name="beat_prize" value="${beatPrizeBrl}">
+                            <input type="hidden" name="prize_office" value="${prizeOfficeBrl}">
+                            <input type="hidden" name="prize_store" value="${prizeStoreBrl}">`);
+                    alert(`A loja pagará: R$${prizeStoreBrl}.
+                     O escritório pagará: R$${prizeOfficeBrl}.`);
                 }
+            } else {
+                inputPrize = inputPrize.toLocaleString('pt-br', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                $('label.prize_output').html(
+                    `<span class="field icon-leanpub">Sem abate</span>
+                            <input type="hidden" name="prize_office" value="${inputPrize}">
+                            <input type="hidden" name="prize_store" value="0">`);
             }
+            setTimeout(function (){},3000);
+        } else {
+            alert('Por favor, digite o valor do premio!');
         }
+
+        $('form.app_form.moviment').submit();
 
     });
     // END MOVIMENT CALCS

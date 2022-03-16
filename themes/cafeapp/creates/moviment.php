@@ -4,7 +4,7 @@
     <div class="color_888 app_header">
         <h2 class=" icon-calendar-check-o ">Cadastrar Movimentação:</h2>
     </div>
-    <form class="app_form" action="<?= url("/app/movimentacao"); ?>" method="post">
+    <form class="app_form moviment" action="<?= url("/app/movimentacao"); ?>" method="post">
         <div class="ajax_response"><?= flash(); ?></div>
 
         <div class="label_group">
@@ -21,7 +21,7 @@
 
             <label class="three_label">
                 <span class="field icon-briefcase"> Horário:</span>
-                <select name="id_hour" id="callback" class="box-shadow required-input" rel="<?= url("/app/get_week_day") ?>">
+                <select name="id_hour" id="callback" class="box-shadow required-input" rel="<?= url("/app/get_week_day") ?>" required>
                 </select>
             </label>
         </div>

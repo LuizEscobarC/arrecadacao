@@ -15,11 +15,15 @@ $(function () {
                 load.fadeIn(200).css("display", "flex");
             },
             success: function (response) {
+                if (response.scroll) {
+                    $(window).scrollTop(response.scroll);
+                }
+
                 //redirect
                 if (response.redirect) {
                     setTimeout(function (){
                         window.location.href = response.redirect;
-                    }, 1000);
+                    }, (response.timeout ?? 1000));
                 } else {
                     load.fadeOut(200);
                 }

@@ -1046,21 +1046,14 @@ class App extends Controller
     public function saveMoviment(?array $data): void
     {
         if (!empty($data)) {
+            $required = (new Moviment())->requiredMoviment($data);
+            if (!empty($required)) {
+                $json['message'] = $required;
+                echo json_encode($json);
+                return;
+            }
+
             $messageError = '';
-
-            //BEGIN SAVE LIST
-            $list = (new Lists());
-            if (!empty($data['id_list'])) {
-                $list = $list->findById($data['id_list']);
-            }
-
-            $list->total_value = (money_fmt_app($data['net_value']) - money_fmt_app($data['get_value']));
-            $list->date_moviment = $data['date_moviment'];
-            if (!$list->save()) {
-                $messageError .= $list->message()->getText();
-            }
-            //END SAVE LIST
-
             $store = (new Store());
             if (!empty($data['id_store'])) {
                 $store = $store->findById($data['id_store']);
@@ -1072,16 +1065,47 @@ class App extends Controller
             }
 
             if (!$store->save()) {
-                $messageError .= $store->message()->getText();
+                $messageError .= ",  " . $store->message()->getText();
+            }
+
+            if (!empty($data['prize_office'])) {
+                $cash = (new CashFlow());
+
+                $cash->bootstrap(
+                    $data["date_moviment"],
+                    $data["id_store"],
+                    $data["id_hour"],
+                    'Saída de Premio do Escritório',
+                    money_fmt_app($data['prize_office']),
+                    2,
+                    null
+                );
+
+                if (!$cash->save()) {
+                    $messageError = $cash->message()->getText();
+                }
+            }
+            if (!empty($data['prize_store'])) {
+                $cash = (new CashFlow());
+
+                $cash->bootstrap(
+                    $data["date_moviment"],
+                    $data["id_store"],
+                    $data["id_hour"],
+                    'Abate de Premio da loja ' . $store->nome_loja,
+                    money_fmt_app($data['prize_store']),
+                    2,
+                    null
+                );
+
+                if (!$cash->save()) {
+                    $messageError = $cash->message()->getText();
+                }
             }
 
             if (money_fmt_app($data['get_value']) !== 0) {
 
                 $cash = (new CashFlow());
-
-                if (!empty($data['id_cash'])) {
-                    $cash = $cash->findById($data['id_cash']);
-                }
 
                 $cash->bootstrap(
                     $data["date_moviment"],
@@ -1092,11 +1116,13 @@ class App extends Controller
                     1,
                     null
                 );
+
                 if (!$cash->save()) {
-                    $messageError .= $cash->message()->getText();
+                    $messageError = $cash->message()->getText();
                 }
 
                 if (money_fmt_app($data['expend']) !== 0) {
+                    $cash = (new CashFlow());
                     $cash->bootstrap(
                         $data["date_moviment"],
                         $data["id_store"],
@@ -1107,32 +1133,37 @@ class App extends Controller
                         null
                     );
                     if (!$cash->save()) {
-                        $messageError .= $cash->message()->getText();
+                        $messageError = $cash->message()->getText();
                     }
                 }
             }
 
-            $moviment = (new Moviment());
-            if (!empty($data['id'])) {
-                $moviment = $moviment->findById($data['id']);
-            }
-            $moviment->bootstrap(
-                $data['date_moviment'],
-                $data['id_store'],
-                $data['id_hour'],
-                money_fmt_app($data['beat_value']),
-                money_fmt_app($data['paying_now']),
-                money_fmt_app($data['expend']),
-                money_fmt_app($data['last_value']),
-                money_fmt_app($data['get_value']),
-                money_fmt_app($data['new_value']),
-                (!empty($data['prize']) ? money_fmt_app($data['prize']) : null),
-                (!empty($data['beat_prize']) ? money_fmt_app($data['beat_prize']) : null)
-            );
-
             if (empty($messageError)) {
+
+                $moviment = (new Moviment());
+                if (!empty($data['id'])) {
+                    $moviment = $moviment->findById($data['id']);
+                }
+                $moviment->bootstrap(
+                    $data['date_moviment'],
+                    $data['id_store'],
+                    $data['id_hour'],
+                    money_fmt_app($data['beat_value']),
+                    money_fmt_app($data['paying_now']),
+                    money_fmt_app($data['expend']),
+                    money_fmt_app($data['last_value']),
+                    money_fmt_app($data['get_value']),
+                    money_fmt_app($data['new_value']),
+                    (!empty($data['prize']) ? money_fmt_app($data['prize']) : null),
+                    (!empty($data['beat_prize']) ? money_fmt_app($data['beat_prize']) : null),
+                    (!empty($data['prize_store']) ? money_fmt_app($data['prize_store']) : null),
+                    (!empty($data['prize_office']) ? money_fmt_app($data['prize_office']) : null),
+                );
                 if ($moviment->save()) {
                     $json['message'] = $this->message->success("Movimento atualizado com sucesso!")->render();
+                    $json['scroll'] = 2;
+                } else {
+                    $json['message'] = $moviment->message()->render();
                 }
             } else {
                 $json['message'] = $this->message->error($messageError);
