@@ -106,6 +106,7 @@ $route->post('/remove-moviment/{id}', 'App:removeMoviment');
 
 
 /** SHARED */
+$route->post('/moviment_verify', 'App:movimentVerify');
 $route->post('/get_hour', 'App:getHour');
 $route->post('/get_list', 'App:getList');
 $route->post('/get_store', 'App:getStore');

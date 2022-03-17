@@ -57,57 +57,57 @@
 
 <section class="app_launch_box">
     <div class="app_launch_item header">
-        <p class="desc moviment">Data de Movimentação</p>
-        <p class="wrap">dia da semana</p>
-        <p class="desc moviment">Horário desejado</p>
-        <p class="desc moviment">Loja</p>
-        <p class="price moviment">Saldo Loja</p>
-        <p class="price moviment">Valor Acertar</p>
-        <p class="price moviment">Valor Dinheiro</p>
-        <p class="price moviment">Valor Despesas</p>
-        <p class="price moviment">Valor Recolhido</p>
-        <p class="price moviment">Valor Anterior</p>
-        <p class="price moviment">Valor Prêmio</p>
-        <p class="wrap moviment"></p>
+        <p class="desc moviment font_80_percent">Data de Movimentação</p>
+        <p class="desc moviment font_80_percent">dia da semana</p>
+        <p class="desc moviment font_80_percent">Horário desejado</p>
+        <p class="desc moviment font_80_percent">Loja</p>
+        <p class="price moviment font_80_percent">Saldo Loja</p>
+        <p class="price moviment font_80_percent">Valor Acertar</p>
+        <p class="price moviment font_80_percent">Valor Dinheiro</p>
+        <p class="price moviment font_80_percent">Valor Despesas</p>
+        <p class="price moviment font_80_percent">Valor Recolhido</p>
+        <p class="price moviment font_80_percent">Valor Anterior</p>
+        <p class="price moviment font_80_percent">Valor Prêmio</p>
+        <p class="desc moviment font_80_percent">Visualizar</p>
     </div>
     <?php if (isnt_empty($moviments, 'self')): ?>
         <?php foreach ($moviments as $moviment): ?>
             <article class="app_launch_item">
-                <p class="desc moviment"><?= date_fmt($moviment->date_moviment, 'd/m/Y'); ?></p>
-                <p class="desc moviment app_invoice_link transition">
-                    <a title="Ver Lista" href="<?= url("/app/horario/{$moviment->id}"); ?>"><?= date_fmt($moviment->date_moviment, 'd/m/Y') . ' ' . $moviment->week_day; ?></a>
+                <p class="desc moviment font_80_percent"><?= date_fmt($moviment->date_moviment, 'd/m/Y'); ?></p>
+                <p class="desc moviment font_80_percent app_invoice_link transition">
+                    <a  title="Ver Lista" class="desc moviment" href="<?= url("/app/horario/{$moviment->id}"); ?>"><?= date_fmt($moviment->date_moviment, 'd/m/Y') . ' ' . $moviment->week_day; ?></a>
                 </p>
-                <p class="desc moviment"><?= $moviment->hour; ?></p>
-                <p class="desc moviment"><?= $moviment->nome_loja; ?></p>
-                <p class="price">
+                <p class="desc moviment font_80_percent"><?= $moviment->hour; ?></p>
+                <p class="desc moviment font_80_percent"><?= $moviment->nome_loja; ?></p>
+                <p class="price category moviment font_80_percent">
                     <span>R$</span>
                     <span><?= money_fmt_br($moviment->new_value); ?></span>
                 </p>
-                <p class="price moviment">
+                <p class="price category moviment font_80_percent">
                     <span>R$</span>
                     <span><?= money_fmt_br($moviment->beat_value);?></span>
                 </p>
-                <p class="price moviment">
+                <p class="price category moviment font_80_percent">
                     <span>R$</span>
                     <span><?= money_fmt_br($moviment->paying_now); ?></span>
                 </p>
-                <p class="price moviment">
+                <p class="price category moviment font_80_percent">
                     <span>R$</span>
                     <span><?= money_fmt_br($moviment->expend); ?></span>
                 </p>
-                <p class="price moviment">
+                <p class="price category moviment font_80_percent">
                     <span>R$</span>
                     <span><?= money_fmt_br($moviment->get_value); ?></span>
                 </p>
-                <p class="price moviment">
+                <p class="price category moviment font_80_percent">
                     <span>R$</span>
                     <span><?= money_fmt_br($moviment->last_value); ?></span>
                 </p>
-                <p class="price moviment">
+                <p class="price category moviment font_80_percent">
                     <span>R$</span>
                     <span><?= money_fmt_br($moviment->prize); ?></span>
                 </p>
-                <p class="wrap moviment gradient gradient-red font_80_percent gradient-hover transition radius">
+                <p class="desc moviment gradient gradient-red font_80_percent gradient-hover transition radius">
                     <a class="color_white " style="text-decoration: none;"
                        href="<?= url("/app/movimentacao/{$moviment->id}") ?>">Visualizar</a>
                 </p>
@@ -150,6 +150,26 @@
         <p></p>
         <p class="font_80_percent">Valor Anterior Total:</p>
         <p class="font_80_percent icon-thumbs-o-up"><?= money_fmt_br($allMoney->total_last_value, true); ?></p>
+    </div>
+    <div class="font_80_percent app_launch_item footer">
+        <p class="desc"></p>
+        <p></p>
+        <p class="font_80_percent">Valor Bruto Total<small>(lista)</small>:</p>
+        <p class="font_80_percent icon-thumbs-o-up"><?= money_fmt_br($allMoney->total_total_value, true); ?></p>
+    </div>
+
+    <div class="font_80_percent app_launch_item footer">
+        <p class="desc"></p>
+        <p></p>
+        <p class="font_80_percent">Valor líquido Total<small>(lista)</small>:</p>
+        <p class="font_80_percent icon-thumbs-o-up"><?= money_fmt_br($allMoney->total_net_value, true); ?></p>
+    </div>
+
+    <div class="font_80_percent app_launch_item footer">
+        <p class="desc"></p>
+        <p></p>
+        <p class="font_80_percent">Valor de comissão Total <small>(lista)</small>:</p>
+        <p class="font_80_percent icon-thumbs-o-up"><?= money_fmt_br($allMoney->total_comission_value, true); ?></p>
     </div>
 
     <?= $paginator; ?>

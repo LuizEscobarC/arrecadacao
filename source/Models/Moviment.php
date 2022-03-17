@@ -15,8 +15,6 @@ class Moviment extends Model
                 'id_store',
                 'date_moviment',
                 'beat_value',
-                'paying_now',
-                'expend',
                 'last_value',
                 'get_value',
                 'new_value'
@@ -28,6 +26,7 @@ class Moviment extends Model
         string $dateMoviment,
         string $idStore,
         string $idHour,
+        ?string $idList,
         string $beatValue,
         string $payingNow,
         string $expend,
@@ -42,6 +41,7 @@ class Moviment extends Model
         $this->date_moviment = $dateMoviment;
         $this->id_store = $idStore;
         $this->id_hour = $idHour;
+        $this->id_list = $idList;
         $this->beat_value = $beatValue;
         $this->paying_now = $payingNow;
         $this->expend = $expend;
@@ -55,19 +55,31 @@ class Moviment extends Model
         return $this;
     }
 
-    public function hour(): ?Hour
+    public function hour(int $hour = null): ?Hour
     {
-        if ($this->id_hour) {
-            (new $this);
+        if (!empty($hour)) {
+            return (new Hour())->findById($hour);
+        } elseif ($this->id_hour) {
             return (new Hour())->findById($this->id_hour);
         }
         return null;
     }
 
-    public function store(): ?Store
+    public function lists(int $list = null): ?Lists
     {
-        if ($this->id_store) {
-            (new $this);
+        if (!empty($list)) {
+            return (new Lists())->findById($list);
+        } elseif ($this->id_list) {
+            return (new Lists())->findById($this->id_list);
+        }
+        return null;
+    }
+
+    public function store(int $store = null): ?Store
+    {
+        if (!empty($store)) {
+            return (new Store())->findById($store);
+        } elseif ($this->id_store) {
             return (new Store())->findById($this->id_store);
         }
         return null;
@@ -77,7 +89,7 @@ class Moviment extends Model
     {
         $fields = [];
         foreach (static::$required as $field) {
-            if (empty($data[$field]) && ($data[$field] !== 0 || $data[$field] !== '0')) {
+            if (empty($data[$field]) && !($data[$field] === 0 || $data[$field] === '0')) {
                 $fields[] = $field;
             }
         }
@@ -93,18 +105,65 @@ class Moviment extends Model
                     case 'date_moviment':
                         $fildsArray[] = 'Data de movimento';
                         break;
-                    case 'paying_now':
-                        $fildsArray[] = 'Valor Dinheiro';
-                        break;
-                    case 'expend':
-                        $fildsArray[] = 'Valor Despesa';
-                        break;
                 }
             }
             $message = 'Os seguintes campos são necessários: ' . implode(', ', $fildsArray) . ".";
             return $this->message->warning($message)->render();
         } else {
             return null;
+        }
+    }
+
+    public function isRepeated(string $dateMoviment, int $hour, int $store): bool
+    {
+        if (!empty($this->findByDateMoviment($dateMoviment, $hour, $store))) {
+            return false;
+        }
+        return true;
+    }
+
+    protected function findByDateMoviment(string $dateMoviment, int $id_hour, int $id_store): ?Moviment
+    {
+        $dateMoviment = date_fmt_app($dateMoviment);
+        (new Moviment());
+        return $this->find("DATE(date_moviment) = '{$dateMoviment}' AND id_store = {$id_store} AND id_hour = {$id_hour}",
+            null, 'id')->fetch();
+    }
+
+    public function isEmpty(array &$data): void
+    {
+        $dataEmpty = [
+            'paying_now',
+            'expend',
+            'get_value',
+            'beat_value',
+            'new_value',
+            'prize',
+            'beat_prize',
+            'prize_store',
+            'prize_office',
+        ];
+
+        if (empty($data[$dataEmpty[0]])) {
+            $data[$dataEmpty[0]] = 0;
+        }
+
+        if (empty($data[$dataEmpty[1]])) {
+            $data[$dataEmpty[1]] = 0;
+        }
+
+        if (empty($data[$dataEmpty[0]]) && empty($data[$dataEmpty[1]])) {
+            $data[$dataEmpty[2]] = 0;
+            $data[$dataEmpty[3]] = (!empty($data['id_list']) ? -abs($this->lists($data['id_list'])->net_value) : ($data['id_list'] = 0));
+            if ($this->store($data['id_store'])->valor_saldo) {
+                $data[$dataEmpty[4]] = ((float)($this->store($data['id_store'])->valor_saldo) + $data[$dataEmpty[3]]);
+            }
+        }
+        if (empty($data[$dataEmpty[5]])) {
+            $data[$dataEmpty[5]] = 0;
+            $data[$dataEmpty[6]] = 0;
+            $data[$dataEmpty[7]] = 0;
+            $data[$dataEmpty[8]] = 0;
         }
     }
 
@@ -145,7 +204,10 @@ class Moviment extends Model
             'paying_now' => 'total_paying_now',
             'expend' => 'total_expend',
             'get_value' => 'total_get_value',
-            'last_value' => 'total_last_value'
+            'last_value' => 'total_last_value',
+            'l.net_value' => 'total_net_value',
+            'l.comission_value' => 'total_comission_value',
+            'l.total_value' => 'total_total_value'
         ], new Moviment());
 
         return array_merge($arrayFilterReturn, [$total]);

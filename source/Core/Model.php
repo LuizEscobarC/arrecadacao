@@ -390,7 +390,7 @@ abstract class Model
     {
         $data = (array)$this->data();
         foreach (static::$required as $field) {
-            if (empty($data[$field]) && $data[$field] != 0) {
+            if (empty($data[$field]) && !($data[$field] !== '0' || $data[$field] !== 0)) {
                 return false;
             }
         }

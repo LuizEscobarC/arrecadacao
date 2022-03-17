@@ -623,7 +623,7 @@ class App extends Controller
      */
     public function hour(?array $data): void
     {
-        $id = (filter_var($data['id'], FILTER_VALIDATE_INT) ? $data['id']: null);
+        $id = (filter_var($data['id'], FILTER_VALIDATE_INT) ? $data['id'] : null);
 
         $head = $this->seo->render(
             "Horário - " . CONF_SITE_NAME,
@@ -1065,7 +1065,6 @@ class App extends Controller
         );
 
         list($moviments, $search, $total) = (new Moviment())->filter($data);
-
         $page = (!empty($data['page']) ? $data['page'] : 1);
 
         $pager = (new Pager(url('/app/movimentacoes/')));
@@ -1131,10 +1130,43 @@ class App extends Controller
 
     public function saveMoviment(?array $data): void
     {
+        /** TESTE  $data = [
+            'date_moviment' => '2022-03-09',
+            'id_hour' => '107',
+            'id_store' => '26',
+            'last_value' => '-1.713,00',
+            'id_list' => '19',
+            'net_value' => '0',
+            'paying_now' => '0',
+            'expend' => '0',
+            'get_value' => '0',
+            'beat_value' => '0',
+            'new_value' => '0',
+            'prize' => '0',
+            'beat_prize' => '0',
+            'prize_office' => '0',
+            'prize_store' => '0'
+        ]; */
+
+
         if (!empty($data)) {
-            $required = (new Moviment())->requiredMoviment($data);
+            $modelVerify = new Moviment();
+            $required = $modelVerify->requiredMoviment($data);
             if (!empty($required)) {
                 $json['message'] = $required;
+                echo json_encode($json);
+                return;
+            }
+            // referencia
+            $modelVerify->isEmpty($data);
+
+            // Se existir um movimento com a mesma data, horario e loja
+            // se retornar falso entra aqui
+            if (!$modelVerify->isRepeated($data['date_moviment'], $data['id_hour'], $data['id_store'])) {
+                $json['message'] = $this->message->warning('O lançamento já existe.')->render();
+                $json['redirect'] = url('app/cadastrar-movimentacao');
+                $json['timeout'] = 3000;
+                $json['scroll'] = 225;
                 echo json_encode($json);
                 return;
             }
@@ -1189,7 +1221,7 @@ class App extends Controller
                 }
             }
 
-            if (money_fmt_app($data['get_value']) !== 0) {
+            if (money_fmt_app($data['get_value']) && !(money_fmt_app($data['get_value']) == 0 || money_fmt_app($data['get_value']) == '0')) {
 
                 $cash = (new CashFlow());
 
@@ -1207,7 +1239,7 @@ class App extends Controller
                     $messageError = $cash->message()->getText();
                 }
 
-                if (money_fmt_app($data['expend']) !== 0) {
+                if (money_fmt_app($data['expend']) && !(money_fmt_app($data['expend']) == 0 || money_fmt_app($data['expend']) == '0')) {
                     $cash = (new CashFlow());
                     $cash->bootstrap(
                         $data["date_moviment"],
@@ -1234,6 +1266,7 @@ class App extends Controller
                     $data['date_moviment'],
                     $data['id_store'],
                     $data['id_hour'],
+                    (!empty($data['id_list']) ? $data['id_list'] : null),
                     money_fmt_app($data['beat_value']),
                     money_fmt_app($data['paying_now']),
                     money_fmt_app($data['expend']),
@@ -1243,7 +1276,7 @@ class App extends Controller
                     (!empty($data['prize']) ? money_fmt_app($data['prize']) : null),
                     (!empty($data['beat_prize']) ? money_fmt_app($data['beat_prize']) : null),
                     (!empty($data['prize_store']) ? money_fmt_app($data['prize_store']) : null),
-                    (!empty($data['prize_office']) ? money_fmt_app($data['prize_office']) : null),
+                    (!empty($data['prize_office']) ? money_fmt_app($data['prize_office']) : null)
                 );
                 if ($moviment->save()) {
                     $json['message'] = $this->message->success("Movimento atualizado com sucesso!")->render();
@@ -1271,6 +1304,17 @@ class App extends Controller
         $this->message->success("Tudo pronto {$this->user->first_name}, movimento removido com sucesso!")->flash();
         $json['redirect'] = url('/app/fluxos-de-caixa');
         echo json_encode($json);
+    }
+
+    public function movimentVerify(array $data): void
+    {
+        // Se existir um movimento com a mesma data, horario e loja
+        // se retornar falso entra aqui
+        if (!(new Moviment())->isRepeated($data['date_moviment'], $data['id_hour'], $data['id_store'])) {
+            $json['message'] = $this->message->warning('O lançamento já existe.')->render();
+            $json['scroll'] = 225;
+            echo json_encode($json);
+        }
     }
 
 }

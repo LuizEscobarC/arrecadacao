@@ -45,17 +45,17 @@
             <input type="hidden" name="id_list">
             <label class="three_label">
                 <span class="field icon-leanpub">(lista)Valor Venda:</span>
-                <span class="app_widget_title total_value"><?= money_fmt_br($moviment->net_value); ?></span>
+                <span class="app_widget_title total_value"><?= (!empty($moviment->id_list) ? money_fmt_br($moviment->list()->total_value): money_fmt_br(0)); ?></span>
             </label>
 
             <label class="three_label">
                 <span class="field icon-leanpub">(lista)Valor Comissão:</span>
-                <span class="app_widget_title"></span>
+                <span class="app_widget_title"><?= (!empty($moviment->id_list) ? money_fmt_br($moviment->list()->comission_value): money_fmt_br(0)); ?></span>
             </label>
 
             <label class="three_label">
                 <span class="field icon-leanpub">(lista)Valor Líquido:</span>
-                <span class="app_widget_title"></span>
+                <span class="app_widget_title"><?= (!empty($moviment->id_list) ? money_fmt_br($moviment->list()->net_value): money_fmt_br(0)); ?></span>
             </label>
         </div>
 

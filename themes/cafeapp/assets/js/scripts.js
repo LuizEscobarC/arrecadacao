@@ -38,7 +38,7 @@ $(function () {
                     totalValue = parseFloat(callback.total_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
                     comissionValue = parseFloat(callback.comission_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
                     netValue = parseFloat(callback.net_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
-                    $('input[name=id_list]').val(callback.id);
+                    $('input[name=id_list]').val(parseInt(callback.id));
                 } else {
                     const message = `<div class="message info icon-info">Não existe uma lista para a loja neste horário.</div>`;
                     $('.ajax_response').html(message).fadeIn(300);
@@ -66,6 +66,24 @@ $(function () {
             dataType: 'JSON',
             success: function (callback) {
                 $('.last_value').html(parseFloat(callback.valor_saldo).toLocaleString('pt-br', {minimumFractionDigits: 2}));
+            }
+        });
+    }
+
+    function storeVerify() {
+        const flashClass = 'ajax_response_warning';
+        const form = $('form.app_form.moviment');
+        $.ajax({
+            url: 'http://www.localhost/arrecadacao/app/moviment_verify',
+            type: 'POST',
+            data: form.serialize(),
+            dataType: 'JSON',
+            success: function (callback) {
+                if (callback.message) {
+                    form.find(".ajax_response_warning").remove();
+                    form.prepend("<div class='" + flashClass + "'>" + callback.message + "</div>")
+                        .find("." + flashClass).effect("bounce", 300);
+                }
             }
         });
     }
@@ -355,6 +373,7 @@ $(function () {
         const hourSelect = $('select.callback');
         getList(storeSelect, hourSelect.val(), storeSelect.val());
         getStoreValueNow(storeSelect);
+        storeVerify();
     });
 
     /*
@@ -418,7 +437,7 @@ $(function () {
     }
 
     $body.on('keyup', 'input[name=expend]', function () {
-        calc('paying_now', this);
+        calc('paying_now', $('input[name=expend]'));
     });
 
     $body.on('keyup', 'input[name=paying_now]', function () {
@@ -429,6 +448,8 @@ $(function () {
     formulário é enviado*/
     $body.on('click', 'button#moviment_btn', function () {
         event.preventDefault();
+        //realiza os calculos para caso os valores não sejam typados
+        calc('paying_now', $('input[name=expend]'));
         let inputPrize = $('input[name=prize]').val();
         if (inputPrize) {
             inputPrize = parseFloat(inputPrize.replaceAll('.', '').replace(',', '.'));
@@ -508,12 +529,12 @@ $(function () {
                 inputPrize = inputPrize.toLocaleString('pt-br', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                 $('label.prize_output').html(
                     `<span class="field icon-leanpub">Sem abate</span>
+                            <input type="hidden" name="beat_prize" value="${beatPrizeBrl}">
                             <input type="hidden" name="prize_office" value="${inputPrize}">
                             <input type="hidden" name="prize_store" value="0">`);
             }
-            setTimeout(function (){},3000);
-        } else {
-            alert('Por favor, digite o valor do premio!');
+            setTimeout(function () {
+            }, 3000);
         }
 
         $('form.app_form.moviment').submit();
@@ -541,7 +562,7 @@ $(function () {
     });
 
     // BEGIN COMO DEFAULT ELE SETA OS INPUTS DE DATA DOS CADASTROS COM A DATA ATUAL
-    if (window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-lista' || window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-fluxo-de-caixa' || window.location.toString() === 'http://www.localhost/arrecadacao/app/cadastrar-movimentacao') {
+    if (window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-lista' || window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-fluxo-de-caixa' || window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-movimentacao') {
         const data = new Date();
         const dia = String(data.getDate()).padStart(2, '0');
         const mes = String(data.getMonth() + 1).padStart(2, '0');

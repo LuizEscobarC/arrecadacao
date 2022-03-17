@@ -32,7 +32,8 @@ class FilterMoviment extends Filter
         // para pegar o totalizador de valor dinâmico com filtro
         $total = ((!empty($model) ? $model : $this->model))->find(null, null, $select)
             ->join('hour h', 'h.id', 'moviment.id_hour')
-            ->join('loja s', 's.id', 'moviment.id_store');
+            ->join('loja s', 's.id', 'moviment.id_store')
+            ->join('lists l', 'l.id', 'moviment.id_list', 'LEFT');
 
         if ($this->implode) {
             $total->putQuery($this->implode, ' WHERE ');
