@@ -2,7 +2,7 @@
 
 <div class="app_invoice app_widget">
     <div class="color_888 app_header">
-        <h2 class=" icon-calendar-check-o ">Cadastrar Cntro de Custo:</h2>
+        <h2 class=" icon-calendar-check-o ">Cadastrar Centro de Custo:</h2>
     </div>
     <form class="app_form" action="<?= url("/app/centro-salvar"); ?>" method="post">
         <div class="ajax_response"><?= flash(); ?></div>

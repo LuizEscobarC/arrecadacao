@@ -199,15 +199,10 @@ class Moviment extends Model
             ->find(['moviment.*', 'h.week_day', 'h.number_day', 'h.description as hour', 's.nome_loja']);
 
         $total = $filterClass->total([
-            'new_value' => 'total_new_value',
-            'beat_value' => 'total_beat_value',
-            'paying_now' => 'total_paying_now',
+            'prize' => 'total_prize',
             'expend' => 'total_expend',
-            'get_value' => 'total_get_value',
-            'last_value' => 'total_last_value',
-            'l.net_value' => 'total_net_value',
-            'l.comission_value' => 'total_comission_value',
-            'l.total_value' => 'total_total_value'
+            'get_value' => 'total_get_value'
+
         ], new Moviment());
 
         return array_merge($arrayFilterReturn, [$total]);

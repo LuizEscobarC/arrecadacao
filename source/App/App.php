@@ -1186,7 +1186,7 @@ class App extends Controller
                 $messageError .= ",  " . $store->message()->getText();
             }
 
-            if (!empty($data['prize_office'])) {
+            if (!empty($data['prize_office']) && !($data['prize_office'] === 0|| $data['prize_office'] === '0')) {
                 $cash = (new CashFlow());
 
                 $cash->bootstrap(
@@ -1203,7 +1203,8 @@ class App extends Controller
                     $messageError = $cash->message()->getText();
                 }
             }
-            if (!empty($data['prize_store'])) {
+
+            if (!empty($data['prize_store']) && !($data['prize_store'] === 0|| $data['prize_store'] === '0')) {
                 $cash = (new CashFlow());
 
                 $cash->bootstrap(
@@ -1221,7 +1222,7 @@ class App extends Controller
                 }
             }
 
-            if (money_fmt_app($data['get_value']) && !(money_fmt_app($data['get_value']) == 0 || money_fmt_app($data['get_value']) == '0')) {
+            if (money_fmt_app($data['get_value']) && !(money_fmt_app($data['get_value']) === 0 || money_fmt_app($data['get_value']) === '0')) {
 
                 $cash = (new CashFlow());
 

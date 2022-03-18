@@ -30,7 +30,7 @@
             <label>
                 <span class="field icon-briefcase">Loja:</span>
                 <select name="id_store" class="select2Input store_select " rel="<?= url('/app/get_list'); ?>"
-                        data-url="<?= url('/app/get_store'); ?>" data-urlVerify="<?= url("/app/moviment_verify"); ?>">
+                        data-url="<?= url('/app/get_store'); ?>" data-verify="<?= url("/app/moviment_verify"); ?>">
                     <option value="">Escolha</option>
                     <?php foreach ((new \Source\Models\Store())->find()->fetch(true) as $store): ?>
                         <option value="<?= $store->id; ?>">&ofcir; <?= $store->nome_loja; ?></option>

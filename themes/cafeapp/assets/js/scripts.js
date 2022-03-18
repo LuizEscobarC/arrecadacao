@@ -74,7 +74,7 @@ $(function () {
         const flashClass = 'ajax_response_warning';
         const form = $('form.app_form.moviment');
         $.ajax({
-            url: 'http://www.localhost/arrecadacao/app/moviment_verify',
+            url: $('select.store_select').data().verify,
             type: 'POST',
             data: form.serialize(),
             dataType: 'JSON',

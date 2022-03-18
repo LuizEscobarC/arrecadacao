@@ -117,22 +117,10 @@
     <div class="font_80_percent app_launch_item footer">
         <p class="desc"></p>
         <p></p>
-        <p class="font_80_percent">Saldo da Loja Total:</p>
-        <p class="font_80_percent icon-thumbs-o-up"><?= money_fmt_br($allMoney->total_new_value, true); ?></p>
+        <p class="font_80_percent">Saldo da Valor Recolhido Total:</p>
+        <p class="font_80_percent icon-thumbs-o-up"><?= money_fmt_br($allMoney->total_get_value, true); ?></p>
     </div>
 
-     <div class="font_80_percent app_launch_item footer">
-        <p class="desc"></p>
-        <p></p>
-        <p class="font_80_percent">Valor Acertar Total:</p>
-        <p class="font_80_percent icon-thumbs-o-up"><?= money_fmt_br($allMoney->total_beat_value, true); ?></p>
-    </div>
-     <div class="font_80_percent app_launch_item footer">
-        <p class="desc"></p>
-        <p></p>
-        <p class="font_80_percent">Valor Dinheiro Total:</p>
-        <p class="font_80_percent icon-thumbs-o-up"><?= money_fmt_br($allMoney->total_paying_now, true); ?></p>
-    </div>
      <div class="font_80_percent app_launch_item footer">
         <p class="desc"></p>
         <p></p>
@@ -142,34 +130,14 @@
      <div class="font_80_percent app_launch_item footer">
         <p class="desc"></p>
         <p></p>
-        <p class="font_80_percent">Valor Recolhido Total:</p>
-        <p class="font_80_percent icon-thumbs-o-up"><?= money_fmt_br($allMoney->total_get_value, true); ?></p>
-    </div>
-    <div class="font_80_percent app_launch_item footer">
-        <p class="desc"></p>
-        <p></p>
-        <p class="font_80_percent">Valor Anterior Total:</p>
-        <p class="font_80_percent icon-thumbs-o-up"><?= money_fmt_br($allMoney->total_last_value, true); ?></p>
-    </div>
-    <div class="font_80_percent app_launch_item footer">
-        <p class="desc"></p>
-        <p></p>
-        <p class="font_80_percent">Valor Bruto Total<small>(lista)</small>:</p>
-        <p class="font_80_percent icon-thumbs-o-up"><?= money_fmt_br($allMoney->total_total_value, true); ?></p>
-    </div>
+        <p class="font_80_percent">Valor Prêmio Total:</p>
+        <p class="font_80_percent icon-thumbs-o-up"><?= money_fmt_br($allMoney->total_prize, true); ?></p>   </div>
 
     <div class="font_80_percent app_launch_item footer">
         <p class="desc"></p>
         <p></p>
-        <p class="font_80_percent">Valor líquido Total<small>(lista)</small>:</p>
-        <p class="font_80_percent icon-thumbs-o-up"><?= money_fmt_br($allMoney->total_net_value, true); ?></p>
-    </div>
-
-    <div class="font_80_percent app_launch_item footer">
-        <p class="desc"></p>
-        <p></p>
-        <p class="font_80_percent">Valor de comissão Total <small>(lista)</small>:</p>
-        <p class="font_80_percent icon-thumbs-o-up"><?= money_fmt_br($allMoney->total_comission_value, true); ?></p>
+        <p class="font_80_percent">Valor Líquido Total:</p>
+        <p class="font_80_percent icon-thumbs-o-up"><?= money_fmt_br(($allMoney->total_get_value - ($allMoney->total_expend + $allMoney->total_prize)), true); ?></p>
     </div>
 
     <?= $paginator; ?>
