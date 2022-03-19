@@ -95,10 +95,18 @@ $(function () {
 
         if (remove === true) {
             $.post($this.data(dataAttr), function (response) {
+                if (response.scroll) {
+                    $(window).scrollTop(response.scroll);
+                }
                 //redirect
                 if (response.redirect) {
                     window.location.href = response.redirect;
                 }
+                // reload page
+                if (response.reload) {
+                    window.location.reload();
+                }
+
             }, "json");
         }
     }

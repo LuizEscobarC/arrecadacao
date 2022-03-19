@@ -16,10 +16,6 @@ class Store extends Model
             'nome_loja',
             'valor_saldo',
             'comissao',
-            'valor_aluguel',
-            'aluguel_dia',
-            'valor_gratificacao',
-            'gratificacao_dia',
             'code'
         ]);
     }
@@ -28,10 +24,10 @@ class Store extends Model
         string $nameStore,
         string $value,
         string $comission,
-        string $valueRent,
-        string $dayRent,
-        string $rentGratification,
-        string $dayGratification,
+        ?string $valueRent,
+        ?string $dayRent,
+        ?string $rentGratification,
+        ?string $dayGratification,
         string $code
     ): Store {
         $this->nome_loja = $nameStore;

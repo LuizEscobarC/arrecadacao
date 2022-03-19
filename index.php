@@ -54,7 +54,7 @@ $route->get('/cadastrar-loja', 'App:createStore');
 $route->get('/lojas/{page}', 'App:stores');
 $route->post('/lojas', 'App:stores');
 $route->get('/loja/{id}', 'App:store');
-$route->post('/loja-salvar', 'App:storeSave');
+$route->post('/loja-salvar', 'App:saveStore');
 $route->post('/remove-store/{id}', 'App:removeStore');
 
 

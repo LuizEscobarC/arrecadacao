@@ -2,6 +2,7 @@
 
 <article class="not_found">
     <div class="container content">
+        <div class="ajax_response"><?= flash(); ?></div>
         <header class="not_found_header">
             <p class="error">&bull;<?= (!empty($error->code) ? $error->code : '404'); ?>&bull;</p>
             <h1><?= (!empty($error->title) ? $error->title : 'Oppps! Houve um Problema.') ?></h1>

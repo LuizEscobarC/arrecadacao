@@ -220,7 +220,10 @@ class App extends Controller
             );
 
             if ($auth->register($user)) {
-                $json['message'] = $auth->message()->success("Usuário editado com sucesso!")->render();
+                $json['message'] = $auth->message()->success("Tudo Pronto {$this->user->first_name}, o usuário foi atualizado com sucesso!")->render();
+                $auth->message()->success("Tudo Pronto {$this->user->first_name}, o usuário foi atualizado com sucesso!")->flash();
+                $json['reload'] = true;
+                $json['scroll'] = 100;
             } else {
                 $json['message'] = $auth->message()->render();
             }
@@ -395,7 +398,7 @@ class App extends Controller
      *  IT UPDATES OR CREATES CURRENT STORE OF THE TABLE DEPENDING ON IF HAVE ID OR NOT
      * @param array|null $data
      */
-    public function storeSave(?array $data)
+    public function saveStore(?array $data)
     {
         if (!empty($data)) {
 
@@ -430,10 +433,10 @@ class App extends Controller
                 $data["nome_loja"],
                 money_fmt_app($data["valor_saldo"]),
                 money_fmt_app($data["comissao"]),
-                money_fmt_app($data["valor_aluguel"]),
-                money_fmt_app($data["aluguel_dia"]),
-                money_fmt_app($data["valor_gratificacao"]),
-                money_fmt_app($data["gratificacao_dia"]),
+                (!empty($data["valor_aluguel"]) ? money_fmt_app($data["valor_aluguel"]) : null),
+                (!empty($data["aluguel_dia"]) ? money_fmt_app($data["aluguel_dia"]) : null),
+                (!empty($data["valor_gratificacao"]) ? money_fmt_app($data["valor_gratificacao"]) : null),
+                (!empty($data["gratificacao_dia"]) ? money_fmt_app($data["gratificacao_dia"]) : null),
                 $data['code']
             );
 
@@ -441,9 +444,9 @@ class App extends Controller
                 $json['message'] = $store->message()->render();
             } else {
                 $json['message'] = $this->message->success("Loja atualizada com sucesso!")->render();
+                $this->message->success("Loja atualizada com sucesso!")->flash();
                 $json['reload'] = true;
                 $json['scroll'] = 100;
-                $this->message->success("Loja atualizada com sucesso!")->flash();
             }
         }
 
@@ -462,8 +465,11 @@ class App extends Controller
             $hour->destroy();
         }
         $this->message->success("Tudo pronto {$this->user->first_name}, loja removida com sucesso!")->flash();
-        $json['redirect'] = url('/app/lojas');
+        $json['message'] = $this->message->success("Tudo pronto {$this->user->first_name}, loja removida com sucesso!")->render();
+        $json['scroll'] = 10;
+        $json['reload'] = true;
         echo json_encode($json);
+        return;
     }
 
 
@@ -917,7 +923,10 @@ class App extends Controller
             if (!$list->save()) {
                 $json['message'] = $list->message()->render();
             } else {
-                $json['message'] = $this->message->success('Lista atualizado com sucesso!')->render();
+                $json['message'] = $this->message->success("Tudo certo {$this->user->first_name}, a lista atualizado com sucesso!")->render();
+                $this->message->success("Tudo certo {$this->user->first_name}, a lista atualizado com sucesso!")->flash();
+                $json['reload'] = true;
+                $json['scroll'] = 100;
             }
         }
 
@@ -1053,6 +1062,9 @@ class App extends Controller
                 $json['message'] = $cash->message()->render();
             } else {
                 $json['message'] = $this->message->success("Lançamento atualizado com sucesso!")->render();
+                $this->message->success("Lançamento atualizado com sucesso!")->flash();
+                $json['reload'] = true;
+                $json['scroll'] = 100;
             }
         } else {
             $json['message'] = $this->message->warning("Todos os campos são necessários!")->render();
@@ -1307,7 +1319,9 @@ class App extends Controller
                     (!empty($data['prize_office']) ? money_fmt_app($data['prize_office']) : null)
                 );
                 if ($moviment->save()) {
-                    $json['message'] = $this->message->success("Movimento atualizado com sucesso!")->render();
+                    $json['message'] = $this->message->success("Tudo certo {$this->user->first_name}, o movimento atualizado com sucesso!")->render();
+                    $this->message->success("Tudo certo {$this->user->first_name}, o movimento atualizado com sucesso!")->flash();
+                    $json['reload'] = true;
                     $json['scroll'] = 2;
                 } else {
                     $json['message'] = $moviment->message()->render();
