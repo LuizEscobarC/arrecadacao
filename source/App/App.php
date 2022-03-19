@@ -3,6 +3,7 @@
 namespace Source\App;
 
 use Composer\Package\Loader\ValidatingArrayLoader;
+use PHPMailer\PHPMailer\Exception;
 use Source\Core\Connect;
 use Source\Core\Controller;
 use Source\Core\View;
@@ -397,6 +398,7 @@ class App extends Controller
     public function storeSave(?array $data)
     {
         if (!empty($data)) {
+
             $store = (new Store());
 
             if (!empty($store->findByName($data['nome_loja'])) && empty($data['id'])) {
@@ -409,15 +411,29 @@ class App extends Controller
                 $store = $store->findById($data['id']);
             }
 
+            // VERIFICAR SE VEIO UM NUMERO NEGATIVO COM MAIS DE 1 NEGATIVO NA STRING
+            if (!more_than_on_negative([
+                $data["valor_saldo"],
+                $data["comissao"],
+                (!empty($data["valor_aluguel"]) ? $data["valor_aluguel"] : ''),
+                (!empty($data["aluguel_dia"]) ? $data["aluguel_dia"] : ''),
+                (!empty($data["valor_gratificacao"]) ? $data["valor_gratificacao"] : ''),
+                (!empty($data["gratificacao_dia"]) ? $data["gratificacao_dia"] : '')
+            ])) {
+                $json['message'] = $this->message->error('Verifique os campos de entrada de dinheiro, há algum problema.')->render();
+                $json['scroll'] = 100;
+                echo json_encode($json);
+                return;
+            }
 
             $store->bootstrap(
                 $data["nome_loja"],
-                $data["valor_saldo"],
-                $data["comissao"],
-                $data["valor_aluguel"],
-                $data["aluguel_dia"],
-                $data["valor_gratificacao"],
-                $data["gratificacao_dia"],
+                money_fmt_app($data["valor_saldo"]),
+                money_fmt_app($data["comissao"]),
+                money_fmt_app($data["valor_aluguel"]),
+                money_fmt_app($data["aluguel_dia"]),
+                money_fmt_app($data["valor_gratificacao"]),
+                money_fmt_app($data["gratificacao_dia"]),
                 $data['code']
             );
 
@@ -425,7 +441,9 @@ class App extends Controller
                 $json['message'] = $store->message()->render();
             } else {
                 $json['message'] = $this->message->success("Loja atualizada com sucesso!")->render();
-                $json['redirect'] = url("/app/lojas");
+                $json['reload'] = true;
+                $json['scroll'] = 100;
+                $this->message->success("Loja atualizada com sucesso!")->flash();
             }
         }
 

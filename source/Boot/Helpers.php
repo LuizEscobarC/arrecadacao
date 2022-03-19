@@ -37,7 +37,7 @@ function is_passwd(string $password): bool
  * @param mixed $right * aqui é o valor caso o valor ou o objeto seja vazio
  * @return mixed
  */
-function isnt_empty($value,  $left = "", $right = "")
+function isnt_empty($value, $left = "", $right = "")
 {
 
     if ((mb_convert_case($left, MB_CASE_LOWER) === 'self') && !empty($value)) {
@@ -401,4 +401,27 @@ function flash(): ?string
         echo $flash;
     }
     return null;
+}
+
+function more_than_on_negative(array $values): bool
+{
+    foreach ($values as $value) {
+        $len = mb_strlen($value);
+        $errorNegative = 0;
+        for ($i = 0; $i < $len; $i++) {
+            if ($value[$i] === '-') {
+                $errorNegative++;
+            }
+        }
+        if ($errorNegative > 1) {
+            $bools[] =  true;
+        } else {
+            $bools[] =  false;
+        }
+    }
+    if (in_array(true, $bools)) {
+        return false;
+    } else {
+        return true;
+    }
 }

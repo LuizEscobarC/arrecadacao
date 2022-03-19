@@ -9,47 +9,47 @@
 
         <label>
             <span class="field icon-leanpub">Código da loja:</span>
-            <input class="radius" type="text" name="code"
+            <input class="radius box-shadow" type="text" name="code"
                    placeholder="Ex: 1234 ou N123" required/>
         </label>
 
         <label>
             <span class="field icon-leanpub">Nome:</span>
-            <input class="radius" type="text" name="nome_loja" placeholder="Ex: Bentão" required/>
+            <input class="radius box-shadow" type="text" name="nome_loja" placeholder="Ex: Bentão" required/>
         </label>
 
 
         <label>
             <span class="field icon-leanpub">Valor:</span>
-            <input class="radius mask-money" type="text" name="valor_saldo" required/>
+            <input class="radius mask-money-negative box-shadow" type="text" name="valor_saldo" required/>
         </label>
 
         <label>
             <span class="field icon-leanpub">Comissão:</span>
-            <input class="radius mask-money" type="text" name="comissao" required/>
+            <input class="radius mask-money-negative box-shadow" type="text" name="comissao" required/>
         </label>
 
         <div class="label_group">
             <label>
                 <span class="field icon-money">Valor Aluguel:</span>
-                <input class="radius mask-money" type="text" name="valor_aluguel" required/>
+                <input class="radius mask-money-negative" type="text" name="valor_aluguel" />
             </label>
 
             <label>
                 <span class="field icon-filter">Aluguel Dia:</span>
-                <input class="radius" type="text" name="aluguel_dia" required/>
+                <input class="radius mask-money-negative" type="text" name="aluguel_dia" />
             </label>
         </div>
 
         <div class="label_group">
             <label>
                 <span class="field icon-money">Valor Gratificação:</span>
-                <input class="radius mask-money" type="text" name="valor_gratificacao" required/>
+                <input class="radius mask-money-negative" type="text" name="valor_gratificacao" />
             </label>
 
             <label>
                 <span class="field icon-filter">Gratificação Dia:</span>
-                <input class="radius" type="text" name="gratificacao_dia" required/>
+                <input class="radius mask-money-negative" type="text" name="gratificacao_dia" />
             </label>
         </div>
 
