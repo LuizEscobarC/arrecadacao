@@ -18,8 +18,8 @@ if (strpos($_SERVER['HTTP_HOST'], "localhost")) {
 /**
  * PROJECT URLs
  */
-define("CONF_URL_BASE", "http://www.ihsistemas.com");
-define("CONF_URL_TEST", "http://www.localhost/arrecadacao");
+define("CONF_URL_BASE", "https://www.ihsistemas.com");
+define("CONF_URL_TEST", "https://www.localhost/arrecadacao");
 define("CONF_URL_ADMIN", "/admin");
 
 /**

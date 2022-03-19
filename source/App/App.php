@@ -546,24 +546,29 @@ class App extends Controller
      */
     public function saveCenter(array $data): void
     {
-
         $data = filter_var_array($data, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-
-        $data_required = $data;
-        unset($data_required['description']);
-        if (!in_array('', $data_required)) {
-            //atualizar
+        if (!empty($data)) {
+            if (empty($data['emit'])) {
+                $json['message'] = $this->message->warning("Selecionar Sim ou Não para emitir recibos é obrigatório.")->render();
+                echo json_encode($json);
+                return;
+            }
+            // ATUALIZAR
             $center = (new Center());
 
             if (!empty($data['id'])) {
                 $center = $center->findById($data['id']);
             }
-            $center->bootstrap($data['description'], $data['emit']);
+            // CADASTRO
+            $center->description = $data['description'];
+            $center->emit = $data['emit'];
 
             if (!$center->save()) {
                 $json['message'] = $center->message()->render();
             } else {
                 $json['message'] = $this->message->success('Centro de custo atualizado com sucesso!')->render();
+                $this->message->success('Centro de custo atualizado com sucesso!')->flash();
+                $json['reload'] = true;
             }
         }
 
@@ -1131,22 +1136,22 @@ class App extends Controller
     public function saveMoviment(?array $data): void
     {
         /** TESTE  $data = [
-            'date_moviment' => '2022-03-09',
-            'id_hour' => '107',
-            'id_store' => '26',
-            'last_value' => '-1.713,00',
-            'id_list' => '19',
-            'net_value' => '0',
-            'paying_now' => '0',
-            'expend' => '0',
-            'get_value' => '0',
-            'beat_value' => '0',
-            'new_value' => '0',
-            'prize' => '0',
-            'beat_prize' => '0',
-            'prize_office' => '0',
-            'prize_store' => '0'
-        ]; */
+         * 'date_moviment' => '2022-03-09',
+         * 'id_hour' => '107',
+         * 'id_store' => '26',
+         * 'last_value' => '-1.713,00',
+         * 'id_list' => '19',
+         * 'net_value' => '0',
+         * 'paying_now' => '0',
+         * 'expend' => '0',
+         * 'get_value' => '0',
+         * 'beat_value' => '0',
+         * 'new_value' => '0',
+         * 'prize' => '0',
+         * 'beat_prize' => '0',
+         * 'prize_office' => '0',
+         * 'prize_store' => '0'
+         * ]; */
 
 
         if (!empty($data)) {
@@ -1186,9 +1191,10 @@ class App extends Controller
                 $messageError .= ",  " . $store->message()->getText();
             }
 
-            if (!empty($data['prize_office']) && !($data['prize_office'] === 0|| $data['prize_office'] === '0')) {
+            if (!empty($data['prize_office']) && !($data['prize_office'] === 0 || $data['prize_office'] === '0')) {
                 $cash = (new CashFlow());
 
+                // PREMIO ESCRITÓRIO DESPESA
                 $cash->bootstrap(
                     $data["date_moviment"],
                     $data["id_store"],
@@ -1196,7 +1202,7 @@ class App extends Controller
                     'Saída de Premio do Escritório',
                     money_fmt_app($data['prize_office']),
                     2,
-                    null
+                    17
                 );
 
                 if (!$cash->save()) {
@@ -1204,9 +1210,10 @@ class App extends Controller
                 }
             }
 
-            if (!empty($data['prize_store']) && !($data['prize_store'] === 0|| $data['prize_store'] === '0')) {
+            if (!empty($data['prize_store']) && !($data['prize_store'] === 0 || $data['prize_store'] === '0')) {
                 $cash = (new CashFlow());
 
+                // PREMIO LOJA PAGOU POREM É DESPESA
                 $cash->bootstrap(
                     $data["date_moviment"],
                     $data["id_store"],
@@ -1214,7 +1221,7 @@ class App extends Controller
                     'Abate de Premio da loja ' . $store->nome_loja,
                     money_fmt_app($data['prize_store']),
                     2,
-                    null
+                    4
                 );
 
                 if (!$cash->save()) {
@@ -1226,6 +1233,7 @@ class App extends Controller
 
                 $cash = (new CashFlow());
 
+                // VALOR RECOLHIDO DA LOJA
                 $cash->bootstrap(
                     $data["date_moviment"],
                     $data["id_store"],
@@ -1233,23 +1241,24 @@ class App extends Controller
                     ($list->description ?? '') . ' Entrada de ' . ($store->nome_loja ?? 'loja'),
                     money_fmt_app($data["get_value"]),
                     1,
-                    null
+                    16
                 );
 
                 if (!$cash->save()) {
                     $messageError = $cash->message()->getText();
                 }
 
+                // DESPESAS DA LOJA
                 if (money_fmt_app($data['expend']) && !(money_fmt_app($data['expend']) == 0 || money_fmt_app($data['expend']) == '0')) {
                     $cash = (new CashFlow());
                     $cash->bootstrap(
                         $data["date_moviment"],
                         $data["id_store"],
                         $data["id_hour"],
-                        ' A ' . ($store->nome_loja ?? 'loja') . ' teve uma movimentação',
+                        ' A ' . ($store->nome_loja ?? 'loja') . ' teve uma despesa',
                         money_fmt_app($data["expend"]),
                         2,
-                        null
+                        2
                     );
                     if (!$cash->save()) {
                         $messageError = $cash->message()->getText();

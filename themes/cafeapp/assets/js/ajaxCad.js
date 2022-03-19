@@ -23,7 +23,14 @@ $(function () {
                 if (response.redirect) {
                     setTimeout(function (){
                         window.location.href = response.redirect;
-                    }, (response.timeout ?? 1000));
+                    }, (response.timeout ?? 300));
+                } else {
+                    load.fadeOut(200);
+                }
+
+                //reload
+                if (response.reload) {
+                        window.location.reload();
                 } else {
                     load.fadeOut(200);
                 }
