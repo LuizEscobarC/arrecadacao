@@ -467,7 +467,7 @@ class App extends Controller
         $this->message->success("Tudo pronto {$this->user->first_name}, loja removida com sucesso!")->flash();
         $json['message'] = $this->message->success("Tudo pronto {$this->user->first_name}, loja removida com sucesso!")->render();
         $json['scroll'] = 10;
-        $json['reload'] = true;
+        $json['redirect'] = url('app/lojas');
         echo json_encode($json);
         return;
     }

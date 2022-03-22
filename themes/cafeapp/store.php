@@ -21,13 +21,13 @@
 
         <label>
             <span class="field icon-leanpub">Valor:</span>
-            <input class="radius mask-money" type="text" name="valor_saldo" value="<?= $store->valor_saldo; ?>"
+            <input class="radius mask-money-negative" type="text" name="valor_saldo" value="<?= $store->valor_saldo; ?>"
                    placeholder="Ex: Bentão" required/>
         </label>
 
         <label>
             <span class="field icon-leanpub">Comissão:</span>
-            <input class="radius" type="text" name="comissao" value="<?= $store->comissao; ?>" placeholder="Ex: Bentão"
+            <input class="radius mask-money-negative" type="text" name="comissao" value="<?= $store->comissao; ?>" placeholder="Ex: Bentão"
                    required/>
         </label>
 
