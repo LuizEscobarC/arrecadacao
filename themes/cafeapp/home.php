@@ -27,7 +27,7 @@
                             <?php endforeach; ?>
                         <?php endif; ?>
                         <p title="Receitas"
-                           class="app_widget_more transition">Últimos 5 lançamentos</p>
+                           class="app_widget_more app_invoice_link transition icon-plus"><a href="<?= url('app/fluxos-de-caixa')?>">Mais lançamentos</a></p>
                     </div>
                 </article>
 
@@ -49,7 +49,7 @@
                             <?php endforeach; ?>
                         <?php endif; ?>
                         <p title="Despesas"
-                           class="app_widget_more transition">Últimos 5 lançamentos</p>
+                           class="app_widget_more app_invoice_link transition icon-plus"><a href="<?= url('app/fluxos-de-caixa')?>">Mais lançamentos</a></p>
                     </div>
                 </article>
             </div>
