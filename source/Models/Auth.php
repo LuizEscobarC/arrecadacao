@@ -73,13 +73,52 @@ class Auth extends Model
     /**
      * @param string $email
      * @param string $password
-     * @param bool $save
-     * @return bool
+     * @param int $level
+     * @return User|null
      */
-    public function login(string $email, string $password, bool $save = false): bool
+    public function attempt(string $email, string $password, int $level = 1): ?User
     {
         if (!is_email($email)) {
             $this->message->warning("O e-mail informado não é válido");
+            return null;
+        }
+
+        if (!is_passwd($password)) {
+            $this->message->warning("A senha informada não é válida");
+            return null;
+        }
+
+        $user = (new User())->findByEmail($email);
+
+        if (!$user) {
+            $this->message->error("O e-mail informado não está cadastrado");
+            return null;
+        }
+
+        if (!passwd_verify($password, $user->password)) {
+            $this->message->error("A senha informada não confere");
+            return null;
+        }
+
+        if (passwd_rehash($user->password)) {
+            $user->password = $password;
+            $user->save();
+        }
+
+        return $user;
+    }
+
+    /**
+     * @param string $email
+     * @param string $password
+     * @param bool $save
+     * @param int $level
+     * @return bool
+     */
+    public function login(string $email, string $password, bool $save = false, int $level = 1): bool
+    {
+        $user = $this->attempt($email, $password, $level);
+        if (!$user) {
             return false;
         }
 
@@ -89,30 +128,8 @@ class Auth extends Model
             setcookie("authEmail", null, time() - 3600, "/");
         }
 
-        if (!is_passwd($password)) {
-            $this->message->warning("A senha informada não é válida");
-            return false;
-        }
-
-        $user = (new User())->findByEmail($email);
-        if (!$user) {
-            $this->message->error("O e-mail informado não está cadastrado");
-            return false;
-        }
-
-        if (!passwd_verify($password, $user->password)) {
-            $this->message->error("A senha informada não confere");
-            return false;
-        }
-
-        if (passwd_rehash($user->password)) {
-            $user->password = $password;
-            $user->save();
-        }
-
         //LOGIN
         (new Session())->set("authUser", $user->id);
-        $this->message->success("Login efetuado com sucesso")->flash();
         return true;
     }
 

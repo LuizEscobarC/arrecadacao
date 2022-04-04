@@ -548,7 +548,7 @@ $(function () {
                 inputPrize = inputPrize.toLocaleString('pt-br', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                 $('label.prize_output').html(
                     `<span class="field icon-leanpub">Sem abate</span>
-                            <input type="hidden" name="beat_prize" value="${beatPrizeBrl}">
+                            <input type="hidden" name="beat_prize" value="0">
                             <input type="hidden" name="prize_office" value="${inputPrize}">
                             <input type="hidden" name="prize_store" value="0">`);
             }

@@ -36,8 +36,8 @@
 
     <footer class="app_footer">
         <span class="icon-bar-chart">
-            IH<br>
-            &copy; IHSistemas - Todos os direitos reservados
+            *<br>
+            &copy; Todos os direitos reservados
         </span>
     </footer>
     <?= $v->insert("views/modals"); ?>
