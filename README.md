@@ -64,9 +64,13 @@ c:\xampp\htdocs\{folder}\arrecadacao\source\Boot\Config.php
 
 ## Imagems do projeto 💻
 
-#### oi
+#### Dashboard coma  apresentação de um grafico realtime, onde se há um lançamento, no mesmo segundo se movimenta.
 <img style="width: 600px; height: 300px" src="https://user-images.githubusercontent.com/54407649/161637293-7018eba8-b4d2-4c73-8d8f-14bf22d5f7d2.png">
-<img style="width: 600px; height: 300px" src="rota">
+##  No sistema a cadastros e listagens de INPUTS CORE do sistema, ou seja para rodar as features avançadas eles são uma dependencia como :
+### usuário, horário, listas do horário a pagar (vinculado com as loja), lojas, centro de custos (padrões de saída ex: luz, aluguel, imposto de renda).
+#### Desses básico temos o crud, telas de CREATE, UPDATE, DELETE E READ + tela de LISTAGEM de todas as linhas do BANCO DE DADOS.
+#### Vou dar aqui uma das telas como exemplo:
+<img style="width: 800px; height: 400px" src="https://user-images.githubusercontent.com/54407649/161638316-7a14bae0-9c25-4114-811a-b230ab506830.png">
 <img style="width: 600px; height: 300px" src="rota">
 <img style="width: 600px; height: 300px" src="rota">
 <img style="width: 600px; height: 300px" src="rota">
