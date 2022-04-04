@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 5.5.62, for Win64 (AMD64)
 --
--- Host: 127.0.0.1    Database: arrecadacao
+-- Host: arrecada.mysql.dbaas.com.br    Database: arrecada
 -- ------------------------------------------------------
--- Server version	5.5.5-10.4.21-MariaDB
+-- Server version	5.7.32-35-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -28,12 +28,12 @@ CREATE TABLE `address` (
   `street` varchar(255) NOT NULL DEFAULT '',
   `number` varchar(255) NOT NULL DEFAULT '',
   `complement` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `addr_user` (`user_id`),
   CONSTRAINT `user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +42,7 @@ CREATE TABLE `address` (
 
 LOCK TABLES `address` WRITE;
 /*!40000 ALTER TABLE `address` DISABLE KEYS */;
-INSERT INTO `address` VALUES (1,1,'rua manoel pedro vieira, 810','810','casa 1','2018-09-03 20:40:57','2018-09-16 23:39:59'),(2,2,'paraguai','2041','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:01'),(3,3,'emilio daroz ','107','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:02'),(4,4,'rua lavinia moreira da silva','145','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:03'),(5,5,'padre anchieta','121','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:04'),(7,7,'alaor martins','312','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:07'),(8,8,'rua das violetas','330','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:09'),(9,9,'francisco carlos ','105','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:10'),(10,10,'torino','95','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:12'),(11,11,'rua erotidas','64','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:13'),(12,12,'r. orquideas','169','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:14'),(13,13,'rua joffre motta','44','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:14'),(14,14,'rua piauí','17','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:15'),(15,15,'fernandes marques','1229','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:16'),(16,16,'av. beta','07','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:17'),(17,17,'abagiba','674','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:23'),(18,18,'gumercindo araujo','302','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:25'),(19,19,'rua 01, quadra 35','35b','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:26'),(20,20,'rua piauí','23d','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:27'),(21,21,'rua leopoldina araãºjo','380','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:28'),(22,22,'rua conceiã§ã£o','101','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:29'),(23,23,'rua benedetto bonfilgi','755','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:30'),(24,24,'rua sã£o francisco','17','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:30'),(25,25,'rua dona zulmira','479','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:32'),(26,26,'rua mampituba','740','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:32'),(27,27,'dezeseis','151','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:34'),(28,28,'rua dos goitacazes','375','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:35'),(29,29,'av lucio jose de meneses','930','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:36'),(30,30,'caetano','3457','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:38'),(31,31,'um nova ','335','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:39'),(32,32,'sres area especial','19','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:40'),(33,33,'islandia','99','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:41'),(34,34,'independência','700','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:42'),(35,35,'sebastiã£o thomaz de oliveira','25','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:46'),(36,36,'nogueira','185','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:48'),(37,37,'tv londrina','12','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:49'),(38,38,'teofilo otoni','222','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:51'),(39,39,'joã£o rasmussen','244','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:53'),(40,40,'travessa elizeu araãºjo','46','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:56'),(41,41,'av. dr. joão pessoa','185','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:58'),(42,42,'travessa brandão','4','casa 1','2018-09-03 20:40:57','2018-09-16 23:40:59'),(43,43,'coqueiros','SN','casa 1','2018-09-03 20:40:57','2018-09-16 23:41:00'),(44,44,'estrada m boi mirim','820','casa 1','2018-09-03 20:40:57','2018-09-16 23:41:01'),(45,45,'travessa dos comerciarios ','5','casa 1','2018-09-03 20:40:57','2018-09-16 23:41:02'),(46,46,'dos jacarandas','30','casa 1','2018-09-03 20:40:57','2018-09-16 23:41:03'),(47,47,'dona ermelinda pereira','413','casa 1','2018-09-03 20:40:57','2018-09-16 23:41:04'),(48,48,'rua projetada 02','742','casa 1','2018-09-03 20:40:57','2018-09-16 23:41:05'),(49,49,'samambaia','96','casa 1','2018-09-03 20:40:57','2018-09-16 23:41:07'),(50,50,'rua dos gerã¢nios','110','casa 1','2018-09-03 20:40:57','2018-09-16 23:41:09');
+INSERT INTO `address` VALUES (1,1,'rua manoel pedro vieira, 810','810','casa 1','2018-09-03 20:40:57','2018-09-16 23:39:59');
 /*!40000 ALTER TABLE `address` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -55,15 +55,15 @@ DROP TABLE IF EXISTS `cash_flow`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `cash_flow` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `date_moviment` timestamp NOT NULL DEFAULT current_timestamp(),
+  `date_moviment` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `id_store` int(11) NOT NULL,
   `id_hour` int(11) NOT NULL,
   `id_cost` int(11) DEFAULT NULL,
-  `description` varchar(1000) NOT NULL,
-  `value` decimal(10,0) NOT NULL,
+  `description` varchar(1000) DEFAULT NULL,
+  `value` float NOT NULL,
   `type` int(11) NOT NULL COMMENT '1: entrada, 2: saída',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `cash_flow_FK` (`id_store`),
   KEY `cash_flow_FK_1` (`id_hour`),
@@ -71,7 +71,7 @@ CREATE TABLE `cash_flow` (
   CONSTRAINT `cash_flow_FK` FOREIGN KEY (`id_store`) REFERENCES `loja` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `cash_flow_FK_1` FOREIGN KEY (`id_hour`) REFERENCES `hour` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `cash_flow_FK_2` FOREIGN KEY (`id_cost`) REFERENCES `cost` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=183 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -80,7 +80,7 @@ CREATE TABLE `cash_flow` (
 
 LOCK TABLES `cash_flow` WRITE;
 /*!40000 ALTER TABLE `cash_flow` DISABLE KEYS */;
-INSERT INTO `cash_flow` VALUES (3,'2022-02-01 01:57:34',16,83,NULL,'teste',1000,1,'2022-02-01 01:57:34',NULL),(4,'2022-01-19 04:00:00',20,85,0,'entrada de mensalidade',199,2,'2022-02-01 03:51:42','2022-02-01 13:27:33'),(6,'2022-01-19 04:00:00',19,87,0,'entrada de mensalidade',960,1,'2022-02-01 13:21:55',NULL),(7,'2022-01-19 04:00:00',23,87,0,'entrada de mensalidade',120,2,'2022-02-01 13:22:47',NULL),(8,'2022-01-19 04:00:00',19,87,0,'entrada de mensalidade',990,2,'2022-02-01 13:23:33',NULL);
+INSERT INTO `cash_flow` VALUES (179,'2022-03-23 03:00:00',34,106,16,' Entrada de LJ 100',120,1,'2022-03-23 14:15:34',NULL),(180,'2022-03-23 03:00:00',34,106,2,' A LJ 100 teve uma despesa',20,2,'2022-03-23 14:15:34',NULL),(181,'2022-03-23 03:00:00',31,106,16,' Entrada de loja 3',50,1,'2022-03-23 14:18:46',NULL),(182,'2022-03-23 03:00:00',31,106,2,' A loja 3 teve uma despesa',20,2,'2022-03-23 14:18:46',NULL);
 /*!40000 ALTER TABLE `cash_flow` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -95,10 +95,10 @@ CREATE TABLE `cost` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `description` varchar(45) NOT NULL,
   `emit` int(11) NOT NULL COMMENT '1: emitir, 2: não emitir',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -107,33 +107,8 @@ CREATE TABLE `cost` (
 
 LOCK TABLES `cost` WRITE;
 /*!40000 ALTER TABLE `cost` DISABLE KEYS */;
-INSERT INTO `cost` VALUES (2,'REPOLHO',1,'2022-01-18 05:03:51','2022-01-19 06:15:11'),(4,'Centro de custo teste',1,'2022-01-19 05:34:01',NULL);
+INSERT INTO `cost` VALUES (2,'PG DESPESA LOJA',2,'2022-01-18 05:03:51','2022-03-17 00:14:20'),(4,'PG PREMIO LOJA',2,'2022-01-19 05:34:01','2022-03-17 00:15:36'),(16,'Receita (Acerto lojas)',2,'2022-02-05 00:36:52',NULL),(17,'PG PREMIO ESCRITORIO',2,'2022-03-17 00:12:09','2022-03-17 00:15:17'),(18,'PG DESPESA ESCRITORIO',2,'2022-03-17 00:17:26',NULL),(19,'13  SALARIO ',1,'2022-03-23 14:12:22','2022-03-23 14:13:10');
 /*!40000 ALTER TABLE `cost` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `dia`
---
-
-DROP TABLE IF EXISTS `dia`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `dia` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `number_day` varchar(1) NOT NULL,
-  `week_day` varchar(15) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `dia`
---
-
-LOCK TABLES `dia` WRITE;
-/*!40000 ALTER TABLE `dia` DISABLE KEYS */;
-INSERT INTO `dia` VALUES (1,'0','DOMINGO'),(2,'1','SEGUNDA-FEIRA'),(3,'2','TERÇA-FEIRA'),(4,'3','QUARTA-FEIRA'),(5,'4','QUINTA-FEIRA'),(6,'5','SEXTA-FEIRA'),(7,'6','SÁBADO');
-/*!40000 ALTER TABLE `dia` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -145,13 +120,14 @@ DROP TABLE IF EXISTS `hour`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `hour` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `number_day` int(11) NOT NULL COMMENT '0.1.2.3.4.5.6',
+  `number_day` int(11) NOT NULL,
   `week_day` varchar(15) CHARACTER SET utf8mb4 NOT NULL,
   `description` varchar(20) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8;
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  FULLTEXT KEY `description` (`description`)
+) ENGINE=InnoDB AUTO_INCREMENT=119 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -160,7 +136,7 @@ CREATE TABLE `hour` (
 
 LOCK TABLES `hour` WRITE;
 /*!40000 ALTER TABLE `hour` DISABLE KEYS */;
-INSERT INTO `hour` VALUES (83,1,'Segunda-feira','HORARIO 2','2022-01-21 05:21:51',NULL),(85,4,'Quinta-feira','HORARIO 1','2022-01-21 05:21:51',NULL),(86,4,'Quinta-feira','HORARIO 3','2022-01-21 05:21:51',NULL),(87,3,'Quarta-feira','HORARIO 3','2022-01-21 05:21:51',NULL),(89,2,'terça-feira','Noturno','2022-01-21 16:10:49','2022-01-28 01:45:37');
+INSERT INTO `hour` VALUES (87,4,'Quinta-feira','ALVORADA','2022-01-21 05:21:51','2022-02-09 15:01:12'),(100,1,'segunda-feira','ALVORADA','2022-02-09 15:12:10',NULL),(101,1,'segunda-feira','DIA','2022-02-09 15:12:21',NULL),(102,1,'segunda-feira','NOITE','2022-02-09 15:12:36',NULL),(103,2,'terça-feira','ALVORADA','2022-02-09 15:13:30',NULL),(104,2,'terça-feira','DIA','2022-02-09 15:13:40',NULL),(105,2,'terça-feira','NOITE','2022-02-09 15:13:49',NULL),(106,3,'Quarta-feira','ALVORADA','2022-02-09 15:13:59',NULL),(107,3,'Quarta-feira','DIA','2022-02-09 15:14:09',NULL),(108,3,'Quarta-feira','FEDERAL','2022-02-09 15:14:22',NULL),(110,4,'Quinta-feira','DIA','2022-02-09 15:14:44',NULL),(111,4,'Quinta-feira','NOITE','2022-02-09 15:14:56',NULL),(112,5,'Sexta-feira','ALVORADA','2022-02-09 15:16:00',NULL),(113,5,'Sexta-feira','DIA','2022-02-09 15:16:14',NULL),(114,5,'Sexta-feira','NOITE','2022-02-09 15:16:26',NULL),(115,6,'Sábado','ALVORADA','2022-02-09 15:16:38',NULL),(116,6,'Sábado','DIA','2022-02-09 15:16:49',NULL),(117,6,'Sábado','FEDERAL','2022-02-09 15:16:59',NULL),(118,0,'domingo','SALVA&Ccedil;AO','2022-02-09 15:29:46',NULL);
 /*!40000 ALTER TABLE `hour` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -175,18 +151,18 @@ CREATE TABLE `lists` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_hour` int(11) DEFAULT NULL COMMENT 'descrição da hora',
   `id_store` int(11) DEFAULT NULL COMMENT 'id da loja',
-  `total_value` decimal(10,0) DEFAULT NULL COMMENT 'valor bruto',
-  `comission_value` decimal(10,0) DEFAULT NULL,
-  `net_value` decimal(10,0) DEFAULT NULL COMMENT 'valor liquido',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
-  `date_moviment` timestamp NOT NULL DEFAULT current_timestamp(),
+  `total_value` float DEFAULT NULL COMMENT 'valor bruto',
+  `comission_value` float DEFAULT NULL,
+  `net_value` float DEFAULT NULL COMMENT 'valor liquido',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `date_moviment` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `hour_FK` (`id_hour`),
   KEY `lists_FK` (`id_store`),
   CONSTRAINT `hour_FK` FOREIGN KEY (`id_hour`) REFERENCES `hour` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `lists_FK` FOREIGN KEY (`id_store`) REFERENCES `loja` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -195,7 +171,7 @@ CREATE TABLE `lists` (
 
 LOCK TABLES `lists` WRITE;
 /*!40000 ALTER TABLE `lists` DISABLE KEYS */;
-INSERT INTO `lists` VALUES (2,85,21,10000000,1000000,9000000,'2022-01-22 02:06:51','2022-01-24 00:11:46','2022-01-31 04:00:00'),(3,89,21,12312,12312,12312,'2022-01-22 02:07:53',NULL,'2022-01-23 04:00:00'),(4,83,16,100,20,80,'2022-01-23 23:50:18','2022-01-28 03:20:32','2022-01-17 04:00:00');
+INSERT INTO `lists` VALUES (55,106,31,50,10,40,'2022-03-23 14:16:54',NULL,'2022-03-23 03:00:00');
 /*!40000 ALTER TABLE `lists` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -211,18 +187,17 @@ CREATE TABLE `loja` (
   `nome_loja` varchar(35) NOT NULL,
   `valor_saldo` decimal(10,0) NOT NULL,
   `comissao` int(2) NOT NULL,
-  `valor_aluguel` decimal(10,0) NOT NULL,
-  `aluguel_dia` int(11) NOT NULL,
-  `valor_gratificacao` decimal(10,0) NOT NULL,
-  `gratificacao_dia` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
-  `code` varchar(100) NOT NULL,
+  `valor_aluguel` decimal(10,0) DEFAULT NULL,
+  `aluguel_dia` int(11) DEFAULT NULL,
+  `valor_gratificacao` decimal(10,0) DEFAULT NULL,
+  `gratificacao_dia` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `code` varchar(35) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `loja_un` (`code`),
-  FULLTEXT KEY `nome_loja` (`nome_loja`,`code`),
-  FULLTEXT KEY `nome_loja_2` (`nome_loja`,`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `code` (`code`),
+  FULLTEXT KEY `nome_loja` (`nome_loja`,`code`)
+) ENGINE=InnoDB AUTO_INCREMENT=114 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -231,7 +206,7 @@ CREATE TABLE `loja` (
 
 LOCK TABLES `loja` WRITE;
 /*!40000 ALTER TABLE `loja` DISABLE KEYS */;
-INSERT INTO `loja` VALUES (16,'LOJA DO MIGUELAO',10,20,2,20,1,1,'2022-01-16 21:08:19','2022-01-28 02:02:37','1'),(19,'RONALDO',10,20,1200,20,200,20,'2022-01-16 21:08:19','2022-01-28 02:02:37','2'),(20,'LOJA TESTE luiz',10,10,1,1,1,1,'2022-01-17 11:33:14','2022-01-28 02:02:37','3'),(21,'Luiz Paulo Hammer',10,10,1,1,1,1,'2022-01-17 11:33:48','2022-01-28 02:02:37','4'),(22,'Luiz Paulo Hammer',10,10,1,1,1,1,'2022-01-17 11:33:53','2022-01-28 02:02:37','5'),(23,'Luiz Paulo Hammer',10,10,1,1,100,1,'2022-01-17 11:39:52','2022-01-28 02:02:37','6'),(24,'Luiz Paulo Hammer',10,10,1,1,100,123,'2022-01-17 11:41:12','2022-01-28 02:02:37','7'),(25,'Luiz Paulo Hammer',10,10,1,1,100,123,'2022-01-17 11:43:53','2022-01-28 02:02:37','8'),(26,'LUIZ PAULO ECOBAL DA COSTA',10,10,1,10,1,2,'2022-01-28 02:13:16','2022-01-28 02:14:38','1234');
+INSERT INTO `loja` VALUES (31,'loja 3',-426,20,1,1,1,1,'2022-02-23 00:25:04','2022-03-23 14:18:46','3'),(34,'LJ 100',0,20,3390,20,NULL,NULL,'2022-03-23 14:08:25','2022-03-28 20:37:41','100'),(35,'LJ 02',0,30,NULL,NULL,300,20,'2022-03-23 20:07:13',NULL,'002'),(36,'LJ 53',0,20,NULL,NULL,300,1,'2022-03-23 20:20:14',NULL,'053'),(37,'LJ 34',0,20,450,6,NULL,NULL,'2022-03-23 20:22:13',NULL,'034'),(38,'LJ 24',0,20,NULL,NULL,500,20,'2022-03-23 20:23:34',NULL,'024'),(39,'LJ 25',0,20,NULL,NULL,NULL,NULL,'2022-03-23 20:24:04',NULL,'025'),(40,'LJ 49',0,20,700,18,NULL,NULL,'2022-03-23 20:25:04',NULL,'049'),(41,'LJ 28',0,20,100,6,200,6,'2022-03-23 20:26:19',NULL,'028'),(42,'LJ 29',0,20,400,2,200,6,'2022-03-23 20:27:47',NULL,'029'),(43,'LJ 41',0,20,NULL,NULL,150,26,'2022-03-23 20:31:58',NULL,'041'),(44,'LJ 06',0,20,NULL,NULL,140,9,'2022-03-23 20:56:21',NULL,'006'),(45,'LJ 05',0,20,NULL,NULL,250,10,'2022-03-23 20:59:43',NULL,'005'),(46,'LJ 13',0,20,880,2,NULL,NULL,'2022-03-23 21:01:35',NULL,'013'),(47,'LJ 14',0,20,1000,3,NULL,NULL,'2022-03-23 21:02:12',NULL,'014'),(48,'LJ 22',0,20,500,9,NULL,NULL,'2022-03-23 21:03:15',NULL,'022'),(49,'LJ 45',0,20,400,26,400,26,'2022-03-23 21:04:14',NULL,'045'),(50,'lJ 60',0,20,600,21,120,21,'2022-03-24 20:38:31',NULL,'060'),(51,'LJ78',0,20,NULL,NULL,200,26,'2022-03-24 20:41:41',NULL,'078'),(52,'LJ82',0,20,NULL,NULL,200,15,'2022-03-24 20:44:43',NULL,'082'),(53,'LJ61',0,20,250,21,NULL,NULL,'2022-03-24 20:48:20',NULL,'061'),(54,'LJ63',0,30,NULL,NULL,NULL,NULL,'2022-03-25 20:06:30',NULL,'063'),(55,'LJ89',0,20,250,24,200,10,'2022-03-25 20:07:36',NULL,'089'),(56,'LJ80',0,20,300,24,170,24,'2022-03-25 20:08:33',NULL,'080'),(57,'LJ71',0,20,500,20,NULL,NULL,'2022-03-25 20:09:47',NULL,'071'),(58,'LJ77',0,30,NULL,NULL,NULL,NULL,'2022-03-25 20:22:59',NULL,'077'),(59,'LJ73',0,20,800,6,150,17,'2022-03-25 20:25:15',NULL,'073'),(60,'LJ79',0,20,350,15,NULL,NULL,'2022-03-25 20:26:05',NULL,'079'),(61,'LJ68',0,20,500,26,400,1,'2022-03-25 20:27:32',NULL,'068'),(62,'LJ90',0,20,NULL,NULL,150,21,'2022-03-25 20:29:27',NULL,'090'),(63,'LJ86',0,20,NULL,NULL,150,17,'2022-03-25 20:30:24',NULL,'086'),(64,'LJ 62',0,20,450,6,250,10,'2022-03-28 19:26:23','2022-03-28 19:29:40','062'),(65,'LJ 87',0,20,1100,10,NULL,NULL,'2022-03-28 19:27:26','2022-03-28 19:30:18','087'),(66,'LJ74',0,20,500,2,170,10,'2022-03-28 19:28:12','2022-03-28 19:31:38','074'),(67,'LJ 96',0,20,400,18,200,27,'2022-03-28 19:33:17',NULL,'096'),(68,'LJ 75',0,20,400,18,150,1,'2022-03-28 19:33:51',NULL,'075'),(69,'LJ92',0,20,NULL,NULL,200,10,'2022-03-28 19:34:45',NULL,'092'),(70,'LJ 81',0,20,400,3,NULL,NULL,'2022-03-28 19:35:40',NULL,'081'),(71,'LJ 99',0,20,500,20,300,9,'2022-03-28 19:36:26',NULL,'099'),(72,'LJ 69',0,20,600,13,NULL,NULL,'2022-03-28 19:36:59',NULL,'069'),(73,'LJ66',0,20,NULL,NULL,NULL,NULL,'2022-03-28 19:39:36',NULL,'066'),(74,'LJ 91',0,20,600,13,200,10,'2022-03-28 19:40:33',NULL,'091'),(75,'LJ 93',0,20,585,3,300,2,'2022-03-28 19:41:28',NULL,'093'),(76,'LJ 84',0,20,NULL,NULL,400,20,'2022-03-28 19:42:10',NULL,'084'),(77,'LJ 70',0,20,NULL,NULL,800,9,'2022-03-28 19:43:20',NULL,'070'),(78,'LJ 64',0,20,300,10,NULL,NULL,'2022-03-28 19:43:49',NULL,'064'),(79,'LJ 76',0,25,NULL,NULL,NULL,NULL,'2022-03-28 19:44:11',NULL,'076'),(80,'LJ 72',0,20,NULL,NULL,300,1,'2022-03-28 19:44:49',NULL,'072'),(81,'LJ 148',0,30,NULL,NULL,NULL,NULL,'2022-03-28 19:45:29',NULL,'148'),(82,'LJ 134',0,30,NULL,NULL,NULL,NULL,'2022-03-28 19:46:10',NULL,'134'),(83,'LJ 88',0,20,350,15,NULL,NULL,'2022-03-28 19:47:28',NULL,'088'),(84,'LJ 101',0,20,1260,3,NULL,NULL,'2022-03-28 20:36:43',NULL,'101'),(85,'LJ 102',0,20,500,24,NULL,NULL,'2022-03-28 20:38:17',NULL,'102'),(86,'LJ 105',0,20,NULL,NULL,300,10,'2022-03-28 20:39:07',NULL,'105'),(87,'LJ 106',0,20,350,18,NULL,NULL,'2022-03-28 20:39:40',NULL,'106'),(88,'LJ 107',0,20,700,13,NULL,NULL,'2022-03-28 20:39:59',NULL,'107'),(89,'LJ 108',0,20,2200,13,NULL,NULL,'2022-03-28 20:40:25',NULL,'108'),(90,'LJ 109',0,20,350,13,NULL,NULL,'2022-03-28 20:40:47',NULL,'109'),(91,'LJ 113',0,20,NULL,NULL,NULL,NULL,'2022-03-28 20:41:41',NULL,'113'),(92,'LJ 114',0,20,400,20,NULL,NULL,'2022-03-28 20:42:01',NULL,'114'),(93,'LJ 117',0,20,440,13,NULL,NULL,'2022-03-28 20:44:54',NULL,'117'),(94,'LJ 118',0,20,500,13,NULL,NULL,'2022-03-28 20:45:16',NULL,'118'),(95,'LJ 119',0,20,1000,13,NULL,NULL,'2022-03-28 20:45:44',NULL,'119'),(96,'LJ 120',0,20,400,18,NULL,NULL,'2022-03-28 20:46:50',NULL,'120'),(97,'LJ 122',0,20,500,6,NULL,NULL,'2022-03-28 20:47:37',NULL,'122'),(98,'LJ 123',0,20,600,18,NULL,NULL,'2022-03-28 20:48:01',NULL,'123'),(99,'LJ 124',0,20,NULL,NULL,150,24,'2022-03-28 20:49:49',NULL,'124'),(100,'LJ 127',0,20,NULL,NULL,150,12,'2022-03-28 20:51:06',NULL,'127'),(101,'LJ 133',0,20,600,9,300,24,'2022-03-28 20:58:21',NULL,'133'),(102,'LJ 136',0,20,500,24,NULL,NULL,'2022-03-28 21:14:44',NULL,'136'),(103,'LJ 137',0,20,1100,13,NULL,NULL,'2022-03-28 21:15:08',NULL,'137'),(104,'LJ 138',0,20,NULL,NULL,300,2,'2022-03-28 21:15:34',NULL,'138'),(105,'LJ 139',0,20,1685,27,250,27,'2022-03-28 21:16:35',NULL,'139'),(106,'LJ 141',0,20,370,15,NULL,NULL,'2022-03-28 21:16:55',NULL,'141'),(107,'LJ 142',0,20,600,3,NULL,NULL,'2022-03-28 21:17:20',NULL,'142'),(108,'LJ 144',0,20,2000,1,NULL,NULL,'2022-03-28 21:17:46',NULL,'144'),(109,'LJ 145',0,30,296,17,NULL,NULL,'2022-03-28 21:18:25',NULL,'145'),(110,'LJ 146',0,30,NULL,NULL,NULL,NULL,'2022-03-28 21:18:42',NULL,'146'),(111,'LJ 147',0,20,NULL,NULL,100,2,'2022-03-28 21:19:09',NULL,'147'),(112,'LJ 149',0,30,NULL,NULL,NULL,NULL,'2022-03-28 21:19:33',NULL,'149'),(113,'LJ 150',0,20,NULL,NULL,400,12,'2022-03-28 21:20:56',NULL,'150');
 /*!40000 ALTER TABLE `loja` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -251,8 +226,8 @@ CREATE TABLE `mail_queue` (
   `recipient_email` varchar(255) NOT NULL DEFAULT '',
   `recipient_name` varchar(255) NOT NULL DEFAULT '',
   `sent_at` timestamp NULL DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -265,6 +240,572 @@ LOCK TABLES `mail_queue` WRITE;
 /*!40000 ALTER TABLE `mail_queue` DISABLE KEYS */;
 INSERT INTO `mail_queue` VALUES (1,'Teste de fila de e-mail 1542115115','Este é apenas um teste de envio de email','cursos@upinside.com.br','Robson V. Leite','robsonvleite@gmail.com','Robson V. Leite','2018-11-13 15:30:54','2018-11-13 15:18:35','2018-11-13 15:30:54'),(2,'Teste de fila de e-mail 1542115178','Este é apenas um teste de envio de email','cursos@upinside.com.br','Robson V. Leite','robsonvleite@gmail.com','Robson V. Leite','2018-11-13 15:31:00','2018-11-13 15:19:38','2018-11-13 15:31:00'),(3,'Teste de fila de e-mail 1542115185','Este é apenas um teste de envio de email','cursos@upinside.com.br','Robson V. Leite','robsonvleite@gmail.com','Robson V. Leite','2018-11-13 15:31:06','2018-11-13 15:19:45','2018-11-13 15:31:06');
 /*!40000 ALTER TABLE `mail_queue` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `moviment`
+--
+
+DROP TABLE IF EXISTS `moviment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `moviment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date_moviment` timestamp NOT NULL,
+  `id_hour` int(11) NOT NULL,
+  `id_store` int(11) NOT NULL,
+  `beat_value` float NOT NULL,
+  `paying_now` float NOT NULL,
+  `expend` float NOT NULL,
+  `last_value` float NOT NULL,
+  `get_value` float NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `new_value` float NOT NULL,
+  `prize` float DEFAULT NULL,
+  `beat_prize` float DEFAULT NULL,
+  `prize_office` float DEFAULT NULL,
+  `prize_store` float DEFAULT NULL,
+  `id_list` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `moviment_FK` (`id_hour`),
+  KEY `moviment_FK_1` (`id_store`),
+  KEY `moviment_FK_2` (`id_list`),
+  CONSTRAINT `moviment_FK` FOREIGN KEY (`id_hour`) REFERENCES `hour` (`id`),
+  CONSTRAINT `moviment_FK_1` FOREIGN KEY (`id_store`) REFERENCES `loja` (`id`),
+  CONSTRAINT `moviment_FK_2` FOREIGN KEY (`id_list`) REFERENCES `lists` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `moviment`
+--
+
+LOCK TABLES `moviment` WRITE;
+/*!40000 ALTER TABLE `moviment` DISABLE KEYS */;
+INSERT INTO `moviment` VALUES (23,'2022-03-23 03:00:00',106,34,120,100,20,0,120,'2022-03-23 14:15:34',120,NULL,NULL,NULL,NULL,NULL),(24,'2022-03-23 03:00:00',106,31,10,30,20,-436,50,'2022-03-23 14:18:46',-426,NULL,NULL,NULL,NULL,55);
+/*!40000 ALTER TABLE `moviment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pma__bookmark`
+--
+
+DROP TABLE IF EXISTS `pma__bookmark`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pma__bookmark` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `dbase` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `user` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `label` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `query` text COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Bookmarks';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pma__bookmark`
+--
+
+LOCK TABLES `pma__bookmark` WRITE;
+/*!40000 ALTER TABLE `pma__bookmark` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pma__bookmark` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pma__central_columns`
+--
+
+DROP TABLE IF EXISTS `pma__central_columns`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pma__central_columns` (
+  `db_name` varchar(64) COLLATE utf8_bin NOT NULL,
+  `col_name` varchar(64) COLLATE utf8_bin NOT NULL,
+  `col_type` varchar(64) COLLATE utf8_bin NOT NULL,
+  `col_length` text COLLATE utf8_bin,
+  `col_collation` varchar(64) COLLATE utf8_bin NOT NULL,
+  `col_isNull` tinyint(1) NOT NULL,
+  `col_extra` varchar(255) COLLATE utf8_bin DEFAULT '',
+  `col_default` text COLLATE utf8_bin,
+  PRIMARY KEY (`db_name`,`col_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Central list of columns';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pma__central_columns`
+--
+
+LOCK TABLES `pma__central_columns` WRITE;
+/*!40000 ALTER TABLE `pma__central_columns` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pma__central_columns` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pma__column_info`
+--
+
+DROP TABLE IF EXISTS `pma__column_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pma__column_info` (
+  `id` int(5) unsigned NOT NULL AUTO_INCREMENT,
+  `db_name` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `table_name` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `column_name` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `comment` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `mimetype` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `transformation` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `transformation_options` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `input_transformation` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `input_transformation_options` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `db_name` (`db_name`,`table_name`,`column_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Column information for phpMyAdmin';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pma__column_info`
+--
+
+LOCK TABLES `pma__column_info` WRITE;
+/*!40000 ALTER TABLE `pma__column_info` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pma__column_info` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pma__designer_settings`
+--
+
+DROP TABLE IF EXISTS `pma__designer_settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pma__designer_settings` (
+  `username` varchar(64) COLLATE utf8_bin NOT NULL,
+  `settings_data` text COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Settings related to Designer';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pma__designer_settings`
+--
+
+LOCK TABLES `pma__designer_settings` WRITE;
+/*!40000 ALTER TABLE `pma__designer_settings` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pma__designer_settings` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pma__export_templates`
+--
+
+DROP TABLE IF EXISTS `pma__export_templates`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pma__export_templates` (
+  `id` int(5) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(64) COLLATE utf8_bin NOT NULL,
+  `export_type` varchar(10) COLLATE utf8_bin NOT NULL,
+  `template_name` varchar(64) COLLATE utf8_bin NOT NULL,
+  `template_data` text COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_user_type_template` (`username`,`export_type`,`template_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Saved export templates';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pma__export_templates`
+--
+
+LOCK TABLES `pma__export_templates` WRITE;
+/*!40000 ALTER TABLE `pma__export_templates` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pma__export_templates` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pma__favorite`
+--
+
+DROP TABLE IF EXISTS `pma__favorite`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pma__favorite` (
+  `username` varchar(64) COLLATE utf8_bin NOT NULL,
+  `tables` text COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Favorite tables';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pma__favorite`
+--
+
+LOCK TABLES `pma__favorite` WRITE;
+/*!40000 ALTER TABLE `pma__favorite` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pma__favorite` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pma__history`
+--
+
+DROP TABLE IF EXISTS `pma__history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pma__history` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `db` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `table` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `timevalue` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `sqlquery` text COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `username` (`username`,`db`,`table`,`timevalue`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='SQL history for phpMyAdmin';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pma__history`
+--
+
+LOCK TABLES `pma__history` WRITE;
+/*!40000 ALTER TABLE `pma__history` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pma__history` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pma__navigationhiding`
+--
+
+DROP TABLE IF EXISTS `pma__navigationhiding`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pma__navigationhiding` (
+  `username` varchar(64) COLLATE utf8_bin NOT NULL,
+  `item_name` varchar(64) COLLATE utf8_bin NOT NULL,
+  `item_type` varchar(64) COLLATE utf8_bin NOT NULL,
+  `db_name` varchar(64) COLLATE utf8_bin NOT NULL,
+  `table_name` varchar(64) COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`username`,`item_name`,`item_type`,`db_name`,`table_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Hidden items of navigation tree';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pma__navigationhiding`
+--
+
+LOCK TABLES `pma__navigationhiding` WRITE;
+/*!40000 ALTER TABLE `pma__navigationhiding` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pma__navigationhiding` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pma__pdf_pages`
+--
+
+DROP TABLE IF EXISTS `pma__pdf_pages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pma__pdf_pages` (
+  `db_name` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `page_nr` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `page_descr` varchar(50) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  PRIMARY KEY (`page_nr`),
+  KEY `db_name` (`db_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='PDF relation pages for phpMyAdmin';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pma__pdf_pages`
+--
+
+LOCK TABLES `pma__pdf_pages` WRITE;
+/*!40000 ALTER TABLE `pma__pdf_pages` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pma__pdf_pages` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pma__recent`
+--
+
+DROP TABLE IF EXISTS `pma__recent`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pma__recent` (
+  `username` varchar(64) COLLATE utf8_bin NOT NULL,
+  `tables` text COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Recently accessed tables';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pma__recent`
+--
+
+LOCK TABLES `pma__recent` WRITE;
+/*!40000 ALTER TABLE `pma__recent` DISABLE KEYS */;
+INSERT INTO `pma__recent` VALUES ('arrecada','[{\"db\":\"arrecada\",\"table\":\"users\"},{\"db\":\"arrecada\",\"table\":\"dia\"},{\"db\":\"arrecada\",\"table\":\"horario\"},{\"db\":\"arrecada\",\"table\":\"lists\"},{\"db\":\"arrecada\",\"table\":\"address\"},{\"db\":\"arrecada\",\"table\":\"listas\"},{\"db\":\"arrecada\",\"table\":\"usuarios\"},{\"db\":\"arrecada\",\"table\":\"mail_queue\"},{\"db\":\"arrecada\",\"table\":\"cost\"},{\"db\":\"arrecada\",\"table\":\"loja\"}]');
+/*!40000 ALTER TABLE `pma__recent` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pma__relation`
+--
+
+DROP TABLE IF EXISTS `pma__relation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pma__relation` (
+  `master_db` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `master_table` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `master_field` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `foreign_db` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `foreign_table` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `foreign_field` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  PRIMARY KEY (`master_db`,`master_table`,`master_field`),
+  KEY `foreign_field` (`foreign_db`,`foreign_table`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Relation table';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pma__relation`
+--
+
+LOCK TABLES `pma__relation` WRITE;
+/*!40000 ALTER TABLE `pma__relation` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pma__relation` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pma__savedsearches`
+--
+
+DROP TABLE IF EXISTS `pma__savedsearches`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pma__savedsearches` (
+  `id` int(5) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `db_name` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `search_name` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `search_data` text COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_savedsearches_username_dbname` (`username`,`db_name`,`search_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Saved searches';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pma__savedsearches`
+--
+
+LOCK TABLES `pma__savedsearches` WRITE;
+/*!40000 ALTER TABLE `pma__savedsearches` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pma__savedsearches` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pma__table_coords`
+--
+
+DROP TABLE IF EXISTS `pma__table_coords`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pma__table_coords` (
+  `db_name` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `table_name` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `pdf_page_number` int(11) NOT NULL DEFAULT '0',
+  `x` float unsigned NOT NULL DEFAULT '0',
+  `y` float unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`db_name`,`table_name`,`pdf_page_number`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Table coordinates for phpMyAdmin PDF output';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pma__table_coords`
+--
+
+LOCK TABLES `pma__table_coords` WRITE;
+/*!40000 ALTER TABLE `pma__table_coords` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pma__table_coords` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pma__table_info`
+--
+
+DROP TABLE IF EXISTS `pma__table_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pma__table_info` (
+  `db_name` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `table_name` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `display_field` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  PRIMARY KEY (`db_name`,`table_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Table information for phpMyAdmin';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pma__table_info`
+--
+
+LOCK TABLES `pma__table_info` WRITE;
+/*!40000 ALTER TABLE `pma__table_info` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pma__table_info` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pma__table_uiprefs`
+--
+
+DROP TABLE IF EXISTS `pma__table_uiprefs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pma__table_uiprefs` (
+  `username` varchar(64) COLLATE utf8_bin NOT NULL,
+  `db_name` varchar(64) COLLATE utf8_bin NOT NULL,
+  `table_name` varchar(64) COLLATE utf8_bin NOT NULL,
+  `prefs` text COLLATE utf8_bin NOT NULL,
+  `last_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`username`,`db_name`,`table_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Tables'' UI preferences';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pma__table_uiprefs`
+--
+
+LOCK TABLES `pma__table_uiprefs` WRITE;
+/*!40000 ALTER TABLE `pma__table_uiprefs` DISABLE KEYS */;
+INSERT INTO `pma__table_uiprefs` VALUES ('arrecada','arrecada','horario','{\"sorted_col\":\"`horario`.`nrdia` ASC\"}','2022-01-26 14:41:51');
+/*!40000 ALTER TABLE `pma__table_uiprefs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pma__tracking`
+--
+
+DROP TABLE IF EXISTS `pma__tracking`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pma__tracking` (
+  `db_name` varchar(64) COLLATE utf8_bin NOT NULL,
+  `table_name` varchar(64) COLLATE utf8_bin NOT NULL,
+  `version` int(10) unsigned NOT NULL,
+  `date_created` datetime NOT NULL,
+  `date_updated` datetime NOT NULL,
+  `schema_snapshot` text COLLATE utf8_bin NOT NULL,
+  `schema_sql` text COLLATE utf8_bin,
+  `data_sql` longtext COLLATE utf8_bin,
+  `tracking` set('UPDATE','REPLACE','INSERT','DELETE','TRUNCATE','CREATE DATABASE','ALTER DATABASE','DROP DATABASE','CREATE TABLE','ALTER TABLE','RENAME TABLE','DROP TABLE','CREATE INDEX','DROP INDEX','CREATE VIEW','ALTER VIEW','DROP VIEW') COLLATE utf8_bin DEFAULT NULL,
+  `tracking_active` int(1) unsigned NOT NULL DEFAULT '1',
+  PRIMARY KEY (`db_name`,`table_name`,`version`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Database changes tracking for phpMyAdmin';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pma__tracking`
+--
+
+LOCK TABLES `pma__tracking` WRITE;
+/*!40000 ALTER TABLE `pma__tracking` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pma__tracking` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pma__userconfig`
+--
+
+DROP TABLE IF EXISTS `pma__userconfig`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pma__userconfig` (
+  `username` varchar(64) COLLATE utf8_bin NOT NULL,
+  `timevalue` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `config_data` text COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='User preferences storage for phpMyAdmin';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pma__userconfig`
+--
+
+LOCK TABLES `pma__userconfig` WRITE;
+/*!40000 ALTER TABLE `pma__userconfig` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pma__userconfig` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pma__usergroups`
+--
+
+DROP TABLE IF EXISTS `pma__usergroups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pma__usergroups` (
+  `usergroup` varchar(64) COLLATE utf8_bin NOT NULL,
+  `tab` varchar(64) COLLATE utf8_bin NOT NULL,
+  `allowed` enum('Y','N') COLLATE utf8_bin NOT NULL DEFAULT 'N',
+  PRIMARY KEY (`usergroup`,`tab`,`allowed`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='User groups with configured menu items';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pma__usergroups`
+--
+
+LOCK TABLES `pma__usergroups` WRITE;
+/*!40000 ALTER TABLE `pma__usergroups` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pma__usergroups` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pma__users`
+--
+
+DROP TABLE IF EXISTS `pma__users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pma__users` (
+  `username` varchar(64) COLLATE utf8_bin NOT NULL,
+  `usergroup` varchar(64) COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`username`,`usergroup`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Users and their assignments to user groups';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pma__users`
+--
+
+LOCK TABLES `pma__users` WRITE;
+/*!40000 ALTER TABLE `pma__users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pma__users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_usr`
+--
+
+DROP TABLE IF EXISTS `tb_usr`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_usr` (
+  `id` int(11) NOT NULL,
+  `nome` varchar(35) NOT NULL,
+  `senha` varchar(8) NOT NULL,
+  `nivel` int(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_usr`
+--
+
+LOCK TABLES `tb_usr` WRITE;
+/*!40000 ALTER TABLE `tb_usr` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_usr` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -284,12 +825,12 @@ CREATE TABLE `users` (
   `forget` varchar(255) DEFAULT NULL,
   `document` varchar(11) DEFAULT NULL,
   `photo` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `level` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -298,12 +839,12 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Robson','Leitea','robsonvleite@email.com.br','confirmed','$2y$10$zytg0p8eFFw8NTam1iYRY.lxLYU3mrCVAw509tVIEjYjZ4DZquqDi',NULL,NULL,'images/2018/10/robsonvleite.jpg','2018-09-03 20:39:07','2022-01-16 20:34:53',0),(2,'Alexandre','Santos','alexandre27@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(3,'Willian','Santos','willian28@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(4,'Eleno','Santos','eleno29@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(5,'Lucas','Santos','lucas30@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(7,'João','Santos','joão32@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(8,'Felipe','Santos','felipe33@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(9,'Anderson','Santos','anderson34@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(10,'Elton','Santos','elton35@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(11,'Leonardo','Santos','leonardo36@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(12,'Regilton','Santos','regilton37@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(13,'Sidney','Santos','sidney38@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(14,'Lourival','Santos','lourival39@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(15,'Henrique','Santos','henrique40@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(16,'Daniel','Santos','daniel41@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(17,'Pedro','Santos','pedro42@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(18,'Andre Roberto','Santos','andre roberto43@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(19,'Ozeias','Santos','ozeias44@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(20,'Arnobio','Santos','arnobio45@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(21,'Roniel','Santos','roniel46@email.com.br','registered','$2y$10$wb6TiQgWiu5KcBbCpxBRDedC.zAz6dTxPqKtEBD6nnkVH3JA/nxLq',NULL,NULL,NULL,'2018-09-03 20:39:07','2022-01-16 20:23:13',0),(22,'Caíque','Santos','caíque47@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(23,'Lucas','Santos','lucas48@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(24,'Francisco','Santos','francisco49@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(25,'Cristian','Santos','cristian50@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(26,'Eduardo','Santos','eduardo51@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(27,'Rodrigo','Santos','rodrigo52@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(28,'Raphael','Santos','raphael53@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(29,'Jose','Santos','jose54@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(30,'Rodrigo','Santos','rodrigo55@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(31,'Diego','Santos','diego56@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(32,'Alexandre','Santos','alexandre57@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(33,'Edimar','Santos','edimar58@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(34,'Jackell','Santos','jackell59@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(35,'Luis','Santos','luis60@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(36,'Lucas','Santos','lucas61@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(37,'Wander','Santos','wander62@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(38,'Tairo','Santos','tairo63@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(39,'Rubens','Santos','rubens64@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(40,'Hugo','Santos','hugo65@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(41,'Gustavo','Santos','gustavo66@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(42,'Paulo','Santos','paulo67@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(43,'Rodrigo','Santos','rodrigo68@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(44,'Denio','Santos','denio69@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(45,'Idalmir','Santos','idalmir70@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(46,'Ataide','Santos','ataide71@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(47,'Luiz','Santos','luiz72@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(48,'Luciano','Santos','luciano73@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(49,'Adir','Santos','adir74@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(50,'Tainan','Santos','tainan75@email.com.br','registered','',NULL,NULL,NULL,'2018-09-03 20:39:07','2018-10-24 15:26:46',0),(51,'Robson','Leite','robsonvleite@gmail.com','confirmed','$2y$10$rLjfjEIzvdOWyTTue.PO.uS8OdoZJakD5zTlR91UOJlzIF2MpnJ76','02f2c324242f924e648ce0dd295511dd',NULL,NULL,'2018-11-13 19:11:57','2018-11-13 20:08:42',0),(60,'Luiz','Hammer','luiz_escobar12@hotmail.com','confirmed','$2y$10$B1UT1tBcmin70gvHbD4lWOQ1zY4el.Q9VZthwOUTxOZc7W1tX.To6',NULL,NULL,NULL,'2022-01-16 07:33:46','2022-01-16 07:33:48',0),(61,'Luiz','Hammer','luiz_escobar13@hotmail.com','registered','$2y$10$YYtD9hcxYEOrBo.D5q2Qmeq102gjzjDc.VrAWD.L9yCnlcmKgzXnO',NULL,NULL,NULL,'2022-01-16 07:36:15',NULL,0),(62,'Luiz','Hammer','luiz_escobar14@hotmail.com','registered','$2y$10$30ePs6vdIk8KLbpuH4Yo7OeQ2sxWQ0iiT4F6h70DJfiIsiK1Kzp9S',NULL,NULL,NULL,'2022-01-16 07:45:39',NULL,0),(63,'asd','asd','robsonvleit1221e@email.com.br','registered','$2y$10$sNwiQYXcsnqWupdkua2WgO1X8u0emjRmqTIANJcp9pcfqZAlTVvc2',NULL,NULL,NULL,'2022-01-18 15:32:03',NULL,0),(64,'LUIZ PAULO ECOBALa','COSTA','luiz_escob1@hotmail.com','registered','$2y$10$I1tvfVWpHOfeBChIPQudkebxQRql5n0oIS.AOqrTwL8D/2lQ0BXjO',NULL,NULL,NULL,'2022-01-19 06:18:35','2022-01-19 06:20:02',0),(65,'asdas','asdasd','luizasdasd@hotmail.com','registered','$2y$10$2PPtjHOfXBglIBaChPQHOOc/0RduIQhutqxnIER9hqq4WHsStAOoW',NULL,NULL,NULL,'2022-01-19 20:21:01',NULL,0);
+INSERT INTO `users` VALUES (1,'admin','admin','admin@admin.com','confirmed','$2y$10$olmakJp/3wwBt7lR0ylcOuI9KOYRxJnLbaX8LFpAs6Vv97qgKxOrS',NULL,NULL,'images/2018/10/robsonvleite.jpg','2018-09-03 20:39:07','2022-02-01 14:40:09',0),(66,'Wagner','Wagner','wagner@email.com','registered','$2y$10$vDzNyi/k9eGDNUQJqb74veJC7AXfrlR457ZCmYPUiw..6b/nf0Lp.',NULL,NULL,NULL,'2022-01-24 13:04:07',NULL,0),(67,'wagner','wagner','wagner@email.com.br','registered','$2y$10$MRgxPLC9d2FqtAlyAMP92eC5gBlCenK7PWyfnd7cc9XmEBcd89zaK',NULL,NULL,NULL,'2022-01-24 13:49:35',NULL,0),(68,'galo','vingador','galovingador@email.com','registered','$2y$10$iMQj70sY7tVsvsfKX46a7emy9MZbgtJX0eMlmr.xQbTRmN37oe92a',NULL,NULL,NULL,'2022-01-24 14:16:02',NULL,0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Dumping routines for database 'arrecadacao'
+-- Dumping routines for database 'arrecada'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -315,4 +856,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-02-01 10:44:51
+-- Dump completed on 2022-04-04  3:03:55
