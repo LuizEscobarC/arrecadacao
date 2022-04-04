@@ -218,6 +218,11 @@ Os controladores ficam no caminho:  c:\xampp\htdocs\arrecadacao{ou nome que vocÃ
 ```
 ![image](https://user-images.githubusercontent.com/54407649/161643688-45cd8832-0c7f-4e5c-a175-34b5858a5414.png)
 
+## como ficaria no postman
+
+![image](https://user-images.githubusercontent.com/54407649/161648320-b1c54fd8-275c-414a-b59a-281b9b4471ed.png)
+
+
 
 
 ## Tecnologias utilizadasðŸ¦‰
