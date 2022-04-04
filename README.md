@@ -23,7 +23,7 @@ git@github.com:LuizEscobarC/arrecadacao.git
 ### Acesse o diretorio🤓
 
 ```
-cd c:\xampp\htdocs\program_name
+cd c:\xampp\htdocs\{folder}
 ```
 ### Instale as dependências�
 ```
@@ -64,6 +64,7 @@ c:\xampp\htdocs\{folder}\arrecadacao\source\Boot\Config.php
 
 ## Imagems do projeto 💻
 
+#### oi
 <img style="width: 600px; height: 300px" src="https://user-images.githubusercontent.com/54407649/161637293-7018eba8-b4d2-4c73-8d8f-14bf22d5f7d2.png">
 <img style="width: 600px; height: 300px" src="rota">
 <img style="width: 600px; height: 300px" src="rota">
