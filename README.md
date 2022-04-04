@@ -172,7 +172,7 @@ Obs: esse é o relatório de movimento. nele só podemos ver e apagar, nunca edi
 
 ## Alguns dos lançamentos de fluxo de caixa automáticos desses exemplos de movimentação.
 
-<img style="width: 600px; height: 300px" src="https://user-images.githubusercontent.com/54407649/161642732-faa967c3-efee-4289-9892ff791383dc53.png">
+<img style="width: 600px; height: 300px" src="https://user-images.githubusercontent.com/54407649/161645040-f427f3e5-7a7b-4616-a88a-08ab48fa9f9d.png">
 
 
 
