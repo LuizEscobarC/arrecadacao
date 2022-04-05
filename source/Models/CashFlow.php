@@ -151,7 +151,7 @@ class CashFlow extends Model
         return (object)[
             'expenses' => $expenses,
             'incomes' => $incomes,
-            'totalBiling' => $totalBilling,
+            'totalBilling' => $totalBilling,
             'totalIncomes' => $totalIncomes,
             'totalExpenses' => $totalExpenses
         ];
