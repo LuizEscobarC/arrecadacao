@@ -3,7 +3,7 @@
 namespace Source\Core;
 
 use Source\Support\Message;
-use Source\Support\Seo;
+use Source\Support\SeoBuilder;
 
 /**
  * FSPHP | Class Controller
@@ -16,7 +16,7 @@ class Controller
     /** @var View */
     protected $view;
 
-    /** @var Seo */
+    /** @var SeoBuilder */
     protected $seo;
 
     /** @var Message */
@@ -29,7 +29,7 @@ class Controller
     public function __construct(string $pathToViews = null)
     {
         $this->view = new View($pathToViews);
-        $this->seo = new Seo();
+        $this->seo = new SeoBuilder();
         $this->message = new Message();
     }
 }

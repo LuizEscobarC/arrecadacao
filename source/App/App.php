@@ -13,13 +13,8 @@ use Source\Models\Center;
 use Source\Models\Hour;
 use Source\Models\Lists;
 use Source\Models\Moviment;
-use Source\Models\Report\Access;
-use Source\Models\Report\Online;
 use Source\Models\Store;
 use Source\Models\User;
-use Source\Support\Filters\FiltersCashFlow;
-use Source\Support\Filters\FiltersLists;
-use Source\Support\Filters\Filter;
 use Source\Support\HourManager;
 use Source\Support\Message;
 use Source\Support\Pager;
@@ -52,14 +47,8 @@ class App extends Controller
      */
     public function home(): void
     {
-        $head = $this->seo->render(
-            "Olá {$this->user->first_name}. - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url(),
-            theme("/assets/images/share.jpg"),
-            false
-        );
-
+        // META SEO
+        $head = $this->seo->make("Olá {$this->user->first_name}. - ", url());
         //CHART
         $chartData = (new CashFlow())->chartData();
         //END CHART
@@ -82,8 +71,13 @@ class App extends Controller
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function ajaxGrap()
     {
+
+        //PARA ATUALIZAR EM TEMPO REAL O GRAFICO TEM QUE SER ENVIADOS ARRAYS COM A MESMA QUANTIDADE DE INDICES
         $chartData = (new CashFlow())->chartData();
         $categories = str_replace("'", "", explode(",", $chartData->date_moviment));
         $callback["chart"] = [
@@ -101,13 +95,9 @@ class App extends Controller
      */
     public function users(?array $data): void
     {
-        $head = $this->seo->render(
-            "Meu perfil - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url(),
-            theme("/assets/images/share.jpg"),
-            false
-        );
+        // META SEO
+        $head = $this->seo->make("Meu perfil - ", url());
+
         $user = new User();
         $page = (!empty($data['page']) ? $data['page'] : 1);
 
@@ -132,13 +122,8 @@ class App extends Controller
      */
     public function profile(array $data): void
     {
-        $head = $this->seo->render(
-            "Meu perfil - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url(),
-            theme("/assets/images/share.jpg"),
-            false
-        );
+        // META SEO
+        $head = $this->seo->make("Meu perfil - ", url());
 
         $id = (filter_var($data['id'], FILTER_VALIDATE_INT) ? $data['id'] : null);
 
@@ -160,15 +145,14 @@ class App extends Controller
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function createUser(): void
     {
-        $head = $this->seo->render(
-            "Cadastrar usuário - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url(),
-            theme("/assets/images/share.jpg"),
-            false
-        );
+        // META SEO
+        $head = $this->seo->make("Cadastrar usuário - ", url());
+
         echo $this->view->render("creates/user", [
             "head" => $head
         ]);
@@ -221,14 +205,8 @@ class App extends Controller
             echo json_encode($json);
             return;
         }
-
-        $head = $this->seo->render(
-            "Criar Conta - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url("/cadastrar"),
-            theme("/assets/images/share.jpg")
-        );
-
+        // META SEO
+        $head = $this->seo->make("Criar Conta - ", url("/cadastrar"));
         echo $this->view->render("auth-register", [
             "head" => $head
         ]);
@@ -263,14 +241,8 @@ class App extends Controller
             $user->status = "confirmed";
             $user->save();
         }
-
-        $head = $this->seo->render(
-            "Bem-vindo(a) ao " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url("/obrigado"),
-            theme("/assets/images/share.jpg")
-        );
-
+        // META SEO
+        $head = $this->seo->make("Bem-vindo(a) ao ", url("/obrigado"));
         echo $this->view->render("optin", [
             "head" => $head,
             "data" => (object)[
@@ -302,16 +274,10 @@ class App extends Controller
      */
     public function stores(?array $data): void
     {
-        $head = $this->seo->render(
-            "Lojas - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url('/app/lojas'),
-            theme("/assets/images/share.jpg"),
-            false
-        );
+        // META SEO
+        $head = $this->seo->make("Lojas - ", url('/app/lojas'));
 
         $search = filter_var((!empty($data['search']) ? $data['search'] : null), FILTER_SANITIZE_STRIPPED);
-
 
         if ($search) {
             $stores = (new Store())->find("MATCH(nome_loja, code) AGAINST(:s)", "s={$search}");
@@ -340,13 +306,9 @@ class App extends Controller
      */
     public function store(array $data): void
     {
-        $head = $this->seo->render(
-            "Loja - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url('/app/loja'),
-            theme("/assets/images/share.jpg"),
-            false
-        );
+        // META SEO
+        $head = $this->seo->make("Lojas - ", url('/app/loja'));
+
         $id = (filter_var($data['id'], FILTER_VALIDATE_INT) ? $data['id'] : null);
 
         if (empty($id) || empty((new Store())->findById($id))) {
@@ -370,15 +332,14 @@ class App extends Controller
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function createStore(): void
     {
-        $head = $this->seo->render(
-            "Cadastrar Loja - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url(),
-            theme("/assets/images/share.jpg"),
-            false
-        );
+        // META SEO
+        $head = $this->seo->make("Cadastrar Loja - ", url());
+
         echo $this->view->render("creates/store", [
             "head" => $head
         ]);
@@ -470,13 +431,8 @@ class App extends Controller
      */
     public function costCenters(?array $data): void
     {
-        $head = $this->seo->render(
-            "Centro de Custos - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url('/app/centro-de-custos'),
-            theme("/assets/images/share.jpg"),
-            false
-        );
+        // META SEO
+        $head = $this->seo->make("Centro de Custos - ", url('/app/centro-de-custos'));
 
         $searchDay = filter_var((!empty($data['day']) ? $data['day'] : null), FILTER_VALIDATE_INT);
 
@@ -511,14 +467,8 @@ class App extends Controller
     public function costCenter(array $data): void
     {
         $id = (filter_var($data['id'], FILTER_VALIDATE_INT) ? $data['id'] : null);
-
-        $head = $this->seo->render(
-            "Centro de Custo - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url('/app/centro-de-custo'),
-            theme("/assets/images/share.jpg"),
-            false
-        );
+        // META SEO
+        $head = $this->seo->make("Centro de Custo - ", url('/app/centro-de-custo'));
 
         if (empty($id) || empty((new Center())->findById($id))) {
             $cafeWeb = (new View());
@@ -539,15 +489,14 @@ class App extends Controller
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function createCost(): void
     {
-        $head = $this->seo->render(
-            "Cadastrar Centro de Custo - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url(),
-            theme("/assets/images/share.jpg"),
-            false
-        );
+        // META SEO
+        $head = $this->seo->make("Cadastrar Centro de Custos - ", url());
+
         echo $this->view->render("creates/cost", [
             "head" => $head
         ]);
@@ -612,19 +561,15 @@ class App extends Controller
      */
     public function hours(?array $data): void
     {
-        $head = $this->seo->render(
-            "Horários - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url('/app/horarios'),
-            theme("/assets/images/share.jpg"),
-            false
-        );
+        // META SEO
+        $head = $this->seo->make("Horários - ", url('/app/horarios'));
 
         $hour = (new Hour())->find();
         $page = (!empty($data['page']) ? $data['page'] : 1);
 
         $pager = (new Pager(url('/app/horarios/')));
         $pager->pager($hour->count(), 15, $page);
+
         echo $this->view->render('hours', [
             'head' => $head,
             'hours' => $hour->order('number_day')
@@ -643,14 +588,8 @@ class App extends Controller
     public function hour(?array $data): void
     {
         $id = (filter_var($data['id'], FILTER_VALIDATE_INT) ? $data['id'] : null);
-
-        $head = $this->seo->render(
-            "Horário - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url('/app/horario'),
-            theme("/assets/images/share.jpg"),
-            false
-        );
+        // META SEO
+        $head = $this->seo->make("Horário - ", url('/app/horario'));
 
         if (empty($id) || empty((new Hour())->findById($id))) {
             $cafeWeb = (new View());
@@ -671,15 +610,13 @@ class App extends Controller
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function createHour(): void
     {
-        $head = $this->seo->render(
-            "Cadastrar Horário - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url(),
-            theme("/assets/images/share.jpg"),
-            false
-        );
+        // META SEO
+        $head = $this->seo->make("Cadastrar Horário - ", url());
         echo $this->view->render("creates/hour", [
             "head" => $head
         ]);
@@ -754,12 +691,20 @@ class App extends Controller
         echo json_encode($callback);
     }
 
+    /**
+     * @param array $data
+     * @return void
+     */
     public function getList(array $data): void
     {
         $callback = (new Lists())->findByStoreHour($data['id_store'], $data['id_hour']);
         echo json_encode($callback);
     }
 
+    /**
+     * @param array $data
+     * @return void
+     */
     public function getStore(array $data): void
     {
         $callback = (new Store())->findById($data['id_store']);
@@ -806,13 +751,8 @@ class App extends Controller
      */
     public function lists(?array $data): void
     {
-        $head = $this->seo->render(
-            "Listas - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url('/app/listas'),
-            theme("/assets/images/share.jpg"),
-            false
-        );
+        // META SEO
+        $head = $this->seo->make("Listas - ", url('app/listas'));
 
         // Classes que se responsabilizam pelos filtros e modelos
         list($list, $search, $total) = (new Lists())->filter($data);
@@ -843,14 +783,8 @@ class App extends Controller
     public function list(?array $data): void
     {
         $id = (filter_var($data['id'], FILTER_VALIDATE_INT) ? $data['id'] : null);
-
-        $head = $this->seo->render(
-            "Lista - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url('/app/lista'),
-            theme("/assets/images/share.jpg"),
-            false
-        );
+        // META SEO
+        $head = $this->seo->make("Listas - ", url('/app/lista'));
 
         if (empty($id) || empty((new Lists())->findById($id))) {
             $cafeWeb = (new View());
@@ -871,15 +805,14 @@ class App extends Controller
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function createList(): void
     {
-        $head = $this->seo->render(
-            "Cadastrar Lista - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url(),
-            theme("/assets/images/share.jpg"),
-            false
-        );
+        // META SEO
+        $head = $this->seo->make("Cadastrar Lista - ", url());
+
         echo $this->view->render("creates/lists", [
             "head" => $head
         ]);
@@ -946,13 +879,8 @@ class App extends Controller
      */
     public function cashFlows(?array $data): void
     {
-        $head = $this->seo->render(
-            "Fluxo - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url('/app/fluxos-de-caixa'),
-            theme("/assets/images/share.jpg"),
-            false
-        );
+        // META SEO
+        $head = $this->seo->make("Fluxo - ", url('app/fluxos-de-caixa'));
 
         list($cashFlows, $search, $total) = (new CashFlow())->filter($data);
         //($moviment = new Moviment())->filter((new Filter($moviment)), $data);
@@ -981,13 +909,9 @@ class App extends Controller
      */
     public function cashFlow(array $data): void
     {
-        $head = $this->seo->render(
-            "Editar lançamento - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url('/app/fluxo-de-caixa'),
-            theme("/assets/images/share.jpg"),
-            false
-        );
+        // META SEO
+        $head = $this->seo->make("Editar lançamento - ", url('/app/fluxo-de-caixa'));
+
         $id = (filter_var($data['id'], FILTER_VALIDATE_INT) ? $data['id'] : null);
 
         if (empty($id) || empty((new CashFlow())->findById($id))) {
@@ -1010,15 +934,14 @@ class App extends Controller
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function createCashFlow(): void
     {
-        $head = $this->seo->render(
-            "Cadastrar Fluxo de Caixa - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url(),
-            theme("/assets/images/share.jpg"),
-            false
-        );
+        // META SEO
+        $head = $this->seo->make("Cadastrar Fluxo de Caixa - ", url());
+
         echo $this->view->render("creates/cash-flow", [
             "head" => $head
         ]);
@@ -1079,15 +1002,14 @@ class App extends Controller
         echo json_encode($json);
     }
 
+    /**
+     * @param array|null $data
+     * @return void
+     */
     public function movimentations(?array $data): void
     {
-        $head = $this->seo->render(
-            "Movimentação - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url('/app/movimentacoes'),
-            theme("/assets/images/share.jpg"),
-            false
-        );
+        // META SEO
+        $head = $this->seo->make("Movimentação - ", url('/app/movimentacoes'));
 
         list($moviments, $search, $total) = (new Moviment())->filter($data);
         $page = (!empty($data['page']) ? $data['page'] : 1);
@@ -1106,16 +1028,14 @@ class App extends Controller
         ]);
     }
 
+    /**
+     * @param array $data
+     * @return void
+     */
     public function moviment(array $data): void
     {
-
-        $head = $this->seo->render(
-            "Movimentação - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url("/app/movimentacao/{$data['id']}"),
-            theme("/assets/images/share.jpg"),
-            false
-        );
+        // META SEO
+        $head = $this->seo->make("Movimentação - ", url("/app/movimentacao/{$data['id']}"));
 
         $id = (filter_var($data['id'], FILTER_VALIDATE_INT) ? $data['id'] : null);
 
@@ -1139,39 +1059,42 @@ class App extends Controller
 
     }
 
+    /**
+     * @return void
+     */
     public function createMoviment()
     {
-        $head = $this->seo->render(
-            "Cadastrar Movimentação - " . CONF_SITE_NAME,
-            CONF_SITE_DESC,
-            url(),
-            theme("/assets/images/share.jpg"),
-            false
-        );
+        // META SEO
+        $head = $this->seo->make("Cadastrar Movimentação - ", url());
+
         echo $this->view->render("creates/moviment", [
             "head" => $head
         ]);
     }
 
+    /**
+     * @param array|null $data
+     * @return void
+     */
     public function saveMoviment(?array $data): void
     {
         /** TESTE  $data = [
-         * 'date_moviment' => '2022-03-09',
-         * 'id_hour' => '107',
-         * 'id_store' => '26',
-         * 'last_value' => '-1.713,00',
-         * 'id_list' => '19',
-         * 'net_value' => '0',
-         * 'paying_now' => '0',
-         * 'expend' => '0',
-         * 'get_value' => '0',
-         * 'beat_value' => '0',
-         * 'new_value' => '0',
-         * 'prize' => '0',
-         * 'beat_prize' => '0',
-         * 'prize_office' => '0',
-         * 'prize_store' => '0'
-         * ]; */
+          'date_moviment' => '2022-03-09',
+          'id_hour' => '107',
+          'id_store' => '26',
+          'last_value' => '-1.713,00',
+          'id_list' => '19',
+          'net_value' => '0',
+          'paying_now' => '0',
+          'expend' => '0',
+          'get_value' => '0',
+          'beat_value' => '0',
+          'new_value' => '0',
+          'prize' => '0',
+          'beat_prize' => '0',
+          'prize_office' => '0',
+          'prize_store' => '0'
+          ]; */
 
 
         if (!empty($data)) {
@@ -1183,6 +1106,10 @@ class App extends Controller
         }
     }
 
+    /**
+     * @param array $data
+     * @return void
+     */
     public function removeMoviment(array $data): void
     {
         $moviment = (new Moviment())->findById($data['id']);
@@ -1194,6 +1121,10 @@ class App extends Controller
         echo json_encode($json);
     }
 
+    /**
+     * @param array $data
+     * @return void
+     */
     public function movimentVerify(array $data): void
     {
         // Se existir um movimento com a mesma data, horario e loja
@@ -1204,6 +1135,5 @@ class App extends Controller
             echo json_encode($json);
         }
     }
-
 }
 

@@ -37,13 +37,13 @@ abstract class Model
     protected $offset;
 
     /** @var string $entity database table */
-    protected static $entity;
+    protected $entity;
 
     /** @var array $protected no update or create */
-    protected static $protected;
+    protected $protected;
 
     /** @var array $entity database table */
-    protected static $required;
+    protected $required;
 
     /**
      * Model constructor.
@@ -53,9 +53,9 @@ abstract class Model
      */
     public function __construct(string $entity, array $protected, array $required)
     {
-        self::$entity = $entity;
-        self::$protected = array_merge($protected, ['created_at', "updated_at"]);
-        self::$required = $required;
+        $this->entity = $entity;
+        $this->protected = array_merge($protected, ['created_at', "updated_at"]);
+        $this->required = $required;
 
         $this->message = new Message();
     }
@@ -132,12 +132,12 @@ abstract class Model
     public function find(?string $terms = null, ?string $params = null, string $columns = "*")
     {
         if ($terms) {
-            $this->query = "SELECT {$columns} FROM " . static::$entity . " WHERE {$terms}";
+            $this->query = "SELECT {$columns} FROM " . $this->entity . " WHERE {$terms}";
             parse_str($params, $this->params);
             return $this;
         }
 
-        $this->query = "SELECT {$columns} FROM " . static::$entity;
+        $this->query = "SELECT {$columns} FROM " . $this->entity;
         return $this;
     }
 
@@ -214,7 +214,7 @@ abstract class Model
      * @param string $type
      * @param string|null $operator
      * @param string|null $where
-     * @return $this
+     * @return Model
      */
     public function join(
         $table,
@@ -251,7 +251,7 @@ abstract class Model
             $columns = implode(", ", array_keys($data));
             $values = ":" . implode(", :", array_keys($data));
 
-            $stmt = Connect::getInstance()->prepare("INSERT INTO " . static::$entity . " ({$columns}) VALUES ({$values})");
+            $stmt = Connect::getInstance()->prepare("INSERT INTO " . $this->entity . " ({$columns}) VALUES ({$values})");
             $stmt->execute($this->filter($data));
 
 
@@ -278,7 +278,7 @@ abstract class Model
             $dateSet = implode(", ", $dateSet);
             parse_str($params, $params);
 
-            $stmt = Connect::getInstance()->prepare("UPDATE " . static::$entity . " SET {$dateSet} WHERE {$terms}");
+            $stmt = Connect::getInstance()->prepare("UPDATE " . $this->entity . " SET {$dateSet} WHERE {$terms}");
             $stmt->execute($this->filter(array_merge($data, $params)));
             return ($stmt->rowCount() ?? 1);
         } catch (\PDOException $exception) {
@@ -330,7 +330,7 @@ abstract class Model
     public function delete(string $terms, ?string $params): bool
     {
         try {
-            $stmt = Connect::getInstance()->prepare("DELETE FROM " . static::$entity . " WHERE {$terms}");
+            $stmt = Connect::getInstance()->prepare("DELETE FROM " . $this->entity . " WHERE {$terms}");
             if ($params) {
                 parse_str($params, $params);
                 $stmt->execute($params);
@@ -364,7 +364,7 @@ abstract class Model
     protected function safe(): ?array
     {
         $safe = (array)$this->data;
-        foreach (static::$protected as $unset) {
+        foreach ($this->protected as $unset) {
             unset($safe[$unset]);
         }
         return $safe;
@@ -389,7 +389,7 @@ abstract class Model
     protected function required(): bool
     {
         $data = (array)$this->data();
-        foreach (static::$required as $field) {
+        foreach ($this->required as $field) {
             if (empty($data[$field]) && !($data[$field] !== '0' || $data[$field] !== 0)) {
                 return false;
             }
