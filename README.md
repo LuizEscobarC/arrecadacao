@@ -64,7 +64,7 @@ c:\xampp\htdocs\{folder}\arrecadacao\source\Boot\Config.php
 
 
 
-## Imagems do projeto 💻
+## Imagens do projeto 💻
 
 #### Dashboard coma  apresentação de um grafico realtime, onde se há um lançamento, no mesmo segundo se movimenta.
 <img style="width: 600px; height: 300px" src="https://user-images.githubusercontent.com/54407649/161637293-7018eba8-b4d2-4c73-8d8f-14bf22d5f7d2.png">
