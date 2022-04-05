@@ -64,36 +64,26 @@ class App extends Controller
         $chartData = (new CashFlow())->chartData();
         //END CHART
 
-        $numberDays = (new \DateTime('now'))->format('d');
-        $numberMonthNow = 1 + ((int)(new \DateTime('now'))->format('m'));
-        $numberYearNow = (new \DateTime('now'))->format('Y');
-
-
-        $expenses = (new CashFlow())->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '{$numberYearNow}-{$numberMonthNow}-01' AND type = 2",
-            null, 'value, description, date_moviment, id')->limit('5')->fetch(true);
-
-        $incomes = (new CashFlow())->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '{$numberYearNow}-{$numberMonthNow}-01' AND type = 1",
-            null, 'value, description, date_moviment, id')->limit('5')->fetch(true);
-
-        $totalBilling = (($totalIncomes = (new CashFlow())->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '{$numberYearNow}-{$numberMonthNow}-01' AND type = 1",
-                null,
-                "sum(value) as total")->fetch()->total) - ($totalExpenses = (new CashFlow())->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '{$numberYearNow}-{$numberMonthNow}-01' AND type = 2",
-                null, "sum(value) as total")->fetch()->total));
+        // BEGIN BALANCE RETORNA OS VALORES DE DESPESAS, RECEITAS, TOTAL DE FATURA DO MES, TOTAL DE DESPESAS E TOTAL DE DESPESAS
+        $balance = (new CashFlow())->balance();
+        // END BALANCE
 
         echo $this->view->render("home", [
             "head" => $head,
             "chart" => $chartData,
             //data, nome e valor
-            "expenses" => $expenses,
-            "incomes" => $incomes,
-            "totalMonth" => $totalBilling,
-            'bothValues' => (object)['total_incomes' => $totalIncomes, 'total_expenses' => $totalExpenses]
+            "expenses" => $balance->expenses,
+            "incomes" => $balance->incomes,
+            "totalMonth" => $balance->totalBilling,
+            'bothValues' => (object)[
+                'total_incomes' => $balance->totalIncomes,
+                'total_expenses' => $balance->totalExpenses
+            ]
         ]);
     }
 
     public function ajaxGrap()
     {
-
         $chartData = (new CashFlow())->chartData();
         $categories = str_replace("'", "", explode(",", $chartData->date_moviment));
         $callback["chart"] = [
@@ -1185,156 +1175,12 @@ class App extends Controller
 
 
         if (!empty($data)) {
-            $modelVerify = new Moviment();
-            $required = $modelVerify->requiredMoviment($data);
-            if (!empty($required)) {
-                $json['message'] = $required;
-                echo json_encode($json);
-                return;
-            }
-            // referencia
-            $modelVerify->isEmpty($data);
-
-            // Se existir um movimento com a mesma data, horario e loja
-            // se retornar falso entra aqui
-            if (!$modelVerify->isRepeated($data['date_moviment'], $data['id_hour'], $data['id_store'])) {
-                $json['message'] = $this->message->warning('O lançamento já existe.')->render();
-                $json['redirect'] = url('app/cadastrar-movimentacao');
-                $json['timeout'] = 3000;
-                $json['scroll'] = 225;
-                echo json_encode($json);
-                return;
-            }
-
-            $messageError = '';
-            $store = (new Store());
-            if (!empty($data['id_store'])) {
-                $store = $store->findById($data['id_store']);
-            }
-            if (!empty($data['beat_prize'])) {
-                $store->valor_saldo = (money_fmt_app($data['new_value']) + money_fmt_app($data['prize']));
-            } else {
-                $store->valor_saldo = money_fmt_app($data['new_value']);
-            }
-
-            if (!$store->save()) {
-                $messageError .= ",  " . $store->message()->getText();
-            }
-
-            if (!empty($data['prize_office']) && !($data['prize_office'] === 0 || $data['prize_office'] === '0')) {
-                $cash = (new CashFlow());
-
-                // PREMIO ESCRITÓRIO DESPESA
-                $cash->bootstrap(
-                    $data["date_moviment"],
-                    $data["id_store"],
-                    $data["id_hour"],
-                    'Saída de Premio do Escritório',
-                    money_fmt_app($data['prize_office']),
-                    2,
-                    17
-                );
-
-                if (!$cash->save()) {
-                    $messageError = $cash->message()->getText();
-                }
-            }
-
-            if (!empty($data['prize_store']) && !($data['prize_store'] === 0 || $data['prize_store'] === '0')) {
-                $cash = (new CashFlow());
-
-                // PREMIO LOJA PAGOU POREM É DESPESA
-                $cash->bootstrap(
-                    $data["date_moviment"],
-                    $data["id_store"],
-                    $data["id_hour"],
-                    'Abate de Premio da loja ' . $store->nome_loja,
-                    money_fmt_app($data['prize_store']),
-                    2,
-                    4
-                );
-
-                if (!$cash->save()) {
-                    $messageError = $cash->message()->getText();
-                }
-            }
-
-            if (money_fmt_app($data['get_value']) && !(money_fmt_app($data['get_value']) === 0 || money_fmt_app($data['get_value']) === '0')) {
-
-                $cash = (new CashFlow());
-
-                // VALOR RECOLHIDO DA LOJA
-                $cash->bootstrap(
-                    $data["date_moviment"],
-                    $data["id_store"],
-                    $data["id_hour"],
-                    ($list->description ?? '') . ' Entrada de ' . ($store->nome_loja ?? 'loja'),
-                    money_fmt_app($data["get_value"]),
-                    1,
-                    16
-                );
-
-                if (!$cash->save()) {
-                    $messageError = $cash->message()->getText();
-                }
-
-                // DESPESAS DA LOJA
-                if (money_fmt_app($data['expend']) && !(money_fmt_app($data['expend']) == 0 || money_fmt_app($data['expend']) == '0')) {
-                    $cash = (new CashFlow());
-                    $cash->bootstrap(
-                        $data["date_moviment"],
-                        $data["id_store"],
-                        $data["id_hour"],
-                        ' A ' . ($store->nome_loja ?? 'loja') . ' teve uma despesa',
-                        money_fmt_app($data["expend"]),
-                        2,
-                        2
-                    );
-                    if (!$cash->save()) {
-                        $messageError = $cash->message()->getText();
-                    }
-                }
-            }
-
-            if (empty($messageError)) {
-
-                $moviment = (new Moviment());
-                if (!empty($data['id'])) {
-                    $moviment = $moviment->findById($data['id']);
-                }
-                $moviment->bootstrap(
-                    $data['date_moviment'],
-                    $data['id_store'],
-                    $data['id_hour'],
-                    (!empty($data['id_list']) ? $data['id_list'] : null),
-                    money_fmt_app($data['beat_value']),
-                    money_fmt_app($data['paying_now']),
-                    money_fmt_app($data['expend']),
-                    money_fmt_app($data['last_value']),
-                    money_fmt_app($data['get_value']),
-                    money_fmt_app($data['new_value']),
-                    (!empty($data['prize']) ? money_fmt_app($data['prize']) : null),
-                    (!empty($data['beat_prize']) ? money_fmt_app($data['beat_prize']) : null),
-                    (!empty($data['prize_store']) ? money_fmt_app($data['prize_store']) : null),
-                    (!empty($data['prize_office']) ? money_fmt_app($data['prize_office']) : null)
-                );
-                if ($moviment->save()) {
-                    $json['message'] = $this->message->success("Tudo certo {$this->user->first_name}, o movimento atualizado com sucesso!")->render();
-                    $this->message->success("Tudo certo {$this->user->first_name}, o movimento atualizado com sucesso!")->flash();
-                    $json['reload'] = true;
-                    $json['scroll'] = 2;
-                } else {
-                    $json['message'] = $moviment->message()->render();
-                }
-            } else {
-                $json['message'] = $this->message->error($messageError);
-            }
-
+            // Metodo que realiza toda a regra de negócio e automatização do lançamento de movimento
+            (new Moviment())->attach($data, $this->user);
         } else {
             $json['message'] = $this->message->warning("Todos os campos são necessários!")->render();
+            echo json_encode($json);
         }
-
-        echo json_encode($json);
     }
 
     public function removeMoviment(array $data): void

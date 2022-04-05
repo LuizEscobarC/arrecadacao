@@ -130,6 +130,33 @@ class CashFlow extends Model
         return array_merge($arrayFilterReturn, [$total]);
     }
 
+    public function balance(): object
+    {
+        $numberDays = (new \DateTime('now'))->format('d');
+        $numberMonthNow = 1 + ((int)(new \DateTime('now'))->format('m'));
+        $numberYearNow = (new \DateTime('now'))->format('Y');
+
+
+        $expenses = (new CashFlow())->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '{$numberYearNow}-{$numberMonthNow}-01' AND type = 2",
+            null, 'value, description, date_moviment, id')->limit('5')->fetch(true);
+
+        $incomes = (new CashFlow())->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '{$numberYearNow}-{$numberMonthNow}-01' AND type = 1",
+            null, 'value, description, date_moviment, id')->limit('5')->fetch(true);
+
+        $totalBilling = (($totalIncomes = (new CashFlow())->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '{$numberYearNow}-{$numberMonthNow}-01' AND type = 1",
+                null,
+                "sum(value) as total")->fetch()->total) - ($totalExpenses = (new CashFlow())->find("created_at BETWEEN DATE(now() - INTERVAL $numberDays DAY) AND '{$numberYearNow}-{$numberMonthNow}-01' AND type = 2",
+                null, "sum(value) as total")->fetch()->total));
+
+        return (object)[
+            'expenses' => $expenses,
+            'incomes' => $incomes,
+            'totalBiling' => $totalBilling,
+            'totalIncomes' => $totalIncomes,
+            'totalExpenses' => $totalExpenses
+        ];
+    }
+
     /**
      * @return object
      */
