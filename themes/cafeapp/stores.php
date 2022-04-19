@@ -7,8 +7,17 @@
     </div>
     <form class="ajax_off app_launch_form_filter app_form" action="<?= url('/app/lojas') ?>" method="post">
 
-        <input type="text" name="search" alt="pesquise por nome ou código" value="<?= $search; ?>"
-               placeholder="Nome da loja/código">
+        <input type="search" name="search" alt="pesquise por nome ou código" value="<?= $search; ?>"
+               placeholder="Nome da loja/código" list="code_store" autocomplete="off">
+
+        <datalist id="code_store">
+            <option></option>
+            <?php foreach ((new \Source\Models\Store())->find()->fetch(true) as $store): ?>
+                <option><?= $store->nome_loja; ?></option>
+                <option><?= $store->code; ?></option>
+            <?php endforeach;?>
+        </datalist>
+
 
         <input list="datelist" type="text" value="<?= $search; ?>" class="radius " name="day"
                placeholder="Data de movimento">

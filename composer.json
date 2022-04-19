@@ -35,6 +35,7 @@
     "coffeecode/optimizer": "^1.0",
     "coffeecode/paginator": "^1.0",
     "coffeecode/router": "^1.0",
+    "shuchkin/simplexls":  "0.10.1",
     "ext-json": "*"
   }
 }

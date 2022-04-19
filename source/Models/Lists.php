@@ -95,7 +95,7 @@ class Lists extends Model
         return array_merge($arrayFilterReturn, [$total]);
     }
 
-    public function findByStoreHour(int $idStore, ?string $idHour): ?\stdClass
+    public function findByStoreHour(?string $idStore, ?string $idHour): ?\stdClass
     {
         if (!empty($idHour)) {
             $this->find('id_hour = :h AND id_store = :s',

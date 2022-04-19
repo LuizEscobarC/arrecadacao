@@ -1,494 +1,392 @@
 const $body = $("body");
-$(function () {
-    var effecttime = 200;
+const formMovimentGlobalVar = document.querySelector('form.app_form#moviment');
 
-    // BEGIN FUNCTIONS
+// BEGIN FUNCTIONS
+/## GET HOUR DRY FUNCTION ##/
 
-    /## GET HOUR DRY FUNCTION ##/
+async function getHours(inputSelect) {
+    const select = document.querySelector('select.callback');
+    const label = document.querySelector('p#label');
+    const data = {};
+    data[inputSelect.getAttribute('name')] = inputSelect.value;
 
-    function getHours(inputSelect) {
-        $.ajax({
-            url: inputSelect.attr('rel'),
-            type: 'POST',
-            data: inputSelect.serialize(),
-            dataType: 'JSON',
-            success: function (callback) {
-                $('p#label').html(callback[0]);
-                callback.shift();
-                $('select.callback').append('<option value="">Escolha</option>');
-                for (let i = 0, len = callback.length; i < len; ++i) {
-                    $('select.callback').append('<option value="' + callback[i].id + '">' + callback[i].description + '</option>');
-                }
-            }
-        });
-    }
-
-    function getList(inputSelect, idHour, idStore) {
-        $.ajax({
-            url: inputSelect.attr('rel'),
-            type: 'POST',
-            data: '&id_hour=' + idHour + '&id_store=' + idStore,
-            dataType: 'JSON',
-            success: function (callback) {
-                let totalValue = null;
-                let comissionValue = null;
-                let netValue = null;
-
-                if (callback) {
-                    totalValue = parseFloat(callback.total_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
-                    comissionValue = parseFloat(callback.comission_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
-                    netValue = parseFloat(callback.net_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
-                    $('input[name=id_list]').val(parseInt(callback.id));
-                } else {
-                    const message = `<div class="message info icon-info">Não existe uma lista para a loja neste horário.</div>`;
-                    $('.ajax_response').html(message).fadeIn(300);
-                    totalValue = 0;
-                    comissionValue = 0;
-                    netValue = 0;
-                    $('input[name=id_list]').val('');
-                }
-
-                $('.total_value').html(totalValue);
-                $('input[name=total_value]').val(totalValue);
-                $('.comission_value').html(comissionValue);
-                $('input[name=comission_value]').val(comissionValue);
-                $('.net_value').html(netValue);
-                $('input[name=net_value]').val(netValue);
-            }
-        });
-    }
-
-    function getStoreValueNow(inputSelect) {
-        $.ajax({
-            url: inputSelect.data().url,
-            type: 'POST',
-            data: inputSelect.serialize(),
-            dataType: 'JSON',
-            success: function (callback) {
-                $('.last_value').html(parseFloat(callback.valor_saldo).toLocaleString('pt-br', {minimumFractionDigits: 2}));
-            }
-        });
-    }
-
-    function storeVerify() {
-        const flashClass = 'ajax_response_warning';
-        const form = $('form.app_form.moviment');
-        $.ajax({
-            url: $('select.store_select').data().verify,
-            type: 'POST',
-            data: form.serialize(),
-            dataType: 'JSON',
-            success: function (callback) {
-                if (callback.message) {
-                    form.find(".ajax_response_warning").remove();
-                    form.prepend("<div class='" + flashClass + "'>" + callback.message + "</div>")
-                        .find("." + flashClass).effect("bounce", 300);
-                }
-            }
-        });
-    }
-
-    /## REMOVE ENTITY DRY FUNCTION ##/
-
-    function remove($this, dataAttr, confirmText) {
-        var remove = confirm(confirmText);
-
-        if (remove === true) {
-            $.post($this.data(dataAttr), function (response) {
-                if (response.scroll) {
-                    $(window).scrollTop(response.scroll);
-                }
-                //redirect
-                if (response.redirect) {
-                    window.location.href = response.redirect;
-                }
-                // reload page
-                if (response.reload) {
-                    window.location.reload();
-                }
-
-            }, "json");
+    const callback = await fetch(inputSelect.getAttribute('rel'), {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: new URLSearchParams(data)
+    })
+    const response = await callback.json();
+    if (response) {
+        label.innerHTML = response[0];
+        response.shift();
+        select.innerHTML = '<option value="">Escolha</option>';
+        for (hour of response) {
+            select.insertAdjacentHTML('beforeend',
+                `<option value="${hour.id}"> ${hour.description}</option>`);
         }
     }
+}
 
-    // END FUNCTIONS
+async function getList(inputDataList, idHour, idStore) {
+    const data = {id_hour: idHour, id_store: idStore};
+    const url = inputDataList.getAttribute('rel');
+    const ajaxResponse = document.querySelector('.ajax_response');
 
-
-    /*
-     * MOBILE MENU
-     */
-    $("[data-mobilemenu]").click(function (e) {
-        var clicked = $(this);
-        var action = clicked.data("mobilemenu");
-
-        if (action === 'open') {
-            $(".app_sidebar").slideDown(effecttime);
-        }
-
-        if (action === 'close') {
-            $(".app_sidebar").slideUp(effecttime);
-        }
-    });
-
-    $body.on('click', "#sidebar", function (e) {
-        var clicked = $(this);
-        const $appDrop = $(".app_drop");
-
-        if (clicked.hasClass('open')) {
-            $appDrop.slideDown(effecttime);
-            clicked.removeClass('open');
-        } else {
-            $appDrop.slideUp(effecttime);
-            clicked.addClass('open');
-        }
-    });
-
-    $body.on('click', "#sidebar_children", function (e) {
-        var clicked = $(this);
-        const $appDrop = $(".app_drop_children");
-
-        if (clicked.hasClass('open')) {
-            $appDrop.slideDown(effecttime);
-            clicked.removeClass('open');
-        } else {
-            $appDrop.slideUp(effecttime);
-            clicked.addClass('open');
-        }
-    });
-
-    $body.on('click', "#sidebar_children2", function (e) {
-        var clicked = $(this);
-        const $appDrop = $(".app_drop_children2");
-
-        if (clicked.hasClass('open')) {
-            $appDrop.slideDown(effecttime);
-            clicked.removeClass('open');
-        } else {
-            $appDrop.slideUp(effecttime);
-            clicked.addClass('open');
-        }
-    });
-
-    $body.on('click', "#sidebar2", function (e) {
-        var clicked = $(this);
-        const $appDrop = $(".app_drop1");
-
-        if (clicked.hasClass('open')) {
-            $appDrop.slideDown(effecttime);
-            clicked.removeClass('open');
-        } else {
-            $appDrop.slideUp(effecttime);
-            clicked.addClass('open');
-        }
-    });
-
-    $body.on('click', "#sidebar2_children", function (e) {
-        var clicked = $(this);
-        const $appDrop = $(".app_drop1_children");
-
-        if (clicked.hasClass('open')) {
-            $appDrop.slideDown(effecttime);
-            clicked.removeClass('open');
-        } else {
-            $appDrop.slideUp(effecttime);
-            clicked.addClass('open');
-        }
-    });
-
-    $body.on('click', "#sidebar3", function (e) {
-        var clicked = $(this);
-        const $appDrop = $(".app_drop2");
-
-        if (clicked.hasClass('open')) {
-            $appDrop.slideDown(effecttime);
-            clicked.removeClass('open');
-        } else {
-            $appDrop.slideUp(effecttime);
-            clicked.addClass('open');
-        }
-    });
-
-    $body.on('click', "#sidebar3_children", function (e) {
-        var clicked = $(this);
-        const $appDrop = $(".app_drop2_children");
-
-        if (clicked.hasClass('open')) {
-            $appDrop.slideDown(effecttime);
-            clicked.removeClass('open');
-        } else {
-            $appDrop.slideUp(effecttime);
-            clicked.addClass('open');
-        }
-    });
-
-    /*
-     * APP MODAL
-     */
-    $("[data-modalopen]").click(function (e) {
-        var clicked = $(this);
-        var modal = clicked.data("modalopen");
-        $(".app_modal").fadeIn(effecttime).css("display", "flex");
-        $(modal).fadeIn(effecttime);
-    });
-    $("[data-modalclose]").click(function (e) {
-        if (e.target === this) {
-            $(this).fadeOut(effecttime);
-            $(this).children().fadeOut(effecttime);
-        }
-    });
-
-    /*
-     * FROM CHECKBOX
-     */
-    $("[data-checkbox]").click(function (e) {
-        var checkbox = $(this);
-        checkbox.parent().find("label").removeClass("check");
-        if (checkbox.find("input").is(':checked')) {
-            checkbox.addClass("check");
-        } else {
-            checkbox.removeClass("check");
-        }
-    });
-
-    /*
-     * FADE
-     */
-    $("[data-fadeout]").click(function (e) {
-        var clicked = $(this);
-        var fadeout = clicked.data("fadeout");
-        $(fadeout).fadeOut(effecttime, function (e) {
-            if (clicked.data("fadein")) {
-                $(clicked.data("fadein")).fadeIn(effecttime);
-            }
+    const callback = await fetch(url,
+        {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: new URLSearchParams(data)
         });
-    });
 
-    $("[data-fadein]").click(function (e) {
-        var clicked = $(this);
-        var fadein = clicked.data("fadein");
-        $(fadein).fadeIn(effecttime, function (e) {
-            if (clicked.data("fadeout")) {
-                $(clicked.data("fadeout")).fadeOut(effecttime);
-            }
-        });
-    });
+    const response = await callback.json();
 
-    /*
-     * SLIDE
-     */
-    $("[data-slidedown]").click(function (e) {
-        var clicked = $(this);
-        var slidedown = clicked.data("slidedown");
-        $(slidedown).slideDown(effecttime);
-    });
+    let totalValue = null;
+    let comissionValue = null;
+    let netValue = null;
 
-    $("[data-slideup]").click(function (e) {
-        var clicked = $(this);
-        var slideup = clicked.data("slideup");
-        $(slideup).slideUp(effecttime);
-    });
+    if (response) {
+        totalValue = parseFloat(response.total_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
+        comissionValue = parseFloat(response.comission_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
+        netValue = parseFloat(response.net_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
+        document.querySelector("input[name='id_list']").value = parseInt(response.id)
+    } else {
+        ajaxResponse.innerHTML = `<div class="message info icon-info bounce animated">Não existe uma lista para a loja neste horário.</div>`;
+        totalValue = 0;
+        comissionValue = 0;
+        netValue = 0;
+        document.querySelector("input[name='id_list']").value = '';
+    }
 
-    /*
-     * TOOGLE CLASS
-     */
-    $("[data-toggleclass]").click(function (e) {
-        var clicked = $(this);
-        var toggle = clicked.data("toggleclass");
-        clicked.toggleClass(toggle);
-    });
+    document.querySelector('.total_value').textContent = totalValue;
+    document.querySelector("input[name='total_value']").value = totalValue;
+    document.querySelector('.comission_value').textContent = comissionValue;
+    document.querySelector("input[name='comission_value']").value = comissionValue;
+    document.querySelector('.net_value').textContent = netValue;
+    document.querySelector("input[name='net_value']").value = netValue;
+}
 
-    /*
-     * jQuery MASK
-     */
-    /*
-     * jQuery MASK
-     */
-    $(".mask-money-negative").mask('N0N0N0N.N0N0N0N.N0N0N0N.N0N0N0N.N0N0N0N,N0N0N', {
-        translation: {
-            'N': {
-                pattern: /[-]/,
-                optional: true
-            }
-        }, reverse: true, placeholder: '0,00'
-    });
-    $(".mask-money").mask('000.000.000.000.000,00', {reverse: true, placeholder: "0,00"});
-    $(".mask-date").mask('00/00/0000', {reverse: true});
-    $(".mask-month").mask('00/0000', {reverse: true});
-    $(".mask-doc").mask('000.000.000-00', {reverse: true});
-    $(".mask-day").mask('00', {reverse: true});
+async function getStoreValueNow(inputDataList, idStore) {
+    const data = {};
+    lastValue = document.querySelector('.last_value');
 
-    // BEGIN REMOVE ENTITIES
+    data['id_store'] = idStore;
+    const callback = await fetch(inputDataList.dataset.url,
+        {
+            method: 'POST',
+            body: new URLSearchParams(data)
+        })
 
-    /*
-     *  APP HOUR REMOVE
-     */
-    $("[data-hourremove]").click(function () {
-        remove($(this), "hourremove", "ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir esse horário?");
+    const content = await callback.json();
+
+    if (content) {
+        lastValue.textContent = parseFloat(content.valor_saldo).toLocaleString('pt-br', {minimumFractionDigits: 2});
+    }
+}
+
+async function storeVerify() {
+    const flashClass = document.querySelector('.ajax_response');
+    const data = new URLSearchParams((new FormData(formMovimentGlobalVar)));
+    const url = document.querySelector('input.store_data_list').dataset.verify;
+
+    const callback = await fetch(url, {
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        method: 'POST',
+        body: data
     })
 
-    /*
-     *  APP USER REMOVE
-     */
-    $("[data-userremove]").click(function () {
-        remove($(this), "userremove", "ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir esse usuário?");
-    });
+    const response = await callback.json();
 
-    /*
-     *  APP CENTER REMOVE
-     */
-    $("[data-centerremove]").click(function () {
-        remove($(this), "centerremove", "ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir esse centro de custo?");
-    });
+    if (response.message) {
+        flashClass.insertAdjacentHTML("afterend",
+            response.message);
+    }
+}
 
-    /*
-     *  APP STORE REMOVE
-     */
-    $("[data-storeremove]").click(function () {
-        remove($(this), "storeremove", "ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir essa loja?");
-    });
+/## REMOVE ENTITY DRY FUNCTION ##/
 
-    /*
-     *  APP LIST REMOVE
-     */
-    $("[data-listremove]").click(function () {
-        remove($(this), "listremove", "ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir essa lista?");
-    });
+async function remove(dataAttr, confirmText) {
+    const selected = document.querySelector(`[data-${dataAttr}]`);
+    if (selected) {
+        selected.addEventListener('click', async function () {
+            const remove = confirm('ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir ' + confirmText);
+            const url = this.dataset[dataAttr];
 
-    /*
-     *  APP CASH-FLOW REMOVE
-     */
-    $("[data-cashremove]").click(function () {
-        remove($(this), "cashremove", "ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir esse lançamento?");
-    });
+            if (remove === true) {
+                const callback = await fetch(url,
+                    {
+                        method: 'POST',
+                        data: {},
+                        headers: {'Content-Type': 'application/json'}
+                    });
 
-    /*
-     *  APP MOVIMENT REMOVE
-     */
-    $("[data-moviment-remove]").click(function () {
-        remove($(this), "moviment-remove", "ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir essa movimentação?");
-    });
+                const response = await callback.json();
 
-    // END REMOVE ENTITIES
+                if (response) {
+                    if (response.scroll) {
+                        window.scrollTo({ top: response.scroll, behavior: 'smooth' });
+                    }
+                    //redirect
+                    if (response.redirect) {
+                        window.location.href = response.redirect;
+                    }
+                    // reload page
+                    if (response.reload) {
+                        window.location.reload();
+                    }
 
-    /*
-    * AJAX GET HOUR
-    */
-    $body.on('change', 'input.hour', function () {
-        if ($('select.callback')) {
-            $('select.callback').html('');
-        }
-        if ($('#label')) {
-            $('#label').html('');
-        }
-        getHours($(this));
-    });
-
-    /*
-    * AJAX GET LIST
-    */
-
-    $body.on('change', 'select.store_select, select.callback', function () {
-        const storeSelect = $('select.store_select');
-        const hourSelect = $('select.callback');
-        getList(storeSelect, hourSelect.val(), storeSelect.val());
-        getStoreValueNow(storeSelect);
-        storeVerify();
-    });
-
-    /*
-    * VALOR RECOLHIDO CALCULO
-    */
-
-    // BEGIN MOVIMENTS CALCS
-
-
-    function calc(value, $this) {
-        let input = $('input[name=' + value + ']');
-        //Case o input esteja vazio, para não retornar NaN
-        if (input.val()) {
-            // VALOR DESPESAS
-            const expense = parseFloat($($this).val().replaceAll('.', '').replace(',', '.'));
-            // VALOR DINHEIRO
-            const paying = parseFloat(input.val().replaceAll('.', '').replace(',', '.'));
-            /* Valor reclohido + despesas*/
-
-            // VALOR RECOLHIDO
-            const getValue = (paying + expense);
-            // VALOR RECOLHIDO EM BRL
-            const getValueBr = getValue.toLocaleString('pt-br', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-            /* Valor a acertar é o valor líquido da lista*/
-            // VALOR LÍQUIDO | VALOR ACERTAR
-            const netValue = $('p.net_value').text();
-            /* Ao final o saldo anterior e o saldo atual que é a mesma coisa, recebe o novo saldo do calculo*/
-            // VALOR ANTERIOR | SALDO ATUAL
-            const last_val = $('p.last_value');
-
-
-            $('input[name=last_value]').val(last_val.text().toLocaleString('pt-br', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }));
-            $('input[name=net_value]').val(netValue);
-            $('input[name=get_value]').val(getValueBr);
-            $('.get_value').html(getValueBr);
-            if (last_val.text() && netValue) {
-                // É o valor que tem que ser abatido  com o valor recolhido + o valor de despesas
-                // VALOR A ACERTAR | VALOR LIQUIDO
-                const beatValue = (getValue - parseFloat(netValue.replaceAll('.', '').replace(',', '.')));
-
-                // NOVO VALOR ATUAL | SALDO ANTERIOR
-                const newValue = (parseFloat(last_val.text().replaceAll('.', '').replace(',', '.')) + beatValue)
-                    .toLocaleString('pt-br', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-
-                const beatValueBrl = beatValue.toLocaleString('pt-br', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-                $('p.beat_value').html(beatValueBrl);
-                $('.new_value').html(newValue);
-                $('input[name=beat_value]').val(beatValueBrl);
-                $('input[name=new_value]').val(newValue);
-
-            } else {
-                alert('Nome da Loja e Horário são necessários!');
+                }
             }
+        });
+    }
+}
+
+// END FUNCTIONS
+
+
+/*
+ * MOBILE MENU
+ */
+const appSidebar = document.querySelector(".app_sidebar");
+
+document.querySelector("li[data-mobilemenu]").addEventListener('click', function () {
+    const action = this.dataset.mobilemenu;
+
+    if (action === 'open') {
+        appSidebar.style.display = 'block';
+    }
+});
+
+document.querySelector("div[data-mobilemenu]").addEventListener('click', function () {
+    const action = this.dataset.mobilemenu;
+
+    if (action === 'close') {
+        appSidebar.style.display = 'none';
+    }
+});
+
+document.getElementById('sidebar').addEventListener('click', function () {
+    const clickedClassList = this.classList;
+    const $appDrop = document.querySelector(".app_drop");
+
+    if (clickedClassList.contains('open')) {
+        $appDrop.classList.add('slidedown');
+        clickedClassList.remove('open');
+        $appDrop.style.display = 'block';
+    } else {
+        $appDrop.classList.add('slideup');
+        clickedClassList.add('open');
+        $appDrop.style.display = 'none';
+    }
+});
+
+document.getElementById('sidebar2').addEventListener('click', function () {
+    const clickedClassList = this.classList;
+    const $appDrop = document.querySelector(".app_drop1");
+
+    if (clickedClassList.contains('open')) {
+        $appDrop.classList.add('slidedown');
+        clickedClassList.remove('open');
+        $appDrop.style.display = 'block';
+    } else {
+        $appDrop.classList.add('slideup');
+        clickedClassList.add('open');
+        $appDrop.style.display = 'none';
+    }
+});
+
+document.getElementById('sidebar3').addEventListener('click', function () {
+    const clickedClassList = this.classList;
+    const $appDrop = document.querySelector(".app_drop2");
+
+    if (clickedClassList.contains('open')) {
+        $appDrop.classList.add('slidedown');
+        clickedClassList.remove('open');
+        $appDrop.style.display = 'block';
+    } else {
+        $appDrop.classList.add('slideup');
+        clickedClassList.add('open');
+        $appDrop.style.display = 'none';
+    }
+});
+
+// BEGIN REMOVE ENTITIES
+const dataRemoveEntities = {
+    "hourremove": "esse horário?",
+    "userremove": "esse usuário?",
+    "centerremove": "esse centro de custo?",
+    "storeremove": "essa loja?",
+    "listremove": "essa lista?",
+    "cashremove": "esse lançamento?",
+    "moviment-remove": "essa movimentação?"
+}
+
+for (keysRemove in dataRemoveEntities) {
+    remove(keysRemove, dataRemoveEntities[keysRemove])
+}
+// END REMOVE ENTITIES
+
+/*
+* AJAX GET HOUR
+*/
+const hourInput = document.querySelector('input.hour');
+
+hourInput.addEventListener('change', function () {
+    const select = document.querySelector('select.callback');
+    const label = document.getElementById('label');
+    if (select || label) {
+        select.textContent = '';
+        label.textContent = '';
+    }
+    getHours(this);
+});
+
+/*
+* AJAX GET LIST
+*/
+const movimentDatas = (inputDataList, idStore) => {
+    const hourSelect = document.querySelector('select.callback');
+    //APAGO AS MENSAGENS REPETIDAS
+    const flashClassRepeatedName = document.querySelectorAll('.message');
+    if (flashClassRepeatedName.length >= 2) {
+        for (element of flashClassRepeatedName) {
+            element.remove();
         }
     }
+    if (idStore && hourSelect.value) {
+        getList(inputDataList, hourSelect.value, idStore);
+    }
+}
 
-    $body.on('keyup', 'input[name=expend]', function () {
-        calc('paying_now', $('input[name=expend]'));
+const storeDataListInput = document.querySelector('input.store_data_list');
+if (storeDataListInput) {
+    storeDataListInput.addEventListener('change', function () {
+        // PEGA DO DATA-LIST O ID STORE DO OPTION
+        const dataValue = this.getAttribute('list');
+        const storeOption = document.getElementById(dataValue).options.namedItem(this.value);
+        const idStoreHidden = document.querySelector("input[name='id_store']");
+
+        // SE EXISTIR
+        if (storeOption) {
+            const idStore = storeOption.dataset.id_store;
+            // ADICIONA O ID NO HIDDEN INPUT
+            idStoreHidden.value = idStore;
+            //FAZ AS ROTINAS DE VERIFICAÇÃO E FETCH NOS DADOS NECESSÁRIOS SOMENTE PARA O MOVIMENT
+            if (document.querySelector('form.app_form#moviment')) {
+                storeVerify(idStore);
+                getStoreValueNow(this, idStore);
+                movimentDatas(this, idStore)
+            }
+        }
+
+    });
+}
+
+document.querySelector('select.callback').addEventListener('change', function () {
+    movimentDatas(null)
+});
+
+/*
+* VALOR RECOLHIDO CALCULO
+*/
+
+// BEGIN MOVIMENTS CALCS
+function calc(value, $this) {
+    let input = document.querySelector("input[name='" + value + "']");
+    //Case o input esteja vazio, para não retornar NaN
+    if (input.value) {
+        // VALOR DESPESAS
+        const expense = parseFloat($this.value.replaceAll('.', '').replace(',', '.'));
+        // VALOR DINHEIRO
+        const paying = parseFloat(input.value.replaceAll('.', '').replace(',', '.'));
+        /* Valor reclohido + despesas*/
+
+        // VALOR RECOLHIDO
+        const getValue = (paying + expense);
+        // VALOR RECOLHIDO EM BRL
+        const getValueBr = getValue.toLocaleString('pt-br', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        /* Valor a acertar é o valor líquido da lista*/
+        // VALOR LÍQUIDO | VALOR ACERTAR
+        const netValue = document.querySelector('p.net_value').textContent;
+        /* Ao final o saldo anterior e o saldo atual que é a mesma coisa, recebe o novo saldo do calculo*/
+        // VALOR ANTERIOR | SALDO ATUAL
+        const last_val = document.querySelector('p.last_value');
+
+
+        document.querySelector("input[name='last_value']").value = last_val.textContent.toLocaleString('pt-br', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+        document.querySelector("input[name='net_value']").value = netValue;
+        document.querySelector("input[name='get_value']").value = getValueBr;
+        document.querySelector('.get_value').innerHTML = getValueBr;
+
+        if (last_val.textContent && netValue) {
+            // É o valor que tem que ser abatido  com o valor recolhido + o valor de despesas
+            // VALOR A ACERTAR | VALOR LIQUIDO
+            const beatValue = (getValue - parseFloat(netValue.replaceAll('.', '')
+                .replace(',', '.')));
+
+            // NOVO VALOR ATUAL | SALDO ANTERIOR
+            const newValue = (parseFloat(last_val.textContent.replaceAll('.', '')
+                .replace(',', '.')) + beatValue)
+                .toLocaleString('pt-br', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+            const beatValueBrl = beatValue.toLocaleString('pt-br', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+            document.querySelector('p.beat_value').innerHTML = beatValueBrl;
+            document.querySelector('.new_value').innerHTML = newValue;
+            document.querySelector("input[name='beat_value']").value = beatValueBrl;
+            document.querySelector("input[name='new_value']").value = newValue;
+
+        } else {
+            alert('Nome da Loja e Horário são necessários!');
+        }
+    }
+}
+
+const inputMoviment = document.querySelector("form.app_form#moviment");
+if (inputMoviment) {
+    document.querySelector("input[name='expend']").addEventListener('keyup', function () {
+        calc('paying_now', this);
     });
 
-    $body.on('keyup', 'input[name=paying_now]', function () {
-        calc('paying_now', 'input[name=expend]');
+    document.querySelector("input[name='paying_now']").addEventListener('keyup', function () {
+        calc('paying_now', document.querySelector("input[name='expend']"));
     });
+}
 
-    /* Não envia o formulário informando se quer ou não adicionar um prémio, após a escolha clicando novamente o
-    formulário é enviado*/
-    $body.on('click', 'button#moviment_btn', function () {
-        event.preventDefault();
+/* Não envia o formulário informando se quer ou não adicionar um prémio, após a escolha clicando novamente o
+formulário é enviado*/
+if (formMovimentGlobalVar) {
+    formMovimentGlobalVar.addEventListener('submit', function (e) {
+        e.preventDefault();
         //realiza os calculos para caso os valores não sejam typados
-        calc('paying_now', $('input[name=expend]'));
-        let inputPrize = $('input[name=prize]').val();
+        const $input = document.querySelector("input[name='expend']");
+        calc('paying_now', $input);
+        let inputPrize = document.querySelector("input[name='prize']").value;
         if (inputPrize) {
             inputPrize = parseFloat(inputPrize.replaceAll('.', '').replace(',', '.'));
             // VALOR DESPESAS
-            const expense = parseFloat($('input[name=expend]').val().replaceAll('.', '').replace(',', '.'));
+            const expense = parseFloat($input.value.replaceAll('.', '').replace(',', '.'));
             // VALOR DINHEIRO
-            const paying = parseFloat($('input[name=paying_now]').val().replaceAll('.', '').replace(',', '.'));
+            const paying = parseFloat(document.querySelector("input[name='paying_now']").value.replaceAll('.', '').replace(',', '.'));
             /* Valor reclohido + despesas*/
             // VALOR RECOLHIDO
             const getValue = (paying + expense);
             /* Valor a acertar é o valor líquido da lista*/
             // VALOR LÍQUIDO | VALOR ACERTAR
-            const netValue = $('p.net_value').text();
+            const netValue = document.querySelector('p.net_value').textContent;
             /* Ao final o saldo anterior e o saldo atual que é a mesma coisa, recebe o novo saldo do calculo*/
             // VALOR ANTERIOR | SALDO ATUAL
-            const last_val = $('p.last_value');
+            const last_val = document.querySelector('p.last_value');
             // VALOR A ACERTAR | VALOR LIQUIDO
             const beatValue = (getValue - parseFloat(netValue.replaceAll('.', '').replace(',', '.')));
             // NOVO VALOR ATUAL | SALDO ANTERIOR
-            const storeNewValue = (parseFloat(last_val.text().replaceAll('.', '').replace(',', '.')) + beatValue);
+            const storeNewValue = (parseFloat(last_val.textContent.replaceAll('.', '').replace(',', '.')) + beatValue);
 
             if (storeNewValue < 0) {
                 const negativeValue = window.confirm('Deseja abater o saldo da loja?');
@@ -515,27 +413,31 @@ $(function () {
                         beatPrize = inputPrize;
                         newStoreValue = 0;
                     }
+
                     const newStoreValueBrl = newStoreValue.toLocaleString('pt-br', {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2
                     });
+
                     const beatPrizeBrl = beatPrize.toLocaleString('pt-br', {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2
                     });
+
                     const prizeOfficeBrl = prizeOffice.toLocaleString('pt-br', {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2
                     });
+
                     const prizeStoreBrl = prizeStore.toLocaleString('pt-br', {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2
                     });
 
-                    $('.new_value').text(newStoreValueBrl);
-                    $('input[name=new_value]').text(newStoreValueBrl);
+                    document.getElementsByClassName('new_value').textContent = newStoreValueBrl;
+                    document.querySelector("input[name='new_value']").textContent = newStoreValueBrl;
 
-                    $('label.prize_output').html(
+                    document.querySelector('label.prize_output').insertAdjacentHTML('afterbegin',
                         `<span class="field icon-leanpub">Valor de Abate Premio:</span>
                             <p class="app_widget_title beat_prize">${beatPrize}</p>
                             <input type="hidden" name="beat_prize" value="${beatPrizeBrl}">
@@ -545,53 +447,77 @@ $(function () {
                      O escritório pagará: R$${prizeOfficeBrl}.`);
                 }
             } else {
-                inputPrize = inputPrize.toLocaleString('pt-br', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-                $('label.prize_output').html(
+                inputPrize = inputPrize.toLocaleString('pt-br', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+                document.querySelector('label.prize_output').insertAdjacentHTML('afterbegin',
                     `<span class="field icon-leanpub">Sem abate</span>
                             <input type="hidden" name="beat_prize" value="0">
                             <input type="hidden" name="prize_office" value="${inputPrize}">
                             <input type="hidden" name="prize_store" value="0">`);
             }
             setTimeout(function () {
-            }, 3000);
+            }, 1000);
         }
-
-        $('form.app_form.moviment').submit();
+        const formMoviment = formMovimentGlobalVar;
+        formSub(formMoviment);
 
     });
-    // END MOVIMENT CALCS
+}
+// END MOVIMENT CALCS
+
+// BEGIN COMO DEFAULT ELE SETA OS INPUTS DE DATA DOS CADASTROS COM A DATA ATUAL
+if (window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-lista' || window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-fluxo-de-caixa' || window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-movimentacao') {
+    const data = new Date();
+    const dia = String(data.getDate()).padStart(2, '0');
+    const mes = String(data.getMonth() + 1).padStart(2, '0');
+    const ano = data.getFullYear();
+    dataAtual = ano + '-' + mes + '-' + dia;
+    const hourInput = document.querySelector('input.hour');
+    hourInput.setAttribute('value', dataAtual);
+    getHours(hourInput)
+}
+// END DEFAULT HOUR
+
+//ANIMATED HOME WITH TOGGLE GRADIENT
+if (document.querySelector('article.app_flex')) {
+    tradeColor()
+
+    function tradeColor() {
+        const color = document.querySelector('article.app_flex');
+        color.classList.add('transition-lower', 'gradient', 'radius');
+        color.classList.toggle('gradient-hover-self')
+
+        setTimeout(function () {
+            tradeColor()
+        }, 1000);
+    }
+}
+//END ANIMATED HOME
 
 
-    /** $('select.callback').change(function () {
-        let url = $(this).attr('rel') + '/' + $(this).find(':selected').attr('value');
-
-        if ($('#label')) {
-            $('#label').html('');
-        }
-
-        $.getJSON(url, function (callback) {
-            $('p#label').html(callback.week_day);
-        });
-    }); */
-
-
+// BEGIN JQUERY ONLY
+$(function () {
     /* Select with search*/
     $("select.select2Input").select2({
         width: '100%'
     });
 
-    // BEGIN COMO DEFAULT ELE SETA OS INPUTS DE DATA DOS CADASTROS COM A DATA ATUAL
-    if (window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-lista' || window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-fluxo-de-caixa' || window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-movimentacao') {
-        const data = new Date();
-        const dia = String(data.getDate()).padStart(2, '0');
-        const mes = String(data.getMonth() + 1).padStart(2, '0');
-        const ano = data.getFullYear();
-        dataAtual = ano + '-' + mes + '-' + dia;
-        const hourInput = $('input.hour');
-        hourInput.attr('value', dataAtual);
-        getHours(hourInput)
-    }
-    // END DEFAULT HOUR
-
-
+    /*
+     * jQuery MASK
+     */
+    $(".mask-money-negative").mask('N0N0N0N.N0N0N0N.N0N0N0N.N0N0N0N.N0N0N0N,N0N0N', {
+        translation: {
+            'N': {
+                pattern: /[-]/,
+                optional: true
+            }
+        }, reverse: true, placeholder: '0,00'
+    });
+    $(".mask-money").mask('000.000.000.000.000,00', {reverse: true, placeholder: "0,00"});
+    $(".mask-date").mask('00/00/0000', {reverse: true});
+    $(".mask-month").mask('00/0000', {reverse: true});
+    $(".mask-doc").mask('000.000.000-00', {reverse: true});
+    $(".mask-day").mask('00', {reverse: true});
 });

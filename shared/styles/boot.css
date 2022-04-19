@@ -31,6 +31,7 @@
     --hover-color-yellow: #FCD277;
     --hover-color-red: #F76C82;
     --hover-duration: 0.3s;
+    --hover-duration-lower: 1s;
 
     --gradient-green: linear-gradient(to right, #42E695 0%, #3BB2B8 50%, #42E695 100%);
     --gradient-blue: linear-gradient(to right, #17EAD9 0%, #6078EA 50%, #17EAD9 100%);
@@ -128,6 +129,10 @@ input:-webkit-autofill {
 .transition {
     transition-duration: var(--hover-duration);
 }
+
+.transition-lower {
+    transition-duration: var(--hover-duration-lower);
+}
 .pointer {
     cursor: pointer;
 }
@@ -185,5 +190,9 @@ input:-webkit-autofill {
 }
 
 .gradient-hover:hover {
+    background-position: right center;
+}
+
+.gradient-hover-self {
     background-position: right center;
 }

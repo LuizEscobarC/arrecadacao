@@ -239,7 +239,7 @@ class Moviment extends Model
     public function requiredMoviment(?array $data): ?string
     {
         $fields = [];
-        foreach (static::$required as $field) {
+        foreach ($this->required as $field) {
             if (empty($data[$field]) && !($data[$field] === 0 || $data[$field] === '0')) {
                 $fields[] = $field;
             }
@@ -265,7 +265,7 @@ class Moviment extends Model
         }
     }
 
-    public function isRepeated(string $dateMoviment, int $hour, int $store): bool
+    public function isRepeated(?string $dateMoviment, ?string $hour, ?string $store): bool
     {
         if (!empty($this->findByDateMoviment($dateMoviment, $hour, $store))) {
             return false;
@@ -273,7 +273,7 @@ class Moviment extends Model
         return true;
     }
 
-    protected function findByDateMoviment(string $dateMoviment, int $id_hour, int $id_store): ?Moviment
+    protected function findByDateMoviment(?string $dateMoviment, ?string $id_hour, ?string $id_store): ?Moviment
     {
         $dateMoviment = date_fmt_app($dateMoviment);
         (new Moviment());

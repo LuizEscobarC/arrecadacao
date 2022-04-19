@@ -110,7 +110,6 @@ class Web extends Controller
             theme("/assets/images/share.jpg"),
             false
         );
-
         echo $this->view->render("error", [
             "head" => $head,
             "error" => $error

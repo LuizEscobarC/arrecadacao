@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b2a69d3e9bd85f7c5f93641cd7570600",
+    "content-hash": "5027938f952178a91b3aeca430595bf3",
     "packages": [
         {
             "name": "coffeecode/cropper",
@@ -714,6 +714,55 @@
                 }
             ],
             "time": "2021-05-06T15:18:48+00:00"
+        },
+        {
+            "name": "shuchkin/simplexls",
+            "version": "0.10.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/shuchkin/simplexls.git",
+                "reference": "a0b7346497f5d9340316c9fa98b49896ee1d42a5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/shuchkin/simplexls/zipball/a0b7346497f5d9340316c9fa98b49896ee1d42a5",
+                "reference": "a0b7346497f5d9340316c9fa98b49896ee1d42a5",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/SimpleXLS.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sergey Shuchkin (SMSPILOT)",
+                    "email": "sergey.shuchkin@gmail.com",
+                    "homepage": "http://www.shuchkin.ru/"
+                }
+            ],
+            "description": "Parse and retrieve data from old format Excel XLS files. MS Excel 97 workbooks PHP reader.",
+            "homepage": "https://github.com/shuchkin/simplexls",
+            "keywords": [
+                "backend",
+                "excel",
+                "parser",
+                "php",
+                "xls"
+            ],
+            "support": {
+                "issues": "https://github.com/shuchkin/simplexls/issues",
+                "source": "https://github.com/shuchkin/simplexls/tree/0.10.1"
+            },
+            "time": "2022-04-04T10:10:43+00:00"
         }
     ],
     "packages-dev": [],

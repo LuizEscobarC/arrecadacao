@@ -4,7 +4,7 @@
     <div class="color_888 app_header">
         <h2 class=" icon-calendar-check-o ">Cadastrar Movimentação:</h2>
     </div>
-    <form class="app_form moviment" action="<?= url("/app/movimentacao"); ?>" method="post">
+    <form class="app_form" id="moviment" action="<?= url("/app/movimentacao"); ?>" method="post">
         <div class="ajax_response"><?= flash(); ?></div>
 
         <div class="label_group">
@@ -21,7 +21,8 @@
 
             <label class="three_label">
                 <span class="field icon-briefcase"> Horário:</span>
-                <select name="id_hour" class="callback box-shadow required-input" rel="<?= url("/app/get_week_day") ?>" required>
+                <select name="id_hour" class="callback box-shadow required-input" rel="<?= url("/app/get_week_day") ?>"
+                        required>
                 </select>
             </label>
         </div>
@@ -29,15 +30,20 @@
         <div class="label_group">
             <label>
                 <span class="field icon-briefcase">Loja:</span>
-                <select name="id_store" class="select2Input store_select " rel="<?= url('/app/get_list'); ?>"
-                        data-url="<?= url('/app/get_store'); ?>" data-verify="<?= url("/app/moviment_verify"); ?>">
-                    <option value="">Escolha</option>
-                    <?php foreach ((new \Source\Models\Store())->find()->fetch(true) as $store): ?>
-                        <option value="<?= $store->id; ?>">&ofcir; <?= $store->nome_loja; ?></option>
-                    <?php endforeach; ?>
-                </select>
+                <input type="hidden" name="id_store">
+                <input type="text" class="store_data_list" list="code_store" name="id_store_fake" autocomplete="off"
+                       rel="<?= url('/app/get_list'); ?>"
+                       data-url="<?= url('/app/get_store'); ?>"
+                       data-verify="<?= url("/app/moviment_verify"); ?>">
 
+                <datalist class="datalist_store" id="code_store">
+                    <?php foreach ((new \Source\Models\Store())->find()->fetch(true) as $store): ?>
+                    <option data-id_store="<?= $store->id; ?>" value="<?= $store->nome_loja; ?>" name="<?= $store->nome_loja; ?>">
+                    <option data-id_store="<?= $store->id; ?>" value="<?= $store->code; ?>" name="<?= $store->code; ?>">
+                        <?php endforeach; ?>
+                </datalist>
             </label>
+
             <label>
                 <span class="field icon-leanpub">Saldo Atual da Loja:</span>
                 <p class="app_widget_title last_value"></p>
@@ -50,10 +56,13 @@
             <label class="three_label">
                 <span class="field icon-leanpub">(lista)Valor Venda:</span>
                 <p class="app_widget_title total_value"></p>
+                <input type="hidden" name="total_value">
+
             </label>
             <label class="three_label">
                 <span class="field icon-leanpub">(lista)Valor Comissão:</span>
                 <p class="app_widget_title comission_value"></p>
+                <input type="hidden" name="comission_value">
             </label>
             <label class="three_label">
                 <span class="field icon-leanpub">(lista)Valor Líquido:</span>
@@ -65,12 +74,14 @@
         <div class="label_group">
             <label class="three_label">
                 <span class="field icon-leanpub">Valor Dinheiro:</span>
-                <input class="radius box-shadow mask-money required-input" type="text" name="paying_now" placeholder="Ex: 999"
+                <input class="radius box-shadow mask-money required-input" type="text" name="paying_now"
+                       placeholder="Ex: 999"
                        value="0" required/>
             </label>
             <label class="three_label">
                 <span class="field icon-leanpub">Valor Despesas:</span>
-                <input class="radius box-shadow mask-money required-input" type="text" name="expend" placeholder="Ex: 999"
+                <input class="radius box-shadow mask-money required-input" type="text" name="expend"
+                       placeholder="Ex: 999"
                        value="0" required/>
             </label>
             <label class="three_label">
@@ -81,7 +92,7 @@
         </div>
 
         <div class="label_group">
-            <label >
+            <label>
                 <span class="field icon-leanpub">Saldo Horário:</span>
                 <p class="app_widget_title beat_value"></p>
                 <input type="hidden" name="beat_value"/>
@@ -102,7 +113,7 @@
             </label> -->
         </div>
         <div class="label_group">
-            <label  class="prize_input">
+            <label class="prize_input">
                 <span class="field icon-leanpub">Valor Premio:</span>
                 <input class="radius mask-money" type="text" name="prize" placeholder="Ex: 999"/>
             </label>
