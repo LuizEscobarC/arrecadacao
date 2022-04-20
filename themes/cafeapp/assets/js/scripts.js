@@ -124,7 +124,7 @@ async function remove(dataAttr, confirmText) {
 
                 if (response) {
                     if (response.scroll) {
-                        window.scrollTo({ top: response.scroll, behavior: 'smooth' });
+                        window.scrollTo({top: response.scroll, behavior: 'smooth'});
                     }
                     //redirect
                     if (response.redirect) {
@@ -495,7 +495,6 @@ if (document.querySelector('article.app_flex')) {
     }
 }
 //END ANIMATED HOME
-
 
 // BEGIN JQUERY ONLY
 $(function () {
