@@ -6,7 +6,6 @@
     </p>
     <p class="price">
         <?= money_fmt_br(isnt_empty($value, 'self', '0.00'), true); ?>
-        <span title="Receber" class="check icon-thumbs-o-down transition"
-              data-toggleclass="active icon-thumbs-o-down icon-thumbs-o-up"></span>
+        <span title="Receber" class="check icon-thumbs-o-down transition"></span>
     </p>
 </div>

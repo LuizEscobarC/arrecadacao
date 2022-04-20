@@ -111,7 +111,7 @@
                 }
             });
 
-            var chart = Highcharts.chart('control', {
+            const chart = Highcharts.chart('control', {
                 chart: {
                     type: 'areaspline',
                     spacingBottom: 0,

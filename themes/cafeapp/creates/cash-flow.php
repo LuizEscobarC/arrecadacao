@@ -28,12 +28,15 @@
 
         <label>
             <span class="field icon-briefcase">Loja:</span>
-            <select name="id_store" class="select2Input">
-                <option value="">Escolha</option>
+            <input type="hidden" name="id_store">
+            <input type="text" class="store_data_list" list="code_store" name="id_store_fake" autocomplete="off">
+
+            <datalist class="datalist_store" id="code_store">
                 <?php foreach ((new \Source\Models\Store())->find()->fetch(true) as $store): ?>
-                    <option value="<?= $store->id; ?>">&ofcir; <?= $store->nome_loja; ?></option>
-                <?php endforeach; ?>
-            </select>
+                <option data-id_store="<?= $store->id; ?>" value="<?= $store->nome_loja; ?>" name="<?= $store->nome_loja; ?>">
+                <option data-id_store="<?= $store->id; ?>" value="<?= $store->code; ?>" name="<?= $store->code; ?>">
+                    <?php endforeach; ?>
+            </datalist>
         </label>
 
         <label>

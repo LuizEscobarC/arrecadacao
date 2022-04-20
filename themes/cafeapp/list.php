@@ -29,18 +29,23 @@
 
         <label>
             <span class="field icon-briefcase">Loja:</span>
-            <select name="id_store" class="select2Input operator">
+            <input type="hidden" name="id_store" value="<?= $list->store()->id; ?>">
+            <input type="text" class="store_data_list" list="code_store" name="id_store_fake"
+                   value="<?= $list->store()->nome_loja; ?>" autocomplete="off">
+
+            <datalist class="datalist_store" id="code_store">
                 <?php foreach ((new \Source\Models\Store())->find()->fetch(true) as $store): ?>
-                    <option <?= ($list->id_store == $store->id ? 'selected' : ""); ?> value="<?= $store->id; ?>">
-                        &ofcir; <?= $store->nome_loja; ?></option>
-                <?php endforeach; ?>
-            </select>
+                <!-- name necessário para manipulação de id no javascript -->
+                <option data-id_store="<?= $store->id; ?>" value="<?= $store->nome_loja; ?>" name="<?= $store->nome_loja; ?>">
+                <option data-id_store="<?= $store->id; ?>" value="<?= $store->code; ?>" name="<?= $store->code; ?>">
+                    <?php endforeach; ?>
+            </datalist>
         </label>
 
         <div class="label_group">
             <label class="three_label">
                 <span class="field icon-leanpub">Valor Total:</span>
-                <input class="radius mask-money" type="text" name="total_value" value="<?= $list->total_value; ?>"
+                <input class="radius mask-money" type="text" name="total_value" value="<?= money_fmt_br($list->total_value); ?>"
                        placeholder="Ex: 999"
                        required/>
             </label>

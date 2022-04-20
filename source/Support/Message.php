@@ -91,7 +91,7 @@ class Message
      */
     public function render(): string
     {
-        return "<div class='" . CONF_MESSAGE_CLASS . " {$this->getType()}'>{$this->getText()}</div>";
+        return "<div class='" . CONF_MESSAGE_CLASS . " animated bounce {$this->getType()}'>{$this->getText()}</div>";
     }
 
     /**

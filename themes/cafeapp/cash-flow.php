@@ -32,21 +32,25 @@
 
         <label>
             <span class="field icon-briefcase">Loja:</span>
-            <select name="id_store" class="select2Input"">
-                <option value="">Escolha</option>
+            <input type="hidden" name="id_store" value="<?= $cash->store()->id; ?>">
+            <input type="text" class="store_data_list" list="code_store" name="id_store_fake"
+                   value="<?= $cash->store()->nome_loja; ?>" autocomplete="off">
+
+            <datalist class="datalist_store" id="code_store">
                 <?php foreach ((new \Source\Models\Store())->find()->fetch(true) as $store): ?>
-                    <option value="<?= $store->id; ?>" <?= ($store->id == $cash->Store()->id ? 'selected' : ""); ?>>
-                        &ofcir; <?= $store->nome_loja; ?></option>
-                <?php endforeach; ?>
-            </select>
+                <!-- name necessário para manipulação de id no javascript -->
+                <option data-id_store="<?= $store->id; ?>" value="<?= $store->nome_loja; ?>" name="<?= $store->nome_loja; ?>">
+                <option data-id_store="<?= $store->id; ?>" value="<?= $store->code; ?>" name="<?= $store->code; ?>">
+                    <?php endforeach; ?>
+            </datalist>
         </label>
 
         <label>
-                <span class="field icon-briefcase">Centro de custo:</span>
+            <span class="field icon-briefcase">Centro de custo:</span>
             <select name="id_cost" class="select2Input">
                 <option value="">Escolha</option>
                 <?php foreach ((new \Source\Models\Center())->find()->fetch(true) as $center): ?>
-                    <option value="<?= $center->id; ?>" <?= ($center->id == (!empty($cash->Cost() ?  $cash->Cost()->id : '')) ?
+                    <option value="<?= $center->id; ?>" <?= ($center->id == (!empty($cash->Cost() ? $cash->Cost()->id : '')) ?
                         'selected' : ""); ?>>&ofcir; <?= $center->description; ?></option>
                 <?php endforeach; ?>
             </select>
@@ -62,7 +66,7 @@
 
             <label class="three_label">
                 <span class="field">Entrada:</span>
-                <input type="radio" name="type" value="1"  <?= ($cash->type == 1 ? "checked" : ""); ?>>
+                <input type="radio" name="type" value="1" <?= ($cash->type == 1 ? "checked" : ""); ?>>
                 <span class="field">Saída: </span>
                 <input type="radio" name="type" value="2" <?= ($cash->type == 2 ? "checked" : ""); ?>>
             </label>
