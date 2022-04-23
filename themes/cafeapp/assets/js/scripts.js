@@ -11,9 +11,7 @@ async function getHours(inputSelect) {
     data[inputSelect.getAttribute('name')] = inputSelect.value;
 
     const callback = await fetch(inputSelect.getAttribute('rel'), {
-        method: 'POST',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: new URLSearchParams(data)
+        method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'}, body: new URLSearchParams(data)
     })
     const response = await callback.json();
     if (response) {
@@ -21,8 +19,7 @@ async function getHours(inputSelect) {
         response.shift();
         select.innerHTML = '<option value="">Escolha</option>';
         for (hour of response) {
-            select.insertAdjacentHTML('beforeend',
-                `<option value="${hour.id}"> ${hour.description}</option>`);
+            select.insertAdjacentHTML('beforeend', `<option value="${hour.id}"> ${hour.description}</option>`);
         }
     }
 }
@@ -32,12 +29,9 @@ async function getList(inputDataList, idHour, idStore) {
     const url = inputDataList.getAttribute('rel');
     const ajaxResponse = document.querySelector('.ajax_response');
 
-    const callback = await fetch(url,
-        {
-            method: 'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: new URLSearchParams(data)
-        });
+    const callback = await fetch(url, {
+        method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'}, body: new URLSearchParams(data)
+    });
 
     const response = await callback.json();
 
@@ -71,11 +65,9 @@ async function getStoreValueNow(inputDataList, idStore) {
     lastValue = document.querySelector('.last_value');
 
     data['id_store'] = idStore;
-    const callback = await fetch(inputDataList.dataset.url,
-        {
-            method: 'POST',
-            body: new URLSearchParams(data)
-        })
+    const callback = await fetch(inputDataList.dataset.url, {
+        method: 'POST', body: new URLSearchParams(data)
+    })
 
     const content = await callback.json();
 
@@ -90,16 +82,13 @@ async function storeVerify() {
     const url = document.querySelector('input.store_data_list').dataset.verify;
 
     const callback = await fetch(url, {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        method: 'POST',
-        body: data
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}, method: 'POST', body: data
     })
 
     const response = await callback.json();
 
     if (response.message) {
-        flashClass.insertAdjacentHTML("afterend",
-            response.message);
+        flashClass.insertAdjacentHTML("afterend", response.message);
     }
 }
 
@@ -113,12 +102,9 @@ async function remove(dataAttr, confirmText) {
             const url = this.dataset[dataAttr];
 
             if (remove === true) {
-                const callback = await fetch(url,
-                    {
-                        method: 'POST',
-                        data: {},
-                        headers: {'Content-Type': 'application/json'}
-                    });
+                const callback = await fetch(url, {
+                    method: 'POST', data: {}, headers: {'Content-Type': 'application/json'}
+                });
 
                 const response = await callback.json();
 
@@ -314,8 +300,7 @@ function calc(value, $this) {
 
 
         document.querySelector("input[name='last_value']").value = last_val.textContent.toLocaleString('pt-br', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
+            minimumFractionDigits: 2, maximumFractionDigits: 2
         });
 
         document.querySelector("input[name='net_value']").value = netValue;
@@ -334,8 +319,7 @@ function calc(value, $this) {
                 .toLocaleString('pt-br', {minimumFractionDigits: 2, maximumFractionDigits: 2});
 
             const beatValueBrl = beatValue.toLocaleString('pt-br', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
+                minimumFractionDigits: 2, maximumFractionDigits: 2
             });
             document.querySelector('p.beat_value').innerHTML = beatValueBrl;
             document.querySelector('.new_value').innerHTML = newValue;
@@ -415,30 +399,25 @@ if (formMovimentGlobalVar) {
                     }
 
                     const newStoreValueBrl = newStoreValue.toLocaleString('pt-br', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
+                        minimumFractionDigits: 2, maximumFractionDigits: 2
                     });
 
                     const beatPrizeBrl = beatPrize.toLocaleString('pt-br', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
+                        minimumFractionDigits: 2, maximumFractionDigits: 2
                     });
 
                     const prizeOfficeBrl = prizeOffice.toLocaleString('pt-br', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
+                        minimumFractionDigits: 2, maximumFractionDigits: 2
                     });
 
                     const prizeStoreBrl = prizeStore.toLocaleString('pt-br', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
+                        minimumFractionDigits: 2, maximumFractionDigits: 2
                     });
 
                     document.getElementsByClassName('new_value').textContent = newStoreValueBrl;
                     document.querySelector("input[name='new_value']").textContent = newStoreValueBrl;
 
-                    document.querySelector('label.prize_output').insertAdjacentHTML('afterbegin',
-                        `<span class="field icon-leanpub">Valor de Abate Premio:</span>
+                    document.querySelector('label.prize_output').insertAdjacentHTML('afterbegin', `<span class="field icon-leanpub">Valor de Abate Premio:</span>
                             <p class="app_widget_title beat_prize">${beatPrize}</p>
                             <input type="hidden" name="beat_prize" value="${beatPrizeBrl}">
                             <input type="hidden" name="prize_office" value="${prizeOfficeBrl}">
@@ -448,11 +427,9 @@ if (formMovimentGlobalVar) {
                 }
             } else {
                 inputPrize = inputPrize.toLocaleString('pt-br', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
+                    minimumFractionDigits: 2, maximumFractionDigits: 2
                 });
-                document.querySelector('label.prize_output').insertAdjacentHTML('afterbegin',
-                    `<span class="field icon-leanpub">Sem abate</span>
+                document.querySelector('label.prize_output').insertAdjacentHTML('afterbegin', `<span class="field icon-leanpub">Sem abate</span>
                             <input type="hidden" name="beat_prize" value="0">
                             <input type="hidden" name="prize_office" value="${inputPrize}">
                             <input type="hidden" name="prize_store" value="0">`);
@@ -509,8 +486,7 @@ $(function () {
     $(".mask-money-negative").mask('N0N0N0N.N0N0N0N.N0N0N0N.N0N0N0N.N0N0N0N,N0N0N', {
         translation: {
             'N': {
-                pattern: /[-]/,
-                optional: true
+                pattern: /[-]/, optional: true
             }
         }, reverse: true, placeholder: '0,00'
     });
