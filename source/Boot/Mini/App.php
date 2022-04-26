@@ -27,6 +27,7 @@ if (strpos(url(), "localhost")) {
     $minJS->add(__DIR__ . "/../../../shared/scripts/jquery.min.js");
     $minJS->add(__DIR__ . "/../../../shared/scripts/highcharts.js");
     $minJS->add(__DIR__ . "/../../../shared/scripts/jquery.mask.js");
+    $minJS->add(__DIR__ . "/../../../shared/scripts/ajaxCad.js");
 
     //theme CSS
     $jsDir = scandir(__DIR__ . "/../../../themes/" . CONF_VIEW_APP . "/assets/js");

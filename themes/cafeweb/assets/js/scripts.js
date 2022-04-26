@@ -62,7 +62,7 @@ $(function () {
         }
     });
 
-    //ajax form
+    /* ajax form
     $("form:not('.ajax_off')").submit(function (e) {
         e.preventDefault();
         var form = $(this);
@@ -104,5 +104,5 @@ $(function () {
                 }
             }
         });
-    })
+    })*/
 });
