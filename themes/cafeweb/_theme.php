@@ -101,6 +101,8 @@
 </footer>
 
 <script src="<?= theme("/assets/scripts.js"); ?>"></script>
+<script src="<?= url("shared/scripts/ajaxCad.js") ?>"></script>
+
 <?= $v->section("scripts"); ?>
 
 </body>

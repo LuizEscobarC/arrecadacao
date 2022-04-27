@@ -57,7 +57,7 @@
     <script src="<?= url("shared/scripts/jquery.min.js") ?>"></script>
     <script src="<?= url("shared/scripts/jquery.mask.js") ?>"></script>
     <script src="<?= url("shared/scripts/highcharts.js") ?>"></script>
-    <script src="<?= theme("/assets/js/ajaxCad.js", CONF_VIEW_APP) ?>"></script>
+    <script src="<?= url("shared/scripts/ajaxCad.js") ?>"></script>
     <script src="<?= theme("/assets/js/scripts.js", CONF_VIEW_APP) ?>"></script>
 <?php endif; ?>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>

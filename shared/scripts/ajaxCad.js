@@ -1,5 +1,5 @@
 //SELECIONO O FORMULÁRIO ATUAL EXCETO O FORMULARIO DE MOVIMENTO QUE TEM UMA REGRA DE NEGÓCIO DIFERENTE RELACIONADO A SUBMISSÃO DE FORMULÁRIO
-const formSubmit = (document.querySelector('.app_form:not(.app_form#moviment)') ?? document.querySelector('.auth_form'));
+const formSubmit = (document.querySelector('.app_form:not(.app_form#moviment)') ? document.querySelector('.app_form:not(.app_form#moviment)') : document.querySelector('.auth_form'));
 // ESPERO O EVENTO DO ENVIO DO FORMULÁRIO
 if (formSubmit) {
     formSubmit.addEventListener('submit', function (e) {

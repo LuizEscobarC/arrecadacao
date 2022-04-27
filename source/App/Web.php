@@ -4,8 +4,6 @@ namespace Source\App;
 
 use Source\Core\Controller;
 use Source\Models\Auth;
-use Source\Models\Faq\Question;
-use Source\Models\Post;
 use Source\Models\User;
 use Source\Support\Pager;
 
@@ -47,6 +45,7 @@ class Web extends Controller
             $login = $auth->login($data['email'], $data['password'], $save);
 
             if ($login) {
+                $this->message->success("Login efetuado com sucesso!")->flash();
                 $json['redirect'] = url("/app");
             } else {
                 $json['message'] = $auth->message()->render();
