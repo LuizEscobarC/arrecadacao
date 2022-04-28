@@ -1,35 +1,47 @@
 <div class="app_sidebar_nav">
-    <a class="pointer icon-home radius transition open" id="sidebar" title="Dashboard">MOVIMENTAÇÃO DIÁRIA</a>
+    <a class="pointer icon-home radius transition" id="sidebar" title="Dashboard">MOVIMENTAÇÃO DIÁRIA</a>
     <div class="app_drop">
-        <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/cadastrar-lista"); ?>">Cadastrar Listas do horário</a>
-        <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/cadastrar-movimentacao"); ?>">Cadastrar Acerto de Loja</a>
-        <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/listas"); ?>">Listas do Horário</a>
-        <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/movimentacoes"); ?>">Acertos de Loja</a>
-        <a class="pointer radius transition open" id="sidebar_children2" title="Dashboard">Relatórios</a>
-        <div class="app_drop_children2">
-            <a class="pointer radius transition" title="Dashboard" href="<?= url("/app"); ?>">opção 1</a>
-            <a class="pointer radius transition" title="Dashboard" href="<?= url("/app"); ?>">opção 2</a>
+        <a class="pointer radius transition" title="Dashboard" id="open_moviment_create">CADASTROS</a>
+        <div class="drop_moviment_create">
+            <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/cadastrar-lista"); ?>">Cadastrar Listas do horário</a>
+            <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/cadastrar-movimentacao"); ?>">Cadastrar Acerto de Loja</a>
         </div>
+        <a class="pointer radius transition" title="Dashboard" id="open_moviment_read">CONSULTAS</a>
+        <div class="drop_moviment_read">
+            <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/listas"); ?>">Listas do Horário</a>
+            <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/movimentacoes"); ?>">Acertos de Loja</a>
+        </div>
+        <a class="pointer radius transition" id="sidebar_children2" title="Dashboard">Relatórios</a>
     </div>
-    <a class="pointer icon-home radius transition open" id="sidebar2" title="Dashboard">CONTROLE DE CAIXA</a>
+    <a class="pointer icon-home radius transition" id="sidebar2" title="Dashboard">CONTROLE DE CAIXA</a>
     <div class="app_drop1">
         <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/cadastrar-fluxo-de-caixa"); ?>">Cadastrar Receita/Despesa</a>
         <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/fluxos-de-caixa"); ?>">Receitas e Despesas</a>
-        <a class="pointer icon-home radius transition open" id="sidebar2_children" title="Dashboard">Relatórios</a>
+        <a class="pointer icon-home radius transition" id="sidebar2_children" title="Dashboard">Relatórios</a>
         <div class="app_drop1_children">
             <a class="pointer radius transition" title="Dashboard" href="#">opção</a>
         </div>
     </div>
-    <a class="pointer icon-home radius transition open" id="sidebar3" title="Dashboard">CONTROLE GERENCIAL</a>
+    <a class="pointer icon-home radius transition" id="sidebar3" title="Dashboard">CONTROLE GERENCIAL</a>
     <div class="app_drop2">
-        <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/cadastrar-usuario"); ?>">Cadastrar Usuário</a>
-        <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/cadastrar-centro-de-custo"); ?>">Cadastrar Centro de Custo</a>
-        <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/cadastrar-loja"); ?>">Cadastrar Loja</a>
-        <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/cadastrar-horario"); ?>">Cadastrar Horário</a>
-        <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/usuarios"); ?>">Usuários</a>
-        <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/centros-de-custo"); ?>">Centros de Custo</a>
-        <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/lojas"); ?>">Lojas</a>
-        <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/horarios"); ?>">Horarios</a>
+        <a class="pointer radius transition" title="Dashboard" id="open_manager_create">CADASTROS</a>
+            <div class="drop_manager_create">
+            <?php if (\Source\Models\Auth::user()->level == 1): ?>
+                <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/cadastrar-usuario"); ?>">Cadastrar Usuário</a>
+            <?php endif;?>
+            <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/cadastrar-centro-de-custo"); ?>">Cadastrar Centro de Custo</a>
+            <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/cadastrar-loja"); ?>">Cadastrar Loja</a>
+            <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/cadastrar-horario"); ?>">Cadastrar Horário</a>
+        </div>
+        <a class="pointer radius transition" title="Dashboard" id="open_manager_read">CONSULTAS</a>
+            <div class="drop_manager_read">
+            <?php if (\Source\Models\Auth::user()->level == 1): ?>
+                <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/usuarios"); ?>">Usuários</a>
+            <?php endif;?>
+            <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/centros-de-custo"); ?>">Centros de Custo</a>
+            <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/lojas"); ?>">Lojas</a>
+            <a class="pointer radius transition" title="Dashboard" href="<?= url("/app/horarios"); ?>">Horarios</a>
+        </div>
     </div>
 
 

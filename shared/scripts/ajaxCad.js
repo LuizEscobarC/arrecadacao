@@ -1,5 +1,8 @@
 //SELECIONO O FORMULÁRIO ATUAL EXCETO O FORMULARIO DE MOVIMENTO QUE TEM UMA REGRA DE NEGÓCIO DIFERENTE RELACIONADO A SUBMISSÃO DE FORMULÁRIO
-const formSubmit = (document.querySelector('.app_form:not(.app_form#moviment)') ? document.querySelector('.app_form:not(.app_form#moviment)') : document.querySelector('.auth_form'));
+const formSubmit = (document.querySelector(".app_form:not(.app_form#moviment , .ajax_off)")
+    ? document.querySelector(".app_form:not(.app_form#moviment, .ajax_off)")
+    : document.querySelector('.auth_form'));
+
 // ESPERO O EVENTO DO ENVIO DO FORMULÁRIO
 if (formSubmit) {
     formSubmit.addEventListener('submit', function (e) {
@@ -14,7 +17,7 @@ async function formSub(formSubmit) {
     const flashClass = "ajax_response";
     const flash = document.querySelector("." + flashClass);
 
-    load.style.display = "flex";
+    //load.style.display = "flex";
 
     // ESPERA O ENVIO COM O RETORNO
     const callback = await fetch(
@@ -30,14 +33,14 @@ async function formSub(formSubmit) {
     //MANIPULA OS DADOS
     if (response) {
         if (response.scroll) {
-            window.scrollTo({ top: response.scroll, behavior: 'smooth' });
+            window.scrollTo({top: response.scroll, behavior: 'smooth'});
         }
 
         // REDIRECIONA
         if (response.redirect) {
             setTimeout(function () {
                 window.location.href = response.redirect;
-            }, (response.timeout ?? 300));
+            }, (response.timeout ?? 10));
         }
 
         // ATUALIZA A PAGINA
@@ -61,6 +64,6 @@ async function formSub(formSubmit) {
             flash.style.display = "none";
         }
         // AO FINAL DE TUDO O LOADER SAÍ
-        load.style.display = "none";
+        //load.style.display = "none";
     }
 }

@@ -27,7 +27,8 @@
                             <?php endforeach; ?>
                         <?php endif; ?>
                         <p title="Receitas"
-                           class="app_widget_more app_invoice_link transition icon-plus"><a href="<?= url('app/fluxos-de-caixa')?>">Mais lançamentos</a></p>
+                           class="app_widget_more app_invoice_link transition icon-plus"><a
+                                    href="<?= url('app/fluxos-de-caixa') ?>">Mais lançamentos</a></p>
                     </div>
                 </article>
 
@@ -49,7 +50,8 @@
                             <?php endforeach; ?>
                         <?php endif; ?>
                         <p title="Despesas"
-                           class="app_widget_more app_invoice_link transition icon-plus"><a href="<?= url('app/fluxos-de-caixa')?>">Mais lançamentos</a></p>
+                           class="app_widget_more app_invoice_link transition icon-plus"><a
+                                    href="<?= url('app/fluxos-de-caixa') ?>">Mais lançamentos</a></p>
                     </div>
                 </article>
             </div>
@@ -156,26 +158,26 @@
             });
 
             function test() {
-                setTimeout(function () {
-                    $.post('<?= url("/app/ajax_grap");?>', function (callback) {
-                        if (callback.chart) {
-                            chart.update({
-                                xAxis: {
-                                    categories: callback.chart.date_moviment
-                                },
-                                series: [{
-                                    data: callback.chart.income
-                                }, {
-                                    data: callback.chart.expense
-                                }]
-                            });
-                        }
-                    }, "json");
-                    test();
-                }, 2000);
+                $.post('<?= url("/app/ajax_grap");?>', function (callback) {
+                    if (callback.chart) {
+                        chart.update({
+                            xAxis: {
+                                categories: callback.chart.date_moviment
+                            },
+                            series: [{
+                                data: callback.chart.income
+                            }, {
+                                data: callback.chart.expense
+                            }]
+                        });
+                    }
+                }, "json");
+
             }
 
-            test();
+            setInterval(function () {
+                test();
+            }, 2000);
         });
 
     </script>

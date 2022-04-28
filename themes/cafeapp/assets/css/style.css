@@ -414,7 +414,7 @@ body {
 .app_modal_box {
     display: none;
     margin: auto;
-    width: 900px;
+    width: 500px;
     max-width: 94%;
     padding: calc(var(--area-box) * 1.5) calc(var(--area-box) * 5);
     background: #ffffff;

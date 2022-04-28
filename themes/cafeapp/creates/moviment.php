@@ -21,6 +21,7 @@
 
             <label class="three_label">
                 <span class="field icon-briefcase"> Horário:</span>
+                <input type="hidden" class="current_hour" name="current_hour" value="<?= ($currentHour ? $currentHour->id : null); ?>">
                 <select name="id_hour" class="callback box-shadow required-input" rel="<?= url("/app/get_week_day") ?>"
                         required>
                 </select>
@@ -31,7 +32,7 @@
             <label>
                 <span class="field icon-briefcase">Loja:</span>
                 <input type="hidden" name="id_store">
-                <input type="text" class="store_data_list" list="code_store" name="id_store_fake" autocomplete="off"
+                <input autofocus type="text" class="store_data_list" list="code_store" name="id_store_fake" autocomplete="off"
                        rel="<?= url('/app/get_list'); ?>"
                        data-url="<?= url('/app/get_store'); ?>"
                        data-verify="<?= url("/app/moviment_verify"); ?>">

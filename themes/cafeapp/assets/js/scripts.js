@@ -1,9 +1,6 @@
-const $body = $("body");
 const formMovimentGlobalVar = document.querySelector('form.app_form#moviment');
 
 // BEGIN FUNCTIONS
-/## GET HOUR DRY FUNCTION ##/
-
 async function getHours(inputSelect) {
     const select = document.querySelector('select.callback');
     const label = document.querySelector('p#label');
@@ -17,9 +14,14 @@ async function getHours(inputSelect) {
     if (response) {
         label.innerHTML = response[0];
         response.shift();
+        let currentHour = (document.querySelector('.current_hour' ?? null));
+        if (currentHour) {
+            currentHour = document.querySelector('.current_hour').value;
+        }
         select.innerHTML = '<option value="">Escolha</option>';
+
         for (hour of response) {
-            select.insertAdjacentHTML('beforeend', `<option value="${hour.id}"> ${hour.description}</option>`);
+            select.insertAdjacentHTML('beforeend', `<option value="${hour.id}" ${(currentHour === hour.id ? 'selected' : '')} > ${hour.description}</option>`);
         }
     }
 }
@@ -92,7 +94,7 @@ async function storeVerify() {
     }
 }
 
-/## REMOVE ENTITY DRY FUNCTION ##/
+/* REMOVE ENTITY DRY FUNCTION */
 
 async function remove(dataAttr, confirmText) {
     const selected = document.querySelector(`[data-${dataAttr}]`);
@@ -129,73 +131,6 @@ async function remove(dataAttr, confirmText) {
 
 // END FUNCTIONS
 
-
-/*
- * MOBILE MENU
- */
-const appSidebar = document.querySelector(".app_sidebar");
-
-document.querySelector("li[data-mobilemenu]").addEventListener('click', function () {
-    const action = this.dataset.mobilemenu;
-
-    if (action === 'open') {
-        appSidebar.style.display = 'block';
-    }
-});
-
-document.querySelector("div[data-mobilemenu]").addEventListener('click', function () {
-    const action = this.dataset.mobilemenu;
-
-    if (action === 'close') {
-        appSidebar.style.display = 'none';
-    }
-});
-
-document.getElementById('sidebar').addEventListener('click', function () {
-    const clickedClassList = this.classList;
-    const $appDrop = document.querySelector(".app_drop");
-
-    if (clickedClassList.contains('open')) {
-        $appDrop.classList.add('slidedown');
-        clickedClassList.remove('open');
-        $appDrop.style.display = 'block';
-    } else {
-        $appDrop.classList.add('slideup');
-        clickedClassList.add('open');
-        $appDrop.style.display = 'none';
-    }
-});
-
-document.getElementById('sidebar2').addEventListener('click', function () {
-    const clickedClassList = this.classList;
-    const $appDrop = document.querySelector(".app_drop1");
-
-    if (clickedClassList.contains('open')) {
-        $appDrop.classList.add('slidedown');
-        clickedClassList.remove('open');
-        $appDrop.style.display = 'block';
-    } else {
-        $appDrop.classList.add('slideup');
-        clickedClassList.add('open');
-        $appDrop.style.display = 'none';
-    }
-});
-
-document.getElementById('sidebar3').addEventListener('click', function () {
-    const clickedClassList = this.classList;
-    const $appDrop = document.querySelector(".app_drop2");
-
-    if (clickedClassList.contains('open')) {
-        $appDrop.classList.add('slidedown');
-        clickedClassList.remove('open');
-        $appDrop.style.display = 'block';
-    } else {
-        $appDrop.classList.add('slideup');
-        clickedClassList.add('open');
-        $appDrop.style.display = 'none';
-    }
-});
-
 // BEGIN REMOVE ENTITIES
 const dataRemoveEntities = {
     "hourremove": "esse horário?",
@@ -217,15 +152,17 @@ for (keysRemove in dataRemoveEntities) {
 */
 const hourInput = document.querySelector('input.hour');
 
-hourInput.addEventListener('change', function () {
-    const select = document.querySelector('select.callback');
-    const label = document.getElementById('label');
-    if (select || label) {
-        select.textContent = '';
-        label.textContent = '';
-    }
-    getHours(this);
-});
+if (hourInput) {
+    hourInput.addEventListener('change', function () {
+        const select = document.querySelector('select.callback');
+        const label = document.getElementById('label');
+        if (select || label) {
+            select.textContent = '';
+            label.textContent = '';
+        }
+        getHours(this);
+    });
+}
 
 /*
 * AJAX GET LIST
@@ -268,9 +205,12 @@ if (storeDataListInput) {
     });
 }
 
-document.querySelector('select.callback').addEventListener('change', function () {
-    movimentDatas(null)
-});
+const callback = document.querySelector('select.callback');
+if(callback) {
+    callback.addEventListener('change', function () {
+        movimentDatas(null)
+    });
+}
 
 /*
 * VALOR RECOLHIDO CALCULO
@@ -386,6 +326,14 @@ if (formMovimentGlobalVar) {
                         prizeStore = storeValuePositive;
                         beatPrize = storeValuePositive;
                         newStoreValue = 0;
+
+                        // VERIFICA SE O VALOR DO ESCRITÓRIO TEM CENTAVOS E SE SIM APLICA AO NOVO VALOR DA LOJA
+                        const hasCents = prizeOffice.search(/.([1-9]+)/);
+                        if (hasCents !== -1) {
+                            let cents = prizeOffice.slice(-prizeOffice.length, hasCents);
+                            newStoreValue = parseFloat('0.' + cents);
+                        }
+
                     } else if (storeValuePositive > inputPrize) {
                         prizeOffice = 0;
                         prizeStore = inputPrize;
@@ -413,6 +361,9 @@ if (formMovimentGlobalVar) {
                     const prizeStoreBrl = prizeStore.toLocaleString('pt-br', {
                         minimumFractionDigits: 2, maximumFractionDigits: 2
                     });
+
+                    // SE TIVER CENTAVOS NO PAGAMENTO DE PREMIO DO ESCRITÓRIO
+                    // if (prizeOfficeBrl)
 
                     document.getElementsByClassName('new_value').textContent = newStoreValueBrl;
                     document.querySelector("input[name='new_value']").textContent = newStoreValueBrl;
@@ -443,9 +394,9 @@ if (formMovimentGlobalVar) {
     });
 }
 // END MOVIMENT CALCS
-
+0
 // BEGIN COMO DEFAULT ELE SETA OS INPUTS DE DATA DOS CADASTROS COM A DATA ATUAL
-if (window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-lista' || window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-fluxo-de-caixa' || window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-movimentacao') {
+if (window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-lista' || window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-fluxo-de-caixa' || window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-movimentacao' || window.location.toString() === 'http://www.localhost/arrecadacao/app/cadastrar-movimentacao') {
     const data = new Date();
     const dia = String(data.getDate()).padStart(2, '0');
     const mes = String(data.getMonth() + 1).padStart(2, '0');
@@ -496,3 +447,47 @@ $(function () {
     $(".mask-doc").mask('000.000.000-00', {reverse: true});
     $(".mask-day").mask('00', {reverse: true});
 });
+
+
+if (document.querySelector('#moviment')) {
+    const parentModal = document.querySelector('.app_modal');
+
+    // ABRE E FECHA MODAL DE CALCULADORA
+    document.addEventListener('keyup', function (e) {
+        const modal = document.querySelector('.app_modal_calc');
+        if (e.key === 'Control') {
+            parentModal.style.display = 'flex';
+            modal.style.display = 'block';
+            parentModal.dataset.modalclose = 'false';
+            // FAZ FOCAR NO INPUT
+            modal.children[1].children[0].children[1].focus();
+            // REALIZA OS CALCULOS
+            const formCalc = document.querySelector('.app_form.ajax_off');
+            const inputCalc = document.querySelector('.input_calc');
+            const currentResult = document.querySelector('.current_result');
+            let currentValue = currentResult.textContent;
+
+            formCalc.addEventListener('submit', (e) => {
+                e.preventDefault();
+            })
+
+            inputCalc.addEventListener('keyup', () => {
+                if (currentValue) {
+                    currentValue = parseFloat(currentValue.value.replaceAll('.', '').replace(',', '.'));
+                    currentValue += inputCalc.value;
+                }
+                currentResult.textContent = currentValue.toLocaleString('pt-br', {
+                    maximumFractionDigits: 2,
+                    minimumFractionDigits: 2
+                });
+            })
+        }
+
+        if (e.key === 'Escape') {
+            modal.style.display = 'none';
+            parentModal.style.display = 'none';
+            parentModal.dataset.modalclose = 'true';
+        }
+    })
+
+}

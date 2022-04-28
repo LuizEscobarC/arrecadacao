@@ -34,7 +34,6 @@ class App extends Controller
     public function __construct()
     {
         parent::__construct(__DIR__ . "/../../themes/" . CONF_VIEW_APP . "/");
-
         if (!$this->user = Auth::user()) {
             $this->message->warning("Efetue login para acessar o APP.")->flash();
             redirect("/entrar");
@@ -49,6 +48,18 @@ class App extends Controller
     {
         // META SEO
         $head = $this->seo->make("Olá {$this->user->first_name}. - ", url());
+        if (Auth::user()->level != 1) {
+            echo $this->view->render("views/home-user", [
+                'head' => $head,
+                'error' => (object) [
+                    'linkTitle' => 'Cadastrar Acerto de Lojas',
+                    'link' => url('/app/cadastrar-movimentacao'),
+                    'message' => 'Welcome',
+                    'name' => $this->user->first_name
+                ]
+            ]);
+            return;
+        }
         //CHART
         $chartData = (new CashFlow())->chartData();
         //END CHART
@@ -280,9 +291,9 @@ class App extends Controller
         $search = filter_var((!empty($data['search']) ? $data['search'] : null), FILTER_SANITIZE_STRIPPED);
 
         if ($search) {
-            $stores = (new Store())->find("MATCH(nome_loja, code) AGAINST(:s)", "s={$search}");
+            $stores = (new Store())->find("nome_loja LIKE '%{$search}%'");
         } else {
-            $stores = (new Store())->find()->order('id');
+            $stores = (new Store())->find()->order('code');
             $search = null;
         }
         $page = (!empty($data['page']) ? $data['page'] : 1);
@@ -829,7 +840,6 @@ class App extends Controller
      */
     public function saveList(array $data): void
     {
-
         $data = filter_var_array($data, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
         if (!empty($data)) {
@@ -896,7 +906,7 @@ class App extends Controller
 
         echo $this->view->render('cash-flows', [
             'head' => $head,
-            'cashFlows' => $cashFlows->order('cash_flow.date_moviment DESC, s.nome_loja ASC')
+            'cashFlows' => $cashFlows->order('cash_flow.id DESC')
                 ->limit($pager->limit())
                 ->offset($pager->offset())
                 ->fetch(true),
@@ -967,12 +977,12 @@ class App extends Controller
 
             $cash->bootstrap(
                 $data["date_moviment"],
-                $data["id_store"],
+                (!empty($data["id_store"]) ? $data["id_store"] : null ),
                 $data["id_hour"],
                 $data["description"],
                 money_fmt_app($data["value"]),
                 $data["type"],
-                $data["id_cost"]
+                (!empty($data["id_cost"]) ? $data["id_cost"] : null)
             );
 
             if (!$cash->save()) {
@@ -1071,8 +1081,10 @@ class App extends Controller
         // META SEO
         $head = $this->seo->make("Cadastrar Movimentação - ", url());
 
+        // no banco deve haver o id 1 exclusivamente para o currentHour
         echo $this->view->render("creates/moviment", [
-            "head" => $head
+            "head" => $head,
+            'currentHour' => ((new \Source\Models\currentHour())->findById(1))->hour()
         ]);
     }
 
@@ -1099,7 +1111,6 @@ class App extends Controller
          * 'prize_office' => '0',
          * 'prize_store' => '0'
          * ]; */
-
 
         if (!empty($data)) {
             // Metodo que realiza toda a regra de negócio e automatização do lançamento de movimento

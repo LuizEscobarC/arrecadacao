@@ -87,7 +87,6 @@ class Moviment extends Model
 
     public function attach(array $data, User $user): bool
     {
-
         $modelVerify = new Moviment();
         $required = $modelVerify->requiredMoviment($data);
         if (!empty($required)) {
@@ -98,22 +97,20 @@ class Moviment extends Model
         // referencia
         $modelVerify->isEmpty($data);
 
+        // current hour setting in DB
+        $this->saveCurrentHour($data['id_hour']);
+
         // Se existir um movimento com a mesma data, horario e loja
         // se retornar falso entra aqui
-        if (!$modelVerify->isRepeated($data['date_moviment'], $data['id_hour'], $data['id_store'])) {
-            $json['message'] = $this->message->warning('O lançamento já existe.')->render();
-            $json['redirect'] = url('app/cadastrar-movimentacao');
-            $json['timeout'] = 3000;
-            $json['scroll'] = 225;
-            echo json_encode($json);
-            return false;
-        }
+        //$movimentUpdate = $modelVerify->isRepeated($data['date_moviment'], $data['id_hour'], $data['id_store']);
+
 
         $messageError = '';
         $store = (new Store());
         if (!empty($data['id_store'])) {
             $store = $store->findById($data['id_store']);
         }
+
         if (!empty($data['beat_prize'])) {
             $store->valor_saldo = (money_fmt_app($data['new_value']) + money_fmt_app($data['prize']));
         } else {
@@ -265,12 +262,9 @@ class Moviment extends Model
         }
     }
 
-    public function isRepeated(?string $dateMoviment, ?string $hour, ?string $store): bool
+    public function isRepeated(?string $dateMoviment, ?string $hour, ?string $store): Moviment
     {
-        if (!empty($this->findByDateMoviment($dateMoviment, $hour, $store))) {
-            return false;
-        }
-        return true;
+        return$this->findByDateMoviment($dateMoviment, $hour, $store);
     }
 
     protected function findByDateMoviment(?string $dateMoviment, ?string $id_hour, ?string $id_store): ?Moviment
@@ -307,7 +301,7 @@ class Moviment extends Model
             $data[$dataEmpty[2]] = 0;
             $data[$dataEmpty[3]] = (!empty($data['id_list']) ? -abs($this->lists($data['id_list'])->net_value) : ($data['id_list'] = 0));
             if ($this->store($data['id_store'])->valor_saldo) {
-                $data[$dataEmpty[4]] = ((float)($this->store($data['id_store'])->valor_saldo) + $data[$dataEmpty[3]]);
+                $data[$dataEmpty[4]] = (money_fmt_app($this->store($data['id_store'])->valor_saldo) + money_fmt_app($data[$dataEmpty[3]]));
             }
         }
         if (empty($data[$dataEmpty[5]])) {
@@ -357,5 +351,11 @@ class Moviment extends Model
         ], new Moviment());
 
         return array_merge($arrayFilterReturn, [$total]);
+    }
+
+    private function saveCurrentHour($id) {
+        $currentHour = (new currentHour())->findById(1);
+        $currentHour->current_hour = $id;
+        $currentHour->save();
     }
 }

@@ -8,7 +8,7 @@
     <form class="ajax_off app_launch_form_filter app_form" action="<?= url('/app/lojas') ?>" method="post">
 
         <input type="search" name="search" alt="pesquise por nome ou código" value="<?= $search; ?>"
-               placeholder="Nome da loja/código" list="code_store" autocomplete="off">
+               placeholder="Nome da loja/código" list="code_store" autocomplete="off"/>
 
         <datalist id="code_store">
             <option></option>
@@ -18,15 +18,6 @@
             <?php endforeach;?>
         </datalist>
 
-
-        <input list="datelist" type="text" value="<?= $search; ?>" class="radius " name="day"
-               placeholder="Data de movimento">
-        <datalist id="datelist">
-            <?php for ($range = 1; $range <= date('d'); $range++):
-                $date = date("d", strtotime("{$range} day")); ?>
-                <option <?= ($search == $range ? 'selected' : null); ?> value="<?= $range; ?>"/>
-            <?php endfor; ?>
-        </datalist>
         <button class="filter radius transition icon-search icon-notext"></button>
 
     </form>

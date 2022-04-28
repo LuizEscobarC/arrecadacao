@@ -735,6 +735,13 @@ body {
     margin-bottom: 40px;
 }
 
+.not_found .home_user {
+    font-size: 4em;
+    font-weight: var(--weight-light);
+    color: #cccccc;
+    margin-bottom: 40px;
+}
+
 .not_found_header {
     width: 500px;
     max-width: 100%;

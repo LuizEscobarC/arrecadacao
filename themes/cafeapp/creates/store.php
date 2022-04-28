@@ -20,7 +20,7 @@
 
 
         <label>
-            <span class="field icon-leanpub">Valor:</span>
+            <span class="field icon-leanpub">Valor Saldo:</span>
             <input class="radius mask-money-negative box-shadow" type="text" name="valor_saldo" required/>
         </label>
 

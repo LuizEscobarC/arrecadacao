@@ -3,15 +3,17 @@
 /**
  * DATABASE
  */
-
-
-
-define("CONF_DB_HOST", "localhost");
-define("CONF_DB_USER", "root");
-define("CONF_DB_PASS", "");
-define("CONF_DB_NAME", "arrecadacao");
-
-
+if (strpos($_SERVER['HTTP_HOST'], "localhost")) {
+    define("CONF_DB_HOST", "localhost");
+    define("CONF_DB_USER", "root");
+    define("CONF_DB_PASS", "");
+    define("CONF_DB_NAME", "arrecadacao");
+} else {
+    define("CONF_DB_HOST", "arrecada.mysql.dbaas.com.br");
+    define("CONF_DB_USER", "arrecada");
+    define("CONF_DB_PASS", "ArrecadacaoDB");
+    define("CONF_DB_NAME", "arrecada");
+}
 
 /**
  * PROJECT URLs

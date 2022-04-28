@@ -72,13 +72,17 @@
     </div>
     <?php if (isnt_empty($moviments, 'self')): ?>
         <?php foreach ($moviments as $moviment): ?>
+
             <article class="app_launch_item">
                 <p class="desc moviment font_80_percent"><?= date_fmt($moviment->date_moviment, 'd/m/Y'); ?></p>
                 <p class="desc moviment font_80_percent app_invoice_link transition">
                     <a  title="Ver Lista" class="desc moviment" href="<?= url("/app/horario/{$moviment->id}"); ?>"><?= date_fmt($moviment->date_moviment, 'd/m/Y') . ' ' . $moviment->week_day; ?></a>
                 </p>
                 <p class="desc moviment font_80_percent"><?= $moviment->hour; ?></p>
-                <p class="desc moviment font_80_percent"><?= $moviment->nome_loja; ?></p>
+                <p class="desc moviment font_80_percent app_invoice_link transition">
+                    <a class="desc moviment " style="text-decoration: none;"
+                       href="<?= url("/app/loja/{$moviment->id_store}") ?>"><?= $moviment->store()->nome_loja; ?></a>
+                </p>
                 <p class="price category moviment font_80_percent">
                     <span>R$</span>
                     <span><?= money_fmt_br($moviment->new_value); ?></span>

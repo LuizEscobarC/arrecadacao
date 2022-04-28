@@ -17,7 +17,7 @@ class CashFlow extends Model
     public function __construct()
     {
         parent::__construct('cash_flow', ['id', 'created_at', 'updated_at'],
-            ['date_moviment', 'id_store', 'id_hour', 'value', 'type']);
+            ['date_moviment', 'id_hour', 'value', 'type']);
     }
 
     /**
@@ -32,7 +32,7 @@ class CashFlow extends Model
      */
     public function bootstrap(
         string $dateMoviment,
-        string $idStore,
+        ?string $idStore,
         string $idHour,
         ?string $description,
         string $value,

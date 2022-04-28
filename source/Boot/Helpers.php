@@ -218,6 +218,9 @@ function money_fmt_br(?float $money, bool $brl = false): string
  */
 function money_fmt_app(?string $money): float
 {
+    if (!strstr($money, ',')) {
+        return $money;
+    }
     return str_replace(',', '.', str_replace('.', '', $money));
 }
 
