@@ -829,7 +829,8 @@ class App extends Controller
         $head = $this->seo->make("Cadastrar Lista - ", url());
 
         echo $this->view->render("creates/lists", [
-            "head" => $head
+            "head" => $head,
+            "currentHour" => ((new \Source\Models\currentHour())->findById(1))->hour()
         ]);
     }
 
@@ -957,7 +958,8 @@ class App extends Controller
         $head = $this->seo->make("Cadastrar Fluxo de Caixa - ", url());
 
         echo $this->view->render("creates/cash-flow", [
-            "head" => $head
+            "head" => $head,
+            'currentHour' => ((new \Source\Models\currentHour())->findById(1))->hour()
         ]);
     }
 
@@ -969,6 +971,17 @@ class App extends Controller
     public function saveCashFlow(?array $data): void
     {
         if (!empty($data)) {
+
+            // CASO UM FLUXO DE CAIXA SEJA UMA SAIDA DA LOJA
+            if (!empty($data['id_store'])) {
+                $store = (new Store())->findById($data['id_store']);
+                $store->valor_saldo = money_fmt_app($data['last_value']);
+                if (!$store->save()) {
+                    $json['message'] = $store->message()->render();
+                    return;
+                }
+            }
+
             $cash = (new CashFlow());
 
             if (!empty($data['id'])) {

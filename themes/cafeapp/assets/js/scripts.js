@@ -195,10 +195,12 @@ if (storeDataListInput) {
             // ADICIONA O ID NO HIDDEN INPUT
             idStoreHidden.value = idStore;
             //FAZ AS ROTINAS DE VERIFICAÇÃO E FETCH NOS DADOS NECESSÁRIOS SOMENTE PARA O MOVIMENT
-            if (document.querySelector('form.app_form#moviment')) {
-                storeVerify(idStore);
+            if (document.querySelector('form.app_form#moviment, .cash_flow')) {
                 getStoreValueNow(this, idStore);
-                movimentDatas(this, idStore)
+                if (document.querySelector('form.app_form#moviment')) {
+                    storeVerify(idStore);
+                    movimentDatas(this, idStore)
+                }
             }
         }
 
@@ -206,7 +208,7 @@ if (storeDataListInput) {
 }
 
 const callback = document.querySelector('select.callback');
-if(callback) {
+if (callback) {
     callback.addEventListener('change', function () {
         movimentDatas(null)
     });
@@ -328,9 +330,12 @@ if (formMovimentGlobalVar) {
                         newStoreValue = 0;
 
                         // VERIFICA SE O VALOR DO ESCRITÓRIO TEM CENTAVOS E SE SIM APLICA AO NOVO VALOR DA LOJA
-                        const hasCents = prizeOffice.search(/.([1-9]+)/);
+                        prizeOfficeToString = prizeOffice.toFixed(2).toString();
+                        const hasCents = prizeOfficeToString.search(/.([1-9]+)/);
                         if (hasCents !== -1) {
-                            let cents = prizeOffice.slice(-prizeOffice.length, hasCents);
+                            let cents = prizeOfficeToString.slice(-2);
+                            let newOfficePrizePay = prizeOfficeToString.slice(0, hasCents);
+                            prizeOffice = parseFloat(newOfficePrizePay);
                             newStoreValue = parseFloat('0.' + cents);
                         }
 
@@ -396,7 +401,12 @@ if (formMovimentGlobalVar) {
 // END MOVIMENT CALCS
 0
 // BEGIN COMO DEFAULT ELE SETA OS INPUTS DE DATA DOS CADASTROS COM A DATA ATUAL
-if (window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-lista' || window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-fluxo-de-caixa' || window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-movimentacao' || window.location.toString() === 'http://www.localhost/arrecadacao/app/cadastrar-movimentacao') {
+if (window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-lista' ||
+    window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-fluxo-de-caixa' ||
+    window.location.toString() === 'http://www.localhost/arrecadacao/app/cadastrar-lista' ||
+    window.location.toString() === 'http://www.localhost/arrecadacao/app/cadastrar-fluxo-de-caixa' ||
+    window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-movimentacao' ||
+    window.location.toString() === 'http://www.localhost/arrecadacao/app/cadastrar-movimentacao') {
     const data = new Date();
     const dia = String(data.getDate()).padStart(2, '0');
     const mes = String(data.getMonth() + 1).padStart(2, '0');
@@ -490,4 +500,89 @@ if (document.querySelector('#moviment')) {
         }
     })
 
+}
+
+// CASH FLOW DEBIT STORE
+let hasStore = document.querySelector('.store_data_list.cash_flow');
+if (hasStore) {
+    const formCashFlow = hasStore.parentElement.parentElement.parentElement;
+    formCashFlow.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        let storeNewValue = parseFloat(document.querySelector('.last_value').textContent.replaceAll('.', '').replace(',', '.'));
+        let isDebtChecked = document.querySelector('input[name="type"]:checked').value;
+        let inputValueCash = parseFloat(document.querySelector('.cash_value').value.replaceAll('.', '').replace(',', '.'));
+
+        if (isDebtChecked && (isDebtChecked === '2') && (storeNewValue < 0)) {
+            const negativeValue = window.confirm('Deseja abater o saldo da loja?');
+            if (negativeValue) {
+                // TORNA POSITIVO PARA OS CALCULOS
+                const storeValuePositive = Math.abs(storeNewValue);
+                let valueOfficeToPay = null;
+                let beatValue = null;
+                let newStoreValue = null;
+
+                if (storeValuePositive < inputValueCash) {
+                    valueOfficeToPay = inputValueCash - storeValuePositive;
+                    beatValue = storeValuePositive;
+                    newStoreValue = 0;
+
+                    // VERIFICA SE O VALOR DO ESCRITÓRIO TEM CENTAVOS E SE SIM APLICA AO NOVO VALOR DA LOJA
+                    valueCentsString = valueOfficeToPay.toFixed(2).toString();
+                    const hasCents = valueCentsString.search(/.([1-9]+)/);
+                    if (hasCents !== -1) {
+                        const cents = valueCentsString.slice(-2);
+                        newStoreValue = parseFloat('0.' + cents);
+
+                        valueOfficeToPay = parseFloat(valueCentsString.slice(0, hasCents));
+                    }
+
+                } else if (storeValuePositive > inputValueCash) {
+                    valueOfficeToPay = 0;
+                    beatValue = inputValueCash;
+                    newStoreValue = -Math.abs((storeValuePositive - inputValueCash));
+                } else {
+                    valueOfficeToPay = 0;
+                    beatValue = inputValueCash;
+                    newStoreValue = 0;
+                }
+
+                const newStoreValueBrl = newStoreValue.toLocaleString('pt-br', {
+                    minimumFractionDigits: 2, maximumFractionDigits: 2
+                });
+                const beatValueBrl = beatValue.toLocaleString('pt-br', {
+                    minimumFractionDigits: 2, maximumFractionDigits: 2
+                });
+                const valueOfficeToPayBrl = valueOfficeToPay.toLocaleString('pt-br', {
+                    minimumFractionDigits: 2, maximumFractionDigits: 2
+                });
+
+                // SE TIVER CENTAVOS NO PAGAMENTO DE PREMIO DO ESCRITÓRIO
+                // if (prizeOfficeBrl)
+
+                document.getElementsByClassName('last_value').textContent = newStoreValueBrl;
+                document.querySelector("input[name='last_value']").value = newStoreValueBrl;
+
+                document.querySelector('label.prize_output').insertAdjacentHTML('afterbegin', `<span class="field icon-leanpub">Valor de Abate:</span>
+                            <p class="app_widget_title beat_value_store">${beatValueBrl}</p>
+                            <input type="hidden" name="beat_store" value="${beatValueBrl}">
+                            <input type="hidden" name="value_office_to_pay" value="${valueOfficeToPayBrl}">`);
+                alert(`Foi abatido do saldo da loja: R$${beatValueBrl}.
+                     O escritório pagará em dinheiro: R$${valueOfficeToPayBrl}.`);
+            }
+        } else {
+            inputValueCashBrl = inputValueCash.toLocaleString('pt-br', {
+                minimumFractionDigits: 2, maximumFractionDigits: 2
+            });
+            document.querySelector('label.prize_output').insertAdjacentHTML('afterbegin', `<span class="field icon-leanpub">Sem abate</span>
+                            <input type="hidden" name="beat_prize" value="0">
+                            <input type="hidden" name="prize_office" value="${inputValueCashBrl}">
+                            <input type="hidden" name="prize_store" value="0">`);
+        }
+        setTimeout(function () {
+        }, 1000);
+
+        // após tudo envio o formulário
+        formSub(formCashFlow);
+    })
 }

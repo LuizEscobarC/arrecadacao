@@ -20,6 +20,7 @@
 
             <label class="three_label">
                 <span class="field icon-briefcase"> HORÁRIO:</span>
+                <input type="hidden" class="current_hour" name="current_hour" value="<?= ($currentHour ? $currentHour->id : null); ?>">
                 <select name="id_hour" class="callback" rel="<?= url("/app/get_week_day") ?>">
                 </select>
             </label>
