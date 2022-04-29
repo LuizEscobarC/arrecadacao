@@ -417,9 +417,9 @@ function more_than_on_negative(array $values): bool
             }
         }
         if ($errorNegative > 1) {
-            $bools[] =  true;
+            $bools[] = true;
         } else {
-            $bools[] =  false;
+            $bools[] = false;
         }
     }
     if (in_array(true, $bools)) {
@@ -427,4 +427,15 @@ function more_than_on_negative(array $values): bool
     } else {
         return true;
     }
+}
+
+function is_not_zero($value)
+{
+    return (
+        !empty($value)
+        && money_fmt_app($value) !== 0
+        && money_fmt_app($value) !== 0.00
+        && money_fmt_app($value) !== 00.00
+        && money_fmt_app($value) !== 00.0
+    );
 }

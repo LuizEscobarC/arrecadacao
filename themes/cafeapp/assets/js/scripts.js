@@ -139,7 +139,7 @@ const dataRemoveEntities = {
     "storeremove": "essa loja?",
     "listremove": "essa lista?",
     "cashremove": "esse lançamento?",
-    "moviment-remove": "essa movimentação?"
+    "movimentremove": "essa movimentação?"
 }
 
 for (keysRemove in dataRemoveEntities) {

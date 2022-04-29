@@ -6,7 +6,6 @@
     </div>
     <form class="app_form moviment" action="<?= url("/app/movimentacao"); ?>" method="post">
         <div class="ajax_response"><?= flash(); ?></div>
-
         <div class="label_group">
             <label class="three_label">
                 <span class="field icon-thumb-tack">DATA DE MOVIMENTO:</span>
@@ -113,7 +112,7 @@
 
         <div class="al-center">
             <div>
-                <span data-moviment-remove="<?= url("/app/remove-moviment/{$moviment->id}") ?>"
+                <span data-movimentremove="<?= url("/app/remove-moviment/{$moviment->id}") ?>"
                       class="btn_remove transition icon-error">Excluir</span>
             </div>
         </div>

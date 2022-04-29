@@ -88,6 +88,11 @@ class CashFlow extends Model
         return null;
     }
 
+    public function findByDateMoviment($idMoviment, int $type,  int $cost): ?CashFlow
+    {
+        return $this->find("id_moviment = {$idMoviment} AND type = {$type} AND id_cost = {$cost}")->fetch();
+    }
+
     public function filter(array $data): array
     {
         if (!empty($data['page'])) {

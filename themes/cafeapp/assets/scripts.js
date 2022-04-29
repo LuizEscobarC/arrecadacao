@@ -50,7 +50,7 @@ const response=await callback.json();if(response.message){flashClass.insertAdjac
 async function remove(dataAttr,confirmText){const selected=document.querySelector(`[data-${dataAttr}]`);if(selected){selected.addEventListener('click',async function(){const remove=confirm('ATENÇÃO: Essa ação não pode ser desfeita! Tem certeza que deseja excluir '+confirmText);const url=this.dataset[dataAttr];if(remove===!0){const callback=await fetch(url,{method:'POST',data:{},headers:{'Content-Type':'application/json'}});const response=await callback.json();if(response){if(response.scroll){window.scrollTo({top:response.scroll,behavior:'smooth'})}
 if(response.redirect){window.location.href=response.redirect}
 if(response.reload){window.location.reload()}}}})}}
-const dataRemoveEntities={"hourremove":"esse horário?","userremove":"esse usuário?","centerremove":"esse centro de custo?","storeremove":"essa loja?","listremove":"essa lista?","cashremove":"esse lançamento?","moviment-remove":"essa movimentação?"}
+const dataRemoveEntities={"hourremove":"esse horário?","userremove":"esse usuário?","centerremove":"esse centro de custo?","storeremove":"essa loja?","listremove":"essa lista?","cashremove":"esse lançamento?","movimentremove":"essa movimentação?"}
 for(keysRemove in dataRemoveEntities){remove(keysRemove,dataRemoveEntities[keysRemove])}
 const hourInput=document.querySelector('input.hour');if(hourInput){hourInput.addEventListener('change',function(){const select=document.querySelector('select.callback');const label=document.getElementById('label');if(select||label){select.textContent='';label.textContent=''}
 getHours(this)})}
