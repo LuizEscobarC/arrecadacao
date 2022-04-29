@@ -65,6 +65,12 @@ class Moviment extends Model
         return null;
     }
 
+    public function findByIdList(?string $id, string $columns = "*"): ?Model
+    {
+        $find = $this->find("id_list = :id", "id={$id}", $columns);
+        return $find->fetch();
+    }
+
     public function lists(int $list = null): ?Lists
     {
         if (!empty($list)) {
@@ -114,6 +120,8 @@ class Moviment extends Model
         // BEGIN STORE
         if (!empty($data['beat_prize'])) {
             $store->valor_saldo = (money_fmt_app($data['new_value']) + money_fmt_app($data['prize']));
+            //  PARA ATUALIZAR O SALDO NO MOVIMENT
+            $data['new_value'] = $store->valor_saldo;
         } else {
             $store->valor_saldo = money_fmt_app($data['new_value']);
         }
@@ -124,24 +132,41 @@ class Moviment extends Model
             echo json_encode($json);
             return false;
         }
+
         // END STORE
 
-        $moviment->bootstrap(
-            $data['date_moviment'],
-            $data['id_store'],
-            $data['id_hour'],
-            (!empty($data['id_list']) ? $data['id_list'] : null),
-            money_fmt_app($data['beat_value']),
-            money_fmt_app($data['paying_now']),
-            money_fmt_app($data['expend']),
-            money_fmt_app($data['last_value']),
-            money_fmt_app($data['get_value']),
-            money_fmt_app($data['new_value']),
-            (!empty($data['prize']) ? money_fmt_app($data['prize']) : null),
-            (!empty($data['beat_prize']) ? money_fmt_app($data['beat_prize']) : null),
-            (!empty($data['prize_store']) ? money_fmt_app($data['prize_store']) : null),
-            (!empty($data['prize_office']) ? money_fmt_app($data['prize_office']) : null)
-        );
+        // SE EXISTIR ID ATUALIZA, SE NÃO SALVA O MESMO VALOR
+        if (!empty($moviment->id)) {
+            $moviment->date_moviment = (!empty($moviment->id) ? $data['date_moviment'] : $moviment->date_moviment);
+            $moviment->id_store = ((!empty($moviment->id)) ? $data['id_store'] : $moviment->id_store);
+            $moviment->id_hour = (!empty($moviment->id) ? $data['id_hour'] : $moviment->id_hour);
+            $moviment->id_list = (!empty($moviment->id) && !empty($data['id_list']) ? $data['id_list'] : $moviment->id_list);
+            $moviment->beat_value = (!empty($moviment->id) ? money_fmt_app($data['beat_value']) : $moviment->beat_value);
+            $moviment->paying_now = (!empty($moviment->id) && is_not_zero($data['paying_now']) ? money_fmt_app($data['paying_now']) : $moviment->paying_now);
+            $moviment->expend = (!empty($moviment->id) && is_not_zero($data['expend']) ? money_fmt_app($data['expend']) : $moviment->expend);
+            $moviment->last_value = (!empty($moviment->id) ? $moviment->last_value : money_fmt_app($data['last_value']));
+            $moviment->get_value = (!empty($moviment->id) && is_not_zero($data['paying_now']) ? money_fmt_app($data['get_value']) : $moviment->get_value);
+            $moviment->new_value = (!empty($moviment->id) ? money_fmt_app($data['new_value']) : $moviment->new_value);
+            $moviment->prize = (!empty($moviment->id) ? money_fmt_app($data['prize']) : $moviment->prize);
+            $moviment->beat_prize = (!empty($moviment->id) ? money_fmt_app($data['beat_prize']) : $moviment->beat_prize);
+            $moviment->prize_store = (!empty($moviment->id) ? money_fmt_app($data['prize_store']) : $moviment->prize_store);
+            $moviment->prize_office = (!empty($moviment->id) ? money_fmt_app($data['prize_office']) : $moviment->prize_office);
+        } else {
+            $moviment->date_moviment = $data['date_moviment'];
+            $moviment->id_store = $data['id_store'];
+            $moviment->id_hour = $data['id_hour'];
+            $moviment->id_list = $data['id_list'];
+            $moviment->beat_value = money_fmt_app($data['beat_value']);
+            $moviment->paying_now = money_fmt_app($data['paying_now']);
+            $moviment->expend = money_fmt_app($data['expend']);
+            $moviment->last_value = money_fmt_app($data['last_value']);
+            $moviment->get_value = money_fmt_app($data['get_value']);
+            $moviment->new_value = money_fmt_app($data['new_value']);
+            $moviment->prize = money_fmt_app($data['prize']);
+            $moviment->beat_prize = money_fmt_app($data['beat_prize']);
+            $moviment->prize_store = money_fmt_app($data['prize_store']);
+            $moviment->prize_office = money_fmt_app($data['prize_office']);
+        }
 
         if ($moviment->save()) {
             $json['message'] = $this->message->success("Tudo certo {$user->first_name}, o movimento atualizado com sucesso!")->render();
@@ -150,6 +175,8 @@ class Moviment extends Model
             $json['scroll'] = 2;
         } else {
             $json['message'] = $moviment->message()->render();
+            echo json_encode($json);
+            return false;
         }
 
         // BEGIN CASH FLOWS
@@ -202,8 +229,7 @@ class Moviment extends Model
     protected function findByDateMoviment(?string $dateMoviment, ?string $id_hour, ?string $id_store): ?Moviment
     {
         $dateMoviment = date_fmt_app($dateMoviment);
-        (new Moviment());
-        return $this->find("DATE(date_moviment) = '{$dateMoviment}' AND id_store = {$id_store} AND id_hour = {$id_hour}")->fetch();
+        return $this->find("DATE(date_moviment) = DATE('{$dateMoviment}') AND id_store = {$id_store} AND id_hour = {$id_hour}")->fetch();
     }
 
     public function isEmpty(array &$data): void
@@ -304,7 +330,11 @@ class Moviment extends Model
             $cash->description = 'Saída de Premio do Escritório';
             // SE FOR ATUALIZAÇÃO DE MOVIMENTO, INCREMENTA
             if ($cash->id) {
-                $cash->value += money_fmt_app($data['prize_office']);
+                if(empty($data['edit'])) {
+                    $cash->value += money_fmt_app($data['prize_office']);
+                } else {
+                    $cash->value = money_fmt_app($data['prize_office']);
+                }
             } else {
                 $cash->value = money_fmt_app($data['prize_office']);
             }
@@ -328,7 +358,11 @@ class Moviment extends Model
             $cash->description = 'Abate de Premio da loja ' . $store->nome_loja;
             // SE FOR ATUALIZAÇÃO DE MOVIMENTO, INCREMENTA
             if ($cash->id) {
-                $cash->value += money_fmt_app($data['prize_store']);
+                if(empty($data['edit'])) {
+                    $cash->value += money_fmt_app($data['prize_store']);
+                } else {
+                    $cash->value = money_fmt_app($data['prize_store']);
+                }
             } else {
                 $cash->value = money_fmt_app($data['prize_store']);
             }
@@ -352,7 +386,11 @@ class Moviment extends Model
             $cash->description = ($list->description ?? '') . ' Entrada de ' . ($store->nome_loja ?? 'loja');
             // SE FOR ATUALIZAÇÃO DE MOVIMENTO, INCREMENTA
             if ($cash->id) {
-                $cash->value += money_fmt_app($data["get_value"]);
+                if(empty($data['edit'])) {
+                    $cash->value += money_fmt_app($data["get_value"]);
+                } else {
+                    $cash->value = money_fmt_app($data["get_value"]);
+                }
             } else {
                 $cash->value = money_fmt_app($data["get_value"]);
             }
@@ -375,7 +413,11 @@ class Moviment extends Model
                 $cash->description = ' A ' . ($store->nome_loja ?? 'loja') . ' teve uma despesa';
                 // SE FOR ATUALIZAÇÃO DE MOVIMENTO, INCREMENTA
                 if ($cash->id) {
-                    $cash->value += money_fmt_app($data["expend"]);
+                    if(empty($data['edit'])) {
+                        $cash->value += money_fmt_app($data["expend"]);
+                    } else {
+                        $cash->value = money_fmt_app($data["expend"]);
+                    }
                 } else {
                     $cash->value = money_fmt_app($data["expend"]);
                 }

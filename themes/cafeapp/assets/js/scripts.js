@@ -26,8 +26,8 @@ async function getHours(inputSelect) {
     }
 }
 
-async function getList(inputDataList, idHour, idStore) {
-    const data = {id_hour: idHour, id_store: idStore};
+async function getList(inputDataList, idHour, idStore, dateMoviment) {
+    const data = {id_hour: idHour, id_store: idStore, date_moviment: dateMoviment};
     const url = inputDataList.getAttribute('rel');
     const ajaxResponse = document.querySelector('.ajax_response');
 
@@ -177,7 +177,8 @@ const movimentDatas = (inputDataList, idStore) => {
         }
     }
     if (idStore && hourSelect.value) {
-        getList(inputDataList, hourSelect.value, idStore);
+        const dateMoviment = document.querySelector("input[name='date_moviment']").value;
+        getList(inputDataList, hourSelect.value, idStore, dateMoviment);
     }
 }
 
@@ -198,7 +199,7 @@ if (storeDataListInput) {
             if (document.querySelector('form.app_form#moviment, .cash_flow')) {
                 getStoreValueNow(this, idStore);
                 if (document.querySelector('form.app_form#moviment')) {
-                    storeVerify(idStore);
+                    //storeVerify(idStore);
                     movimentDatas(this, idStore)
                 }
             }
@@ -238,10 +239,15 @@ function calc(value, $this) {
         const netValue = document.querySelector('p.net_value').textContent;
         /* Ao final o saldo anterior e o saldo atual que é a mesma coisa, recebe o novo saldo do calculo*/
         // VALOR ANTERIOR | SALDO ATUAL
-        const last_val = document.querySelector('p.last_value');
+        let last_val = null;
+        if (document.querySelector('.app_form.edit')) {
+            document.querySelector('p.last_value').textContent = document.querySelector("input[name='last_value']").value;
+            last_val = document.querySelector('p.last_value').textContent;
+        } else {
+           last_val = document.querySelector('p.last_value').textContent
+        }
 
-
-        document.querySelector("input[name='last_value']").value = last_val.textContent.toLocaleString('pt-br', {
+        document.querySelector("input[name='last_value']").value = last_val.toLocaleString('pt-br', {
             minimumFractionDigits: 2, maximumFractionDigits: 2
         });
 
@@ -249,14 +255,14 @@ function calc(value, $this) {
         document.querySelector("input[name='get_value']").value = getValueBr;
         document.querySelector('.get_value').innerHTML = getValueBr;
 
-        if (last_val.textContent && netValue) {
+        if (last_val && netValue) {
             // É o valor que tem que ser abatido  com o valor recolhido + o valor de despesas
             // VALOR A ACERTAR | VALOR LIQUIDO
             const beatValue = (getValue - parseFloat(netValue.replaceAll('.', '')
                 .replace(',', '.')));
 
             // NOVO VALOR ATUAL | SALDO ANTERIOR
-            const newValue = (parseFloat(last_val.textContent.replaceAll('.', '')
+            const newValue = (parseFloat(last_val.replaceAll('.', '')
                 .replace(',', '.')) + beatValue)
                 .toLocaleString('pt-br', {minimumFractionDigits: 2, maximumFractionDigits: 2});
 
@@ -380,6 +386,17 @@ if (formMovimentGlobalVar) {
                             <input type="hidden" name="prize_store" value="${prizeStoreBrl}">`);
                     alert(`A loja pagará: R$${prizeStoreBrl}.
                      O escritório pagará: R$${prizeOfficeBrl}.`);
+                } else {
+
+                    const beatPrizeBrl = inputPrize.toLocaleString('pt-br', {
+                        minimumFractionDigits: 2, maximumFractionDigits: 2
+                    });
+
+                    document.querySelector('label.prize_output').insertAdjacentHTML('afterbegin', `<span class="field icon-leanpub">Valor de Abate Premio:</span>
+                            <input type="hidden" name="beat_prize" value="0">
+                            <input type="hidden" name="prize_office" value="${beatPrizeBrl}">
+                            <input type="hidden" name="prize_store" value="0">`);
+                    alert(`<h1>O escritório pagará: R$${beatPrizeBrl}.</h1>`);
                 }
             } else {
                 inputPrize = inputPrize.toLocaleString('pt-br', {
@@ -459,7 +476,7 @@ $(function () {
 });
 
 
-if (document.querySelector('#moviment')) {
+if (document.querySelector('.app_form#moviment')) {
     const parentModal = document.querySelector('.app_modal');
 
     // ABRE E FECHA MODAL DE CALCULADORA
@@ -491,6 +508,23 @@ if (document.querySelector('#moviment')) {
                     minimumFractionDigits: 2
                 });
             })
+        }
+
+        if (e.key === 'Escape') {
+            modal.style.display = 'none';
+            parentModal.style.display = 'none';
+            parentModal.dataset.modalclose = 'true';
+        }
+    })
+
+    // ABRE E FECHA MODAL DE CALCULADORA
+    document.addEventListener('keyup', function (e) {
+        const modal = document.querySelector('.app_modal_moviment');
+        if (e.key === 'i') {
+            parentModal.style.display = 'flex';
+            modal.style.display = 'block';
+            parentModal.dataset.modalclose = 'false';
+            // FAZ FOCAR NO INPUT
         }
 
         if (e.key === 'Escape') {

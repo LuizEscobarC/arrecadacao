@@ -708,7 +708,11 @@ class App extends Controller
      */
     public function getList(array $data): void
     {
-        $callback = (new Lists())->findByStoreHour($data['id_store'], $data['id_hour']);
+        $callback = (new Lists())->findByStoreHour($data['id_store'], $data['id_hour'], $data['date_moviment']);
+        if(!empty($callback->id) && (new Moviment())->findByIdList($callback->id)) {
+            // JÁ FOI LANÇADO
+            $callback = null;
+        }
         echo json_encode($callback);
     }
 
@@ -1081,7 +1085,8 @@ class App extends Controller
 
         echo $this->view->render('moviment', [
             'head' => $head,
-            'moviment' => (new Moviment())->findById($id)
+            'moviment' => (new Moviment())->findById($id),
+            "currentHour" => ((new \Source\Models\currentHour())->findById(1))->hour()
         ]);
 
     }
@@ -1145,7 +1150,7 @@ class App extends Controller
             $moviment->destroy();
         }
         $this->message->success("Tudo pronto {$this->user->first_name}, movimento removido com sucesso!")->flash();
-        $json['redirect'] = url('/app/fluxos-de-caixa');
+        $json['redirect'] = url('/app/movimentacoes');
         echo json_encode($json);
     }
 

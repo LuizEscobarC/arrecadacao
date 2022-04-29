@@ -414,7 +414,6 @@ body {
 .app_modal_box {
     display: none;
     margin: auto;
-    width: 500px;
     max-width: 94%;
     padding: calc(var(--area-box) * 1.5) calc(var(--area-box) * 5);
     background: #ffffff;
@@ -422,6 +421,14 @@ body {
     -webkit-border-radius: var(--radius-normal);
     -moz-border-radius: var(--radius-normal);
     border-radius: var(--radius-normal);
+}
+
+.app_modal_box.app_modal_calc {
+    width: 500px;
+}
+
+.app_modal_box.app_modal_moviment {
+    width: 1000px;
 }
 
 .app_modal_box .title {

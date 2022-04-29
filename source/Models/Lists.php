@@ -2,6 +2,7 @@
 
 namespace Source\Models;
 
+use Composer\Package\Loader\ValidatingArrayLoader;
 use Source\Core\Model;
 use Source\Models\MoldelInterfaces\FilterInterface;
 use Source\Support\Filters\FiltersLists;
@@ -95,10 +96,10 @@ class Lists extends Model
         return array_merge($arrayFilterReturn, [$total]);
     }
 
-    public function findByStoreHour(?string $idStore, ?string $idHour): ?\stdClass
+    public function findByStoreHour(?string $idStore, ?string $idHour, $dateMoviment): ?\stdClass
     {
         if (!empty($idHour)) {
-            $this->find('id_hour = :h AND id_store = :s',
+            $this->find("id_hour = :h AND id_store = :s AND DATE(date_moviment) = DATE('{$dateMoviment}')",
                 "&h={$idHour}&s={$idStore}");
             if (empty($this->fetch())) {
                 return null;
