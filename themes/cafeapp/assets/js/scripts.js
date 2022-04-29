@@ -412,7 +412,6 @@ if (formMovimentGlobalVar) {
         }
         const formMoviment = formMovimentGlobalVar;
         formSub(formMoviment);
-
     });
 }
 // END MOVIMENT CALCS

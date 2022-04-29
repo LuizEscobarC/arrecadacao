@@ -9,7 +9,7 @@
         <?= csrf_input(); ?>
         <label>
             <span class="field icon-life-ring">Nível?</span>
-            <select name="type">
+            <select name="level">
                 <option value="1">&ofcir; admin</option>
                 <option value="2">&ofcir; User</option>
             </select>

@@ -203,6 +203,7 @@ class App extends Controller
                 $data["email"],
                 $data["password"]
             );
+            $user->level = $data['level'];
 
             if ($auth->register($user)) {
                 $json['message'] = $auth->message()->success("Tudo Pronto {$this->user->first_name}, o usuário foi atualizado com sucesso!")->render();
