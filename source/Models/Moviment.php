@@ -434,6 +434,11 @@ class Moviment extends Model
         return null;
     }
 
+    public function getMoviment(array $data): ?Model
+    {
+        return $this->find("DATE(date_moviment) = DATE('{$data['date_moviment']}') AND id_hour = {$data['id_hour']} AND id_store = {$data['id_store']}")->fetch();
+    }
+
     private function saveCurrentHour($id)
     {
         $currentHour = (new currentHour())->findById(1);

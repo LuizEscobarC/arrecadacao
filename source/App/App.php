@@ -717,6 +717,20 @@ class App extends Controller
         echo json_encode($callback);
     }
 
+    public function getMoviment(array $data): void
+    {
+        $callback = (new Moviment())->getMoviment($data);
+        $json = null;
+        if (!empty($callback)) {
+            $json['link'] = url("app/movimentacao/{$callback->id}");
+            $json['moviment'] = (array)$callback->data();
+            $json['moviment']['list'] = (array)$callback->lists()->data();
+            $json['moviment']['hour'] = (array)$callback->hour()->data();
+            $json['moviment']['store'] = (array)$callback->store()->data();
+        }
+        echo json_encode($json);
+    }
+
     /**
      * @param array $data
      * @return void
@@ -1086,6 +1100,7 @@ class App extends Controller
 
         echo $this->view->render('moviment', [
             'head' => $head,
+            'view' => $this->view,
             'moviment' => (new Moviment())->findById($id),
             "currentHour" => ((new \Source\Models\currentHour())->findById(1))->hour()
         ]);
@@ -1102,6 +1117,7 @@ class App extends Controller
 
         // no banco deve haver o id 1 exclusivamente para o currentHour
         echo $this->view->render("creates/moviment", [
+            'view' => $this->view,
             "head" => $head,
             'currentHour' => ((new \Source\Models\currentHour())->findById(1))->hour()
         ]);

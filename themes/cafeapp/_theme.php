@@ -61,6 +61,9 @@
     <script src="<?= url("shared/scripts/ajaxCad.js") ?>"></script>
     <script src="<?= theme("/assets/js/scripts.js", CONF_VIEW_APP) ?>"></script>
     <script src="<?= theme("/assets/js/sidebar.js", CONF_VIEW_APP) ?>"></script>
+    <script src="<?= theme("/assets/js/removes.js", CONF_VIEW_APP) ?>"></script>
+    <script src="<?= theme("/assets/js/home.js", CONF_VIEW_APP) ?>"></script>
+    <script src="<?= theme("/assets/js/jquery-mask.js", CONF_VIEW_APP) ?>"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <?php endif; ?>
 <?= $v->section("scripts"); ?>

@@ -111,6 +111,7 @@ $route->post('/get_hour', 'App:getHour');
 $route->post('/get_list', 'App:getList');
 $route->post('/get_store', 'App:getStore');
 $route->get('/get_week_day/{id}', 'App:getWeekDay');
+$route->post('/get-moviment', 'App:getMoviment');
 
 /** OPTIN */
 $route->get("/obrigado/{email}", "App:success");
