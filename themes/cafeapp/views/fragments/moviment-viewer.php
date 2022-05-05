@@ -1,5 +1,5 @@
 <!-- moviment visualization fragment-->
-<div class="app_modal app_form" data-modalclose="true">
+<div class="app_modal app_form modal_moviment_parent" data-modalclose="true">
     <!--Calc-->
     <div class="app_modal_box app_modal_moviment">
         <p class="title icon-calendar-check-o">Dados:</p>

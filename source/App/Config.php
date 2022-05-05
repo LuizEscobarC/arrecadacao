@@ -14,7 +14,7 @@ class Config extends App
     {
         parent::__construct();
 
-       // TEST $this->calcStore(['date_moviment' => '2022-04-29', 'id_hour' => '112']);
+        // TEST $this->calcStore(['date_moviment' => '2022-04-29', 'id_hour' => '112']);
     }
 
     /**
@@ -72,6 +72,8 @@ class Config extends App
             // PEGAR O ID DA LOJA DOS MOVIMENTOS EXISTENTES NO DIA
             $moviments = (new Moviment())->find("DATE(date_moviment) = '{$date}' AND id_hour = :h",
                 "h={$idHour}", 'id_store')->fetch(true);
+
+            // SE HOUVER ALGUM LANÇAMENTO DE ABATE DE LOJA MANUAL
             if (!empty($moviments)) {
                 // PEGAR AS LOJAS QUE NÃO ESTEJAM ENTRE AS QUE TENHAM MOVIMENTO
                 $notIn = [];
@@ -80,88 +82,74 @@ class Config extends App
                 }
                 $notIn = implode(', ', $notIn);
                 $stores = (new Store())->find("id NOT IN({$notIn})", null, 'id, valor_saldo')->fetch(true);
+            } else {
+                // SE NÃO HOUVE NENHUM LANÇAMENTO MANUAL
+                $stores = (new Store())->find(null, null, 'id, valor_saldo')->fetch(true);
+            }
+            // PEGAR A LISTA DE CADA LOJA, SE HOUVER, SE NÃO REALIZAR CALCULO COM 0
+            $list = new Lists();
+            if (!empty($stores)) {
+                foreach ($stores as $store) {
+                    $currentList = $list->find("id_store = :s AND DATE(date_moviment) = '{$date}'",
+                        "s={$store->id}",
+                        'id, net_value')->fetch();
 
-                // PEGAR A LISTA DE CADA LOJA, SE HOUVER, SE NÃO REALIZAR CALCULO COM 0
-                $list = new Lists();
-                if (!empty($store)) {
-                    foreach ($stores as $store) {
-                        $currentList = $list->find("id_store = :s AND DATE(date_moviment) = '{$date}'",
-                            "s={$store->id}",
-                            'id')->fetch();
-                        if (!empty($currentList)) {
-                            // FAZER O LANÇAMENTO DE MOVIMENTO DE CADA LOJA
-                            // SALDO HORÁRIO
-                            $beatValue = (0 - $currentList->net_value);
-                            $newValue = ($store->valor_saldo + $beatValue);
+                    if (!empty($currentList)) {
+                        // FAZER O LANÇAMENTO DE MOVIMENTO DE CADA LOJA
+                        // SALDO HORÁRIO
+                        $beatValue = (0 - $currentList->net_value);
+                        $newValue = ($store->valor_saldo + $beatValue);
 
-                            // SAVE MOVIMENTS
-                            $movimentSave = (new Moviment());
+                        // SAVE MOVIMENTS
+                        $movimentSave = (new Moviment());
 
-                            $movimentSave->date_moviment = $date;
-                            $movimentSave->id_hour = $idHour;
-                            $movimentSave->id_store = $store->id;
-                            $movimentSave->last_value = $store->valor_saldo;
-                            $movimentSave->id_list = $currentList->id;
-                            $movimentSave->net_value = $currentList->net_value;
-                            $movimentSave->paying_now = 0;
-                            $movimentSave->expend = 0;
-                            $movimentSave->get_value = 0;
-                            $movimentSave->beat_value = $beatValue;
-                            $movimentSave->new_value = $newValue;
-                            $movimentSave->prize = 0;
-                            $movimentSave->beat_prize = 0;
-                            $movimentSave->prize_office = 0;
-                            $movimentSave->prize_store = 0;
+                        $movimentSave->date_moviment = $date;
+                        $movimentSave->id_hour = $idHour;
+                        $movimentSave->id_store = $store->id;
+                        $movimentSave->last_value = $store->valor_saldo;
+                        $movimentSave->id_list = $currentList->id;
+                        $movimentSave->paying_now = 0;
+                        $movimentSave->expend = 0;
+                        $movimentSave->get_value = 0;
+                        $movimentSave->beat_value = $beatValue;
+                        $movimentSave->new_value = $newValue;
+                        $movimentSave->prize = 0;
+                        $movimentSave->beat_prize = 0;
+                        $movimentSave->prize_office = 0;
+                        $movimentSave->prize_store = 0;
 
-                            if (!$movimentSave->save()) {
-                                $message[] = $movimentSave->message()->render();
-                            }
-                        } else {
-                            // FAZER O LANÇAMENTO DE MOVIMENTO DE CADA LOJA
-                            // SALDO HORÁRIO
-                            $beatValue = (0 - 0);
-                            $newValue = ($store->valor_saldo + $beatValue);
+                        if (!$movimentSave->save()) {
+                            $message[] = $movimentSave->message()->render();
+                        }
+                    } else {
+                        // FAZER O LANÇAMENTO DE MOVIMENTO DE CADA LOJA
+                        // SALDO HORÁRIO
+                        $beatValue = (0 - 0);
+                        $newValue = ($store->valor_saldo + $beatValue);
 
-                            // SAVE MOVIMENTS
-                            $movimentSave = (new Moviment());
+                        // SAVE MOVIMENTS
+                        $movimentSave = (new Moviment());
 
 
-                            $movimentSave->date_moviment = $date;
-                            $movimentSave->id_hour = $idHour;
-                            $movimentSave->id_store = $store->id;
-                            $movimentSave->last_value = $store->valor_saldo;
-                            $movimentSave->id_list = null;
-                            $movimentSave->paying_now = 0;
-                            $movimentSave->expend = 0;
-                            $movimentSave->get_value = 0;
-                            $movimentSave->beat_value = $beatValue;
-                            $movimentSave->new_value = $newValue;
-                            $movimentSave->prize = 0;
-                            $movimentSave->beat_prize = 0;
-                            $movimentSave->prize_office = 0;
-                            $movimentSave->prize_store = 0;
+                        $movimentSave->date_moviment = $date;
+                        $movimentSave->id_hour = $idHour;
+                        $movimentSave->id_store = $store->id;
+                        $movimentSave->last_value = $store->valor_saldo;
+                        $movimentSave->id_list = null;
+                        $movimentSave->paying_now = 0;
+                        $movimentSave->expend = 0;
+                        $movimentSave->get_value = 0;
+                        $movimentSave->beat_value = $beatValue;
+                        $movimentSave->new_value = $newValue;
+                        $movimentSave->prize = 0;
+                        $movimentSave->beat_prize = 0;
+                        $movimentSave->prize_office = 0;
+                        $movimentSave->prize_store = 0;
 
-                            if (!$movimentSave->save()) {
-                                $message[] = $movimentSave->message()->render();
-                            }
+                        if (!$movimentSave->save()) {
+                            $message[] = $movimentSave->message()->render();
                         }
                     }
-                } else {
-                    // TODAS AS LOJAS FORAM ABATIDAS
-                    $json['message'] = $this->message->warning("Todas as lojas do horário já foram abatidas na data {$date} e no horário " . (new Hour())->findById($idHour)->description . ".")->render();
-                    echo json_encode($json);
-                    return;
-                }
-
-                if (!empty($message)) {
-                    $json['message'] = implode(', ', $message);
-                    echo json_encode($json);
-                    return;
-                } else {
-                    // TODAS AS LOJAS ABATIDAS COM SUCESSO
-                    $json['message'] = $this->message->success("Todas as lojas inadimplentes foram abatidas com sucesso na data {$date} e no horário " . (new Hour())->findById($idHour)->description . ".")->render();
-                    echo json_encode($json);
-                    return;
                 }
             } else {
                 // TODAS AS LOJAS FORAM ABATIDAS
@@ -169,6 +157,22 @@ class Config extends App
                 echo json_encode($json);
                 return;
             }
+
+            if (!empty($message)) {
+                $json['message'] = implode(', ', $message);
+                echo json_encode($json);
+                return;
+            } else {
+                // TODAS AS LOJAS ABATIDAS COM SUCESSO
+                $json['message'] = $this->message->success("Todas as lojas inadimplentes foram abatidas com sucesso na data {$date} e no horário " . (new Hour())->findById($idHour)->description . ".")->render();
+                echo json_encode($json);
+                return;
+            }
+        } else {
+            // NÃO ENVIOU O HORÁRIO OU A DATA DE MOVIMENT
+            $json['message'] = $this->message->warning("Data de movimento e horário são obrigatórios.")->render();
+            echo json_encode($json);
+            return;
         }
     }
 }

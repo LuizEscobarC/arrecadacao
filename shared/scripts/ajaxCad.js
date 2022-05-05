@@ -17,7 +17,7 @@ async function formSub(formSubmit) {
     const flashClass = "ajax_response";
     const flash = document.querySelector("." + flashClass);
 
-    //load.style.display = "flex";
+    load.style.display = "flex";
 
     // ESPERA O ENVIO COM O RETORNO
     const callback = await fetch(
@@ -64,6 +64,6 @@ async function formSub(formSubmit) {
             flash.style.display = "none";
         }
         // AO FINAL DE TUDO O LOADER SAÍ
-        //load.style.display = "none";
+        load.style.display = "none";
     }
 }

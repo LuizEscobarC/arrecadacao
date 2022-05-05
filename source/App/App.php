@@ -2,9 +2,6 @@
 
 namespace Source\App;
 
-use Composer\Package\Loader\ValidatingArrayLoader;
-use PHPMailer\PHPMailer\Exception;
-use Source\Core\Connect;
 use Source\Core\Controller;
 use Source\Core\View;
 use Source\Models\Auth;
@@ -39,6 +36,8 @@ class App extends Controller
             redirect("/entrar");
         }
 
+        // RESETA O STATUS DE FECHAMENTO DE HORÁRIO NA TABELA HOUR
+        (new Hour())->resetStatus();
     }
 
     /**
@@ -51,7 +50,7 @@ class App extends Controller
         if (Auth::user()->level != 1) {
             echo $this->view->render("views/home-user", [
                 'head' => $head,
-                'error' => (object) [
+                'error' => (object)[
                     'linkTitle' => 'Cadastrar Acerto de Lojas',
                     'link' => url('/app/cadastrar-movimentacao'),
                     'message' => 'Welcome',
@@ -203,7 +202,7 @@ class App extends Controller
                 $data["email"],
                 $data["password"]
             );
-            $user->level = $data['level'];
+            $user->level = ($data['level'] ?? 2);
 
             if ($auth->register($user)) {
                 $json['message'] = $auth->message()->success("Tudo Pronto {$this->user->first_name}, o usuário foi atualizado com sucesso!")->render();
@@ -710,13 +709,17 @@ class App extends Controller
     public function getList(array $data): void
     {
         $callback = (new Lists())->findByStoreHour($data['id_store'], $data['id_hour'], $data['date_moviment']);
-        if(!empty($callback->id) && (new Moviment())->findByIdList($callback->id)) {
+        if (!empty($callback->id) && (new Moviment())->findByIdList($callback->id)) {
             // JÁ FOI LANÇADO
             $callback = null;
         }
         echo json_encode($callback);
     }
 
+    /**
+     * @param array $data
+     * @return void
+     */
     public function getMoviment(array $data): void
     {
         $callback = (new Moviment())->getMoviment($data);
@@ -1009,7 +1012,7 @@ class App extends Controller
 
             $cash->bootstrap(
                 $data["date_moviment"],
-                (!empty($data["id_store"]) ? $data["id_store"] : null ),
+                (!empty($data["id_store"]) ? $data["id_store"] : null),
                 $data["id_hour"],
                 $data["description"],
                 money_fmt_app($data["value"]),

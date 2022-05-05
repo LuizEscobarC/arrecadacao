@@ -275,7 +275,7 @@ function image(string $image, int $width, int $height = null): string
  */
 function date_fmt(string $date = "now", string $format = "d/m/Y H\hi"): string
 {
-    return (new DateTime($date))->format($format);
+    return (new DateTime($date, (new DateTimeZone('America/Sao_Paulo'))))->format($format);
 }
 
 /**

@@ -117,6 +117,12 @@ $route->post('/get-moviment', 'App:getMoviment');
 $route->get("/obrigado/{email}", "App:success");
 
 
+/** CONFIGS */
+$route->group('/configuracoes');
+$route->get('/horario', 'Config:closeHour');
+$route->post('/fechamento-de-horario/{id_hour}', 'Config:closeHour');
+$route->post('/abate-de-lojas-inadimplentes', 'Config:calcStore');
+
 /*
  * ERROR ROUTES
  */

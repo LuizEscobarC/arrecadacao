@@ -193,11 +193,28 @@ const movimentDatas = (inputDataList, idStore) => {
     }
 }
 
+
 const storeDataListInput = document.querySelector('input.store_data_list');
 if (storeDataListInput) {
+    const dataValue = storeDataListInput.getAttribute('list');
+    const callback = document.querySelector('select.callback');
+    if (callback) {
+        callback.addEventListener('change', function () {
+            if (storeDataListInput.value) {
+                const storeOption = document.getElementById(dataValue).options.namedItem(storeDataListInput.value);
+                const idStoreHidden = document.querySelector("input[name='id_store']");
+                if (storeOption) {
+                    const idStore = storeOption.dataset.id_store;
+                    // ADICIONA O ID NO HIDDEN INPUT
+                    idStoreHidden.value = idStore;
+                    movimentDatas(storeDataListInput, idStore)
+                }
+            }
+        });
+    }
+
     storeDataListInput.addEventListener('change', function () {
         // PEGA DO DATA-LIST O ID STORE DO OPTION
-        const dataValue = this.getAttribute('list');
         const storeOption = document.getElementById(dataValue).options.namedItem(this.value);
         const idStoreHidden = document.querySelector("input[name='id_store']");
 
@@ -215,13 +232,6 @@ if (storeDataListInput) {
                 }
             }
         }
-    });
-}
-
-const callback = document.querySelector('select.callback');
-if (callback) {
-    callback.addEventListener('change', function () {
-        movimentDatas(null)
     });
 }
 
@@ -290,29 +300,31 @@ function calc(value, $this) {
 
 // BEGIN CALC EVENT LISTENNERS
 const inputMoviment = document.querySelector("form.app_form#moviment");
-document.querySelector("input[name='expend']").addEventListener('keyup', function () {
-    if (inputMoviment && document.querySelector('.last_value').textContent) {
-        calc('paying_now', this);
-    }
-});
+if (inputMoviment) {
+    document.querySelector("input[name='expend']").addEventListener('keyup', function () {
+        if (inputMoviment && document.querySelector('.last_value').textContent) {
+            calc('paying_now', this);
+        }
+    });
 
-document.querySelector("input[name='paying_now']").addEventListener('keyup', function () {
-    if (inputMoviment && document.querySelector('.last_value').textContent) {
-        calc('paying_now', document.querySelector("input[name='expend']"));
-    }
-});
+    document.querySelector("input[name='paying_now']").addEventListener('keyup', function () {
+        if (inputMoviment && document.querySelector('.last_value').textContent) {
+            calc('paying_now', document.querySelector("input[name='expend']"));
+        }
+    });
 
-document.querySelector("input[name='id_store']").addEventListener('change', function () {
-    if (inputMoviment && document.querySelector('.last_value').textContent) {
-        calc('paying_now', document.querySelector("input[name='expend']"));
-    }
-});
+    document.querySelector("input[name='id_store']").addEventListener('change', function () {
+        if (inputMoviment && document.querySelector('.last_value').textContent) {
+            calc('paying_now', document.querySelector("input[name='expend']"));
+        }
+    });
 
-document.querySelector("input[name='id_store_fake']").addEventListener('input', function () {
-    if (inputMoviment && document.querySelector('.last_value').textContent) {
-        calc('paying_now', document.querySelector("input[name='expend']"));
-    }
-});
+    document.querySelector("input[name='id_store_fake']").addEventListener('input', function () {
+        if (inputMoviment && document.querySelector('.last_value').textContent) {
+            calc('paying_now', document.querySelector("input[name='expend']"));
+        }
+    });
+}
 
 // END CALC EVENT LISTENNERS
 
@@ -446,7 +458,10 @@ if (window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-list
     window.location.toString() === 'http://www.localhost/arrecadacao/app/cadastrar-lista' ||
     window.location.toString() === 'http://www.localhost/arrecadacao/app/cadastrar-fluxo-de-caixa' ||
     window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-movimentacao' ||
-    window.location.toString() === 'http://www.localhost/arrecadacao/app/cadastrar-movimentacao') {
+    window.location.toString() === 'http://www.localhost/arrecadacao/app/cadastrar-movimentacao' ||
+    window.location.toString() === 'http://www.localhost/arrecadacao/configuracoes/horario' ||
+    window.location.toString() === 'http://www.ihsistemas.com/configuracoes/horario'
+) {
     const data = new Date();
     const dia = String(data.getDate()).padStart(2, '0');
     const mes = String(data.getMonth() + 1).padStart(2, '0');
@@ -488,7 +503,11 @@ if (document.querySelector('.app_form#moviment')) {
             // ADICIONA O VALOR CALCULADO NO INPUT DE VALOR DINHEIRO CASO EXISTA
             let resultCurrentValue = document.querySelector('.current_result').textContent;
             if (resultCurrentValue) {
-                document.querySelector("input[name='paying_now']").value = resultCurrentValue;
+                const inputPayingNow = document.querySelector("input[name='paying_now']");
+                inputPayingNow.value = resultCurrentValue;
+                //re-faz os calculos
+                calc('paying_now', document.querySelector("input[name='expend']"));
+                inputPayingNow.focus();
             }
         }
     })
@@ -513,7 +532,6 @@ if (document.querySelector('.app_form#moviment')) {
                 if (currentValue) {
                     currentValue = parseFloat(currentValue.replaceAll('.', '').replace(',', '.'));
                     currentValue += parseFloat(inputCalc.value.replaceAll('.', '').replace(',', '.'));
-                    console.log(currentValue, inputCalc.value)
                     currentResult.textContent = currentValue.toLocaleString('pt-br', {
                         maximumFractionDigits: 2,
                         minimumFractionDigits: 2
@@ -541,7 +559,6 @@ if (document.querySelector('.app_form#moviment')) {
                 parentModalMoviment.style.display = 'flex';
                 modalMoviment.style.display = 'block';
                 parentModalMoviment.dataset.modalclose = 'false';
-                // FAZ FOCAR NO INPUT
             }
 
             if (e.key === 'Escape') {

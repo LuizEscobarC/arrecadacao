@@ -81,25 +81,25 @@
                 </p>
             </article>
 
-            <!-- <section class="app_widget app_widget_blog">
+            <section class="app_widget app_widget_blog">
                 <header class="app_widget_title">
-                    <h2 class="icon-graduation-cap">Aprenda:</h2>
+                    <h2 class="icon-graduation-cap">Configurações:</h2>
                 </header>
                 <div class="app_widget_content">
-                    <?php //for ($i = 0; $i < 3; $i++): ?>
-                        <article class="app_widget_blog_article">
-                            <div class="thumb">
-                                <img alt="" title="" src="<?php //theme("/assets/images/thumb.jpg", CONF_VIEW_APP); ?>"/>
-                            </div>
-                            <h3 class="title">
-                                <a href="#" title="">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</a>
-                            </h3>
-                        </article>
-                    <?php // endfor; ?>
-                    <a target="_blank" href="<?php //url("/blog"); ?>" title="Blog" class="app_widget_more transition">
-                        Ver Mais...</a>
+                    <div class="margin-height-20">
+                        <a href="<?= url('configuracoes/horario'); ?>" title="config"
+                           class="btn padding_btn app_launch_btn color_888 font_110_percent radius transition"
+                           style="text-decoration: none;">Fechamento de horário.</a>
+                    </div>
+                    <div class="margin-height-20">
+                        <a href="<?= url('configuracoes/horario'); ?>" title="config"
+                           class="btn padding_btn app_launch_btn color_888 radius transition"
+                           style="text-decoration: none;">Calcular listas de lojas inadimplentes.</a>
+                    </div>
+                    <a target="_blank" href="#" title="Blog" class="app_widget_more transition ">
+                        ...</a>
                 </div>
-            </section> -->
+            </section>
         </section>
     </div>
 

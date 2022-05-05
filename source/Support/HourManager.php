@@ -9,7 +9,7 @@ class HourManager
     public static function getHourByDate(array $data): array
     {
         $getDayNumber = weekDay($data['date_moviment'], true);
-        $dataDay = (new Hour())->findByNumberDay($getDayNumber);
+        $dataDay = (new Hour())->findByNumberDayNotClosed($getDayNumber);
         $i = 1;
 
         foreach ($dataDay as $item) {
@@ -19,6 +19,12 @@ class HourManager
             $i++;
         }
         return $callback;
+    }
+
+    public static function getHoursByDate(string $date) {
+        $numberDay = weekDay($date, true);
+        $hours = (new Hour())->findByNumberDay($numberDay);
+        return $hours;
     }
 
 }
