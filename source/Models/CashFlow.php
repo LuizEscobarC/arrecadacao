@@ -88,7 +88,7 @@ class CashFlow extends Model
         return null;
     }
 
-    public function findByDateMoviment($idMoviment, int $type,  int $cost): ?CashFlow
+    public function findByDateMoviment($idMoviment, int $type, int $cost): ?CashFlow
     {
         return $this->find("id_moviment = {$idMoviment} AND type = {$type} AND id_cost = {$cost}")->fetch();
     }
@@ -223,5 +223,28 @@ class CashFlow extends Model
         // END FORMATA
 
         return $chartData;
+    }
+
+    public function filterQuery(array $filter, string $fixed, ?int $limit = null)
+    {
+
+        // QUERYS
+        $storeQuery = (!empty($filter['store']) && $filter['store'] != 'all' ? "AND id_store = {$filter['store']}" : null);
+        $costQuery = (!empty($filter['cost']) && $filter['cost'] != 'all' ? "AND id_cost = {$filter['cost']}" : null);
+        $hourQuery = (!empty($filter['hour']) && $filter['hour'] != 'all' ? "AND h.description like '%{$filter['hour']}%'" : null);
+        $dateQuery = (!empty($filter['date']) && $filter['date'] != 'all' ? "AND DATE(date_moviment) = DATE('{$filter['date']}')" : null);
+
+        // CASO PROCURE PELO NOME DO HORÁRIO É PRECISO FAZER UM JOIN
+        if ($hourQuery) {
+            $cashFlows = $this->find()
+                ->join('hour h', 'cash_flow.id_hour', 'h.id');
+            $cashFlows->putQuery("{$fixed} {$storeQuery} {$costQuery} {$hourQuery} {$dateQuery}");
+        } else {
+            $cashFlows = $this->find("{$fixed} {$storeQuery} {$costQuery} {$hourQuery} {$dateQuery}");
+        }
+        if ($limit) {
+            $cashFlows->limit($limit);
+        }
+        return $cashFlows->fetch(true);
     }
 }

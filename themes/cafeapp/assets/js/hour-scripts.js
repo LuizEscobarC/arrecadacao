@@ -1,11 +1,11 @@
 // FUNCTION THAT CLEAR TEMP MESSAGES
 const clearMessages = () => setTimeout(() => document.querySelector('.message.animated.bounce').remove(), 10000)
 
-const ajax = async (url, data, contentType) => {
+const ajax = async (url, data, method, contentType) => {
     const load = document.querySelector(".ajax_load");
     load.style.display = 'flex';
     const callback = await fetch(url, {
-        method: 'POST',
+        method: method,
         body: data,
         headers: {
             'Content-Type': contentType
@@ -18,7 +18,7 @@ const ajax = async (url, data, contentType) => {
 // BEGIN UPDATE STATUS CLOSE/OPEN
 // BEGIN CALL AJAX STATUS HOUR
 const updateStatusHour = async (element) => {
-    const response = await ajax(element.getAttribute('href'), {}, 'application/json')
+    const response = await ajax(element.getAttribute('href'), {}, 'POST', 'application/json')
 
     if (response) {
         const status = parseInt(element.dataset.status);
@@ -44,7 +44,7 @@ const calcStores = async (element) => {
     const ajaxResponse = document.querySelector('.ajax_response');
     const url = element.getAttribute('action');
     const data = new URLSearchParams((new FormData(element)));
-    const response = await ajax(url, data, 'application/x-www-form-urlencoded');
+    const response = await ajax(url, data, 'POST', 'application/x-www-form-urlencoded');
 
     if (response) {
         if (response.message) {

@@ -123,6 +123,24 @@ $route->get('/horario', 'Config:closeHour');
 $route->post('/fechamento-de-horario/{id_hour}', 'Config:closeHour');
 $route->post('/abate-de-lojas-inadimplentes', 'Config:calcStore');
 
+/** LISTS SEARCH */
+$route->group('/consultas');
+$route->post('/filters', 'Query:filters');
+// PRIZE
+$route->get('/premios-pagos', 'Query:paidPrizes');
+$route->get('/premios-pagos/{cost}/{date}/{store}/{hour}', 'Query:paidPrizes');
+// INCOME
+$route->get('/lancamento-de-entradas', 'Query:attachIncome');
+$route->post('/lancamento-de-entradas', 'Query:attachIncome');
+// EXPENSE
+$route->get('/despesas-pagas', 'Query:attachExpense');
+$route->post('/despesas-pagas', 'Query:attachExpense');
+// STORE BALANCE
+$route->get('/consultar-saldo-da-loja', 'Query:storeBalance');
+$route->post('/consultar-saldo-da-loja', 'Query:storeBalance');
+
+
+
 /*
  * ERROR ROUTES
  */
