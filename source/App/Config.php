@@ -69,108 +69,65 @@ class Config extends App
             $date = date_fmt($data['date_moviment'], 'Y-m-d');
             $idHour = $data['id_hour'];
 
-            // PEGAR O ID DA LOJA DOS MOVIMENTOS EXISTENTES NO DIA
-            $moviments = (new Moviment())->find("DATE(date_moviment) = '{$date}' AND id_hour = :h",
-                "h={$idHour}", 'id_store')->fetch(true);
-
-            // SE HOUVER ALGUM LANÇAMENTO DE ABATE DE LOJA MANUAL
-            if (!empty($moviments)) {
-                // PEGAR AS LOJAS QUE NÃO ESTEJAM ENTRE AS QUE TENHAM MOVIMENTO
-                $notIn = [];
-                foreach ($moviments as $moviment) {
-                    $notIn[] = $moviment->id_store;
-                }
-                $notIn = implode(', ', $notIn);
-                $stores = (new Store())->find("id NOT IN({$notIn})", null, 'id, valor_saldo')->fetch(true);
-            } else {
-                // SE NÃO HOUVE NENHUM LANÇAMENTO MANUAL
-                $stores = (new Store())->find(null, null, 'id, valor_saldo')->fetch(true);
-            }
+            // PEGA O ID DAS LOJAS QUE ENVIARAM LISTAS MAS NÃO TEM MOVIMENTO
+            $storesQuery = (new Store());
+            $storesQuery->find(null, null,
+                'loja.id, loja.valor_saldo, l.net_value, l.id as id_list')
+                ->join('lists l', 'loja.id', 'l.id_store', 'LEFT', ' = ',
+                    " WHERE DATE(l.date_moviment) = DATE('{$date}') AND l.id_hour = {$idHour} AND loja.id 
+                        NOT IN  
+                            (
+                                SELECT m.id_store
+                                    FROM moviment m 
+                                        WHERE DATE(m.date_moviment) = DATE('{$date}') AND m.id_hour = {$idHour}
+                            )");
+            
+            $stores = $storesQuery->fetch(true);
             // PEGAR A LISTA DE CADA LOJA, SE HOUVER, SE NÃO REALIZAR CALCULO COM 0
-            $list = new Lists();
             if (!empty($stores)) {
                 foreach ($stores as $store) {
-                    $currentList = $list->find("id_store = :s AND DATE(date_moviment) = '{$date}'",
-                        "s={$store->id}",
-                        'id, net_value')->fetch();
+                    // FAZER O LANÇAMENTO DE MOVIMENTO DE CADA LOJA
+                    // SALDO HORÁRIO
+                    $beatValue = (0 - $store->net_value);
+                    $newValue = ($store->valor_saldo + $beatValue);
 
-                    if (!empty($currentList)) {
-                        // FAZER O LANÇAMENTO DE MOVIMENTO DE CADA LOJA
-                        // SALDO HORÁRIO
-                        $beatValue = (0 - $currentList->net_value);
-                        $newValue = ($store->valor_saldo + $beatValue);
+                    // SAVE MOVIMENTS
+                    $movimentSave = (new Moviment());
 
-                        // SAVE MOVIMENTS
-                        $movimentSave = (new Moviment());
+                    $movimentSave->date_moviment = $date;
+                    $movimentSave->id_hour = $idHour;
+                    $movimentSave->id_store = $store->id;
+                    $movimentSave->last_value = $store->valor_saldo;
+                    $movimentSave->id_list = $store->id_list;
+                    $movimentSave->paying_now = 0;
+                    $movimentSave->expend = 0;
+                    $movimentSave->get_value = 0;
+                    $movimentSave->beat_value = $beatValue;
+                    $movimentSave->new_value = $newValue;
+                    $movimentSave->prize = 0;
+                    $movimentSave->beat_prize = 0;
+                    $movimentSave->prize_office = 0;
+                    $movimentSave->prize_store = 0;
 
-                        $movimentSave->date_moviment = $date;
-                        $movimentSave->id_hour = $idHour;
-                        $movimentSave->id_store = $store->id;
-                        $movimentSave->last_value = $store->valor_saldo;
-                        $movimentSave->id_list = $currentList->id;
-                        $movimentSave->paying_now = 0;
-                        $movimentSave->expend = 0;
-                        $movimentSave->get_value = 0;
-                        $movimentSave->beat_value = $beatValue;
-                        $movimentSave->new_value = $newValue;
-                        $movimentSave->prize = 0;
-                        $movimentSave->beat_prize = 0;
-                        $movimentSave->prize_office = 0;
-                        $movimentSave->prize_store = 0;
-
-                        if (!$movimentSave->save()) {
-                            $message[] = $movimentSave->message()->render();
-                        }
-                    } else {
-                        // FAZER O LANÇAMENTO DE MOVIMENTO DE CADA LOJA
-                        // SALDO HORÁRIO
-                        $beatValue = (0 - 0);
-                        $newValue = ($store->valor_saldo + $beatValue);
-
-                        // SAVE MOVIMENTS
-                        $movimentSave = (new Moviment());
-
-
-                        $movimentSave->date_moviment = $date;
-                        $movimentSave->id_hour = $idHour;
-                        $movimentSave->id_store = $store->id;
-                        $movimentSave->last_value = $store->valor_saldo;
-                        $movimentSave->id_list = null;
-                        $movimentSave->paying_now = 0;
-                        $movimentSave->expend = 0;
-                        $movimentSave->get_value = 0;
-                        $movimentSave->beat_value = $beatValue;
-                        $movimentSave->new_value = $newValue;
-                        $movimentSave->prize = 0;
-                        $movimentSave->beat_prize = 0;
-                        $movimentSave->prize_office = 0;
-                        $movimentSave->prize_store = 0;
-
-                        if (!$movimentSave->save()) {
-                            $message[] = $movimentSave->message()->render();
-                        }
+                    if (!$movimentSave->save()) {
+                        $message[] = $movimentSave->message()->render();
                     }
                 }
-            } else {
-                // TODAS AS LOJAS FORAM ABATIDAS
-                $json['message'] = $this->message->warning("Todas as lojas do horário já foram abatidas na data {$date} e no horário " . (new Hour())->findById($idHour)->description . ".")->render();
-                echo json_encode($json);
-                return;
-            }
-
-            if (!empty($message)) {
-                $json['message'] = implode(', ', $message);
-                echo json_encode($json);
-                return;
-            } else {
-                // TODAS AS LOJAS ABATIDAS COM SUCESSO
-                $json['message'] = $this->message->success("Todas as lojas inadimplentes foram abatidas com sucesso na data {$date} e no horário " . (new Hour())->findById($idHour)->description . ".")->render();
-                echo json_encode($json);
-                return;
             }
         } else {
-            // NÃO ENVIOU O HORÁRIO OU A DATA DE MOVIMENT
-            $json['message'] = $this->message->warning("Data de movimento e horário são obrigatórios.")->render();
+            // TODAS AS LOJAS FORAM ABATIDAS
+            $json['message'] = $this->message->warning("Todas as lojas do horário já foram abatidas na data {$date} e no horário " . (new Hour())->findById($idHour)->description . ".")->render();
+            echo json_encode($json);
+            return;
+        }
+
+        if (!empty($message)) {
+            $json['message'] = implode(', ', $message);
+            echo json_encode($json);
+            return;
+        } else {
+            // TODAS AS LOJAS ABATIDAS COM SUCESSO
+            $json['message'] = $this->message->success("Todas as lojas inadimplentes foram abatidas com sucesso na data {$date} e no horário " . (new Hour())->findById($idHour)->description . ".")->render();
             echo json_encode($json);
             return;
         }

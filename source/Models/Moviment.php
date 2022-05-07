@@ -147,10 +147,10 @@ class Moviment extends Model
             $moviment->last_value = (!empty($moviment->id) ? $moviment->last_value : money_fmt_app($data['last_value']));
             $moviment->get_value = (!empty($moviment->id) && is_not_zero($data['paying_now']) ? money_fmt_app($data['get_value']) : $moviment->get_value);
             $moviment->new_value = (!empty($moviment->id) ? money_fmt_app($data['new_value']) : $moviment->new_value);
-            $moviment->prize = (!empty($moviment->id) ? money_fmt_app($data['prize']) : $moviment->prize);
-            $moviment->beat_prize = (!empty($moviment->id) ? money_fmt_app($data['beat_prize']) : $moviment->beat_prize);
-            $moviment->prize_store = (!empty($moviment->id) ? money_fmt_app($data['prize_store']) : $moviment->prize_store);
-            $moviment->prize_office = (!empty($moviment->id) ? money_fmt_app($data['prize_office']) : $moviment->prize_office);
+            $moviment->prize = (!empty($moviment->id) ? (money_fmt_app($data['prize']) + $moviment->prize) : $moviment->prize);
+            $moviment->beat_prize = (!empty($moviment->id) ? (money_fmt_app($data['beat_prize']) + $moviment->beat_prize) : $moviment->beat_prize);
+            $moviment->prize_store = (!empty($moviment->id) ? (money_fmt_app($data['prize_store']) + $moviment->prize_store) : $moviment->prize_store);
+            $moviment->prize_office = (!empty($moviment->id) ? (money_fmt_app($data['prize_office']) + $moviment->prize_office) : $moviment->prize_office);
         } else {
             $moviment->date_moviment = $data['date_moviment'];
             $moviment->id_store = $data['id_store'];
@@ -330,7 +330,7 @@ class Moviment extends Model
             $cash->description = 'Saída de Premio do Escritório';
             // SE FOR ATUALIZAÇÃO DE MOVIMENTO, INCREMENTA
             if ($cash->id) {
-                if(empty($data['edit'])) {
+                if (empty($data['edit'])) {
                     $cash->value += money_fmt_app($data['prize_office']);
                 } else {
                     $cash->value = money_fmt_app($data['prize_office']);
@@ -358,7 +358,7 @@ class Moviment extends Model
             $cash->description = 'Abate de Premio da loja ' . $store->nome_loja;
             // SE FOR ATUALIZAÇÃO DE MOVIMENTO, INCREMENTA
             if ($cash->id) {
-                if(empty($data['edit'])) {
+                if (empty($data['edit'])) {
                     $cash->value += money_fmt_app($data['prize_store']);
                 } else {
                     $cash->value = money_fmt_app($data['prize_store']);
@@ -386,7 +386,7 @@ class Moviment extends Model
             $cash->description = ($list->description ?? '') . ' Entrada de ' . ($store->nome_loja ?? 'loja');
             // SE FOR ATUALIZAÇÃO DE MOVIMENTO, INCREMENTA
             if ($cash->id) {
-                if(empty($data['edit'])) {
+                if (empty($data['edit'])) {
                     $cash->value += money_fmt_app($data["get_value"]);
                 } else {
                     $cash->value = money_fmt_app($data["get_value"]);
@@ -413,7 +413,7 @@ class Moviment extends Model
                 $cash->description = ' A ' . ($store->nome_loja ?? 'loja') . ' teve uma despesa';
                 // SE FOR ATUALIZAÇÃO DE MOVIMENTO, INCREMENTA
                 if ($cash->id) {
-                    if(empty($data['edit'])) {
+                    if (empty($data['edit'])) {
                         $cash->value += money_fmt_app($data["expend"]);
                     } else {
                         $cash->value = money_fmt_app($data["expend"]);
