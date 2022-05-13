@@ -36,14 +36,9 @@ class Hour extends Model
     public function resetStatus(): void
     {
         $numberDay = weekDay(date_fmt('now','Y-m-d'), true);
-        if ($numberDay != 0) {
-            --$numberDay;
-        } else {
-            $numberDay = 6;
-        }
 
         // PROCURA SE EXISTE HORARIO DO DIA ANTERIOR FECHADO
-        if (!$this->find('number_day = :n AND status = 0', "n=$numberDay")->fetch()) {
+        if (!$this->find('number_day != :n AND status = 0', "n=$numberDay")->fetch()) {
             return;
         }
 
