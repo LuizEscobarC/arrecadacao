@@ -155,7 +155,7 @@ class Moviment extends Model
             $moviment->date_moviment = $data['date_moviment'];
             $moviment->id_store = $data['id_store'];
             $moviment->id_hour = $data['id_hour'];
-            $moviment->id_list = $data['id_list'];
+            $moviment->id_list = !empty($data['id_list']) ? $data['id_list'] : null;
             $moviment->beat_value = money_fmt_app($data['beat_value']);
             $moviment->paying_now = money_fmt_app($data['paying_now']);
             $moviment->expend = money_fmt_app($data['expend']);

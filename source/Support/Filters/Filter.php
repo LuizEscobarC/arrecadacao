@@ -46,6 +46,12 @@ Abstract class Filter extends FilterQuery implements FilterInterface
                     case 'between':
                         $this->between('', '', '');
                         break;
+                    case 'negative':
+                        $this->negative($keyWhere);
+                        break;
+                    case 'positive':
+                        $this->positive($keyWhere);
+                        break;
                 }
 
                 $typeIterator++;

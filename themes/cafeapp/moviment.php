@@ -51,7 +51,7 @@
 
             <label>
                 <span class="field icon-leanpub">Saldo Atual da Loja:</span>
-                <input class="mask-money-negative" type="text" name="last_value" value="<?= money_fmt_br($moviment->last_value - $moviment->lists()->net_value); ?>">
+                <input class="mask-money-negative" type="text" name="last_value" value="<?= money_fmt_br($moviment->last_value) ?>">
                 <p style="display:none;" class="app_widget_title last_value"><?= $moviment->last_value - $moviment->lists()->net_value; ?></p>
             </label>
         </div>

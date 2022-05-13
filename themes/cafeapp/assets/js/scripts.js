@@ -211,6 +211,22 @@ if (storeDataListInput) {
                 }
             }
         });
+
+        if (window.location.toString().indexOf('movimentacao')) {
+            if (storeDataListInput.value) {
+                const storeOption = document.getElementById(dataValue).options.namedItem(storeDataListInput.value);
+                const idStoreHidden = document.querySelector("input[name='id_store']");
+                console.log(storeOption)
+
+                if (storeOption) {
+                    console.log(storeOption.dataset)
+                    const idStore = storeOption.dataset.id_store;
+                    // ADICIONA O ID NO HIDDEN INPUT
+                    idStoreHidden.value = idStore;
+                    movimentDatas(storeDataListInput, idStore)
+                }
+            }
+        }
     }
 
     storeDataListInput.addEventListener('change', function () {

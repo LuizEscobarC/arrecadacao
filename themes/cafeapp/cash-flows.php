@@ -5,10 +5,19 @@
 <div class="app_launch_header">
     <div class="app_flex_title">
         <h2>
-            <a class="color_white font_80_percent icon-user padding_btn transition gradient gradient-green gradient-hover radius box-shadow"
-               title="usuários">R. de lançamentos</a></h2>
+            <a class="color_white font_60_percent icon-user padding_btn transition gradient gradient-green gradient-hover radius box-shadow"
+               title="usuários">R. de lançamentos</a>
+        </h2>
     </div>
     <form class="ajax_off app_launch_form_filter app_form" action="<?= url('/app/fluxos-de-caixa'); ?>" method="post">
+
+        <select name="store_situation">
+            <option value="">
+                &ofcir; Lojas Haver / Devem
+            </option>
+            <option value="2">Lojas de haver</option>
+            <option value="1">Lojas que devem</option>
+        </select>
 
         <select name="search_store" class="select2Input operator">
             <option value="">

@@ -35,7 +35,6 @@ class App extends Controller
             $this->message->warning("Efetue login para acessar o APP.")->flash();
             redirect("/entrar");
         }
-
         // RESETA O STATUS DE FECHAMENTO DE HORÁRIO NA TABELA HOUR
         (new Hour())->resetStatus();
     }
@@ -709,7 +708,8 @@ class App extends Controller
     public function getList(array $data): void
     {
         $callback = (new Lists())->findByStoreHour($data['id_store'], $data['id_hour'], $data['date_moviment']);
-        if (!empty($callback->id) && (new Moviment())->findByIdList($callback->id)) {
+        // O REG EXP SERVE PARA VERIFICAR SE ESTÁ NO MODO EDIÇÃO PARA TRAZER A LISTA MESMO SE JÁ EXISTIR E TIVER LANÇADO
+        if (!empty($callback->id) && (new Moviment())->findByIdList($callback->id) && ! preg_match('/movimentacao\//i', $_SERVER['HTTP_REFERER'])) {
             // JÁ FOI LANÇADO
             $callback = null;
         }

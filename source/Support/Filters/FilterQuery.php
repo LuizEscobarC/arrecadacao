@@ -78,6 +78,18 @@ use Source\Core\Model;
         return $this;
     }
 
+    protected function positive(string $column): FilterQuery
+    {
+        $this->dataFilter[] = "{$column} > 0 ";
+        return $this;
+    }
+
+    protected function negative(string $column ): FilterQuery
+    {
+        $this->dataFilter[] = "{$column} < 0 ";
+        return $this;
+    }
+
     /**
      * FILTER TO INTERVAL DATES
      * @param string $column
