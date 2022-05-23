@@ -3,6 +3,8 @@
 namespace Source\App;
 
 use Source\Models\CashFlow;
+use Source\Models\Moviment;
+use Source\Support\Pager;
 use Source\Support\SeoBuilder;
 
 class Query extends App
@@ -44,12 +46,6 @@ class Query extends App
         echo $this->view->render('');
     }
 
-    public function storeBalance(array $data): void
-    {
-        $head = $this->seo->make('Premios Pagos - ', url());
-
-        echo $this->view->render('');
-    }
 
     public function filters(array $data): void
     {
@@ -63,6 +59,20 @@ class Query extends App
 
         $json['redirect'] = url("/consultas/{$data['route']}/{$cost}/{$date}/{$store}/{$hour}");
         echo json_encode($json);
+    }
+
+    public function storeBalance(array $data): void
+    {
+        // META SEO
+        $head = $this->seo->make("Movimentação - ", url('/app/movimentacoes'));
+
+        list($moviments, $search, $total) = (new Moviment())->filter($data);
+
+        echo $this->view->render('store-balance', [
+            'head' => $head,
+            'allMoney' => isnt_empty($total, 'self', '0.00'),
+            'search' => (object)$search
+        ]);
     }
 
 }

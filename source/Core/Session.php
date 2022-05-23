@@ -18,6 +18,7 @@ class Session
     public function __construct()
     {
         if (!session_id()) {
+            ini_set('session.gc_maxlifetime', 60 * 60 * 3);
             session_start();
         }
     }

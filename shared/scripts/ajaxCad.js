@@ -12,7 +12,7 @@ if (formSubmit) {
 }
 
 // FUNCTION
-async function formSub(formSubmit) {
+async function formSub(form) {
     const load = document.querySelector(".ajax_load");
     const flashClass = "ajax_response";
     const flash = document.querySelector("." + flashClass);
@@ -21,10 +21,10 @@ async function formSub(formSubmit) {
 
     // ESPERA O ENVIO COM O RETORNO
     const callback = await fetch(
-        formSubmit.getAttribute("action"), {
+        form.getAttribute("action"), {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: new URLSearchParams(new FormData(formSubmit))
+            body: new URLSearchParams(new FormData(form))
         })
 
     // SE RETORNAR A PROMESSA FOR CUMPRIDA PEGA OS DADOS
@@ -57,7 +57,7 @@ async function formSub(formSubmit) {
                 flash.classList.add('bounce', 'animated')
             } else {
                 // INSERE NO COMEÇO DO FORMULÁRIO
-                formSubmit.insertAdjacentHTML("afterbegin",
+                form.insertAdjacentHTML("afterbegin",
                     "<div class='" + flashClass + " bounce animated'>" + response.message + "</div>");
             }
         } else {

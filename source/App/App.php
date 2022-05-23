@@ -459,7 +459,7 @@ class App extends Controller
 
         $page = (!empty($data['page']) ? $data['page'] : 1);
 
-        $pager = (new Pager(url('/app/centro-de-custos/')));
+        $pager = (new Pager(url('/app/centros-de-custo/')));
         $pager->pager($center->count(), 20, $page);
 
         echo $this->view->render('cost-centers', [
@@ -871,19 +871,37 @@ class App extends Controller
         $data = filter_var_array($data, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
         if (!empty($data)) {
+
+            // REQUERIDOS
+            $modelVerify = new Lists();
+            $required = $modelVerify->requiredList($data);
+            if (!empty($required)) {
+                $json['message'] = $required;
+                echo json_encode($json);
+                return;
+            }
+
             //atualizar
             $list = (new Lists());
             if (!empty($data['id'])) {
                 $list = $list->findById($data['id']);
+            } else {
+                $dateMoviment = date_fmt_app($data['date_moviment']);
+                $list = $list->find("DATE(date_moviment) = DATE('{$dateMoviment}') AND id_store = {$data['id_store']} AND id_hour = {$data['id_hour']}")->fetch();
+                $isRepeated = ($list ? true : false);
+                $list = ($list ?: (new Lists()));
             }
 
-            $list->bootstrap(
-                $data['id_hour'],
-                $data['id_store'],
-                money_fmt_app($data['total_value']),
-                ($data['date_moviment'])
-            );
-
+            if (!empty($isRepeated)) {
+                    $list->total_value += money_fmt_app($data['total_value']);
+            } else {
+                $list->bootstrap(
+                    $data['id_hour'],
+                    $data['id_store'],
+                    money_fmt_app($data['total_value']),
+                    ($data['date_moviment'])
+                );
+            }
             /** @var Lists $list */
             if (!$list->save()) {
                 $json['message'] = $list->message()->render();

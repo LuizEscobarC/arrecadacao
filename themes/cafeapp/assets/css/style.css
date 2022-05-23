@@ -729,8 +729,8 @@ body {
 }
 
 .app_launch_box {
-    margin-top: var(--area-box);
-}
+     margin-top: var(--area-box);
+ }
 
 .app_launch_item {
     display: flex;
@@ -759,8 +759,15 @@ body {
     font-weight: bold;
 }
 
-.app_launch_item p {
+.app_launch_item p:not(.not) {
     flex-basis: 17.5%;
+    margin: 0;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.app_launch_item .app_launch_box_flex_basis_100 p {
+    flex-basis: calc(50% - 120px);
     margin: 0;
     padding: 0 20px;
     text-align: center;

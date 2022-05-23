@@ -6,6 +6,7 @@
     <form class="app_form" action="<?= url("/app/lista"); ?>" method="post">
         <div class="ajax_response"><?= flash(); ?></div>
         <input class="radius" type="hidden" name="id" value="<?= $list->id; ?>" required/>
+        <input class="radius" type="hidden" name="edit" value="1" required/>
         <div class="label_group">
             <label class="three_label">
                 <span class="field icon-thumb-tack">Data de movimentação:</span>

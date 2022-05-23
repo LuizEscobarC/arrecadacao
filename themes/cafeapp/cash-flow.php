@@ -50,8 +50,7 @@
             <select name="id_cost" class="select2Input">
                 <option value="">Escolha</option>
                 <?php foreach ((new \Source\Models\Center())->find()->fetch(true) as $center): ?>
-                    <option value="<?= $center->id; ?>" <?= ($center->id == (!empty($cash->Cost() ? $cash->Cost()->id : '')) ?
-                        'selected' : ""); ?>>&ofcir; <?= $center->description; ?></option>
+                    <option value="<?= $center->id; ?>" <?= ($center->id == (!empty($cash->Cost() ? $cash->Cost()->id == $center->id : '')) ? 'selected' : ""); ?>>&ofcir; <?= $center->description; ?></option>
                 <?php endforeach; ?>
             </select>
         </label>

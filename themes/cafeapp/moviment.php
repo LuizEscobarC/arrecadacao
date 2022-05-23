@@ -80,16 +80,15 @@
             <label class="three_label">
                 <span class="field icon-leanpub">Valor Dinheiro:</span>
                 <input class="radius box-shadow mask-money required-input" type="text" name="paying_now"
-                       value="<?= $moviment->paying_now; ?>"
+                       value="<?= (money_fmt_br($moviment->paying_now) ?? '0'); ?>"
                        placeholder="Ex: 999"
-                       value="0" required/>
+                       required/>
             </label>
             <label class="three_label">
                 <span class="field icon-leanpub">Valor Despesas:</span>
                 <input class="radius box-shadow mask-money required-input" type="text" name="expend"
-                    <?= $moviment->expend; ?>
                        placeholder="Ex: 999"
-                       value="0" required/>
+                       value="<?= (!empty($moviment->expend) ? ( $moviment->expend ? money_fmt_br($moviment->expend) : '0') : '0'); ?>" required/>
             </label>
             <label class="three_label">
                 <span class="field icon-leanpub">Valor Recolhido:</span>
