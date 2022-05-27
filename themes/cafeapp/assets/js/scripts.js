@@ -253,7 +253,7 @@ if (storeDataListInput) {
 * VALOR RECOLHIDO CALCULO
 */
 
-// BEGIN MOVIMENTS CALCS()
+// BEGIN MOVIMENTS CALCS ()
 function calc(value, $this) {
     let input = document.querySelector("input[name='" + value + "']");
     //Case o input esteja vazio, para não retornar NaN
