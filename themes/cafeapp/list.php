@@ -43,10 +43,17 @@
             </datalist>
         </label>
 
+        <label class="three_label">
+            <span class="field icon-leanpub">Valor Total:</span>
+            <input class="radius mask-money" type="text" name="total_value" readonly value="<?= money_fmt_br($list->lists()->total_value); ?>"
+                   placeholder="Ex: 999"
+                   required/>
+        </label>
+
         <div class="label_group">
             <label class="three_label">
-                <span class="field icon-leanpub">Valor Total:</span>
-                <input class="radius mask-money" type="text" name="total_value" value="<?= money_fmt_br($list->total_value); ?>"
+                <span class="field icon-leanpub">Valor da Lista:</span>
+                <input class="radius mask-money" type="text" name="total_value" value="<?= money_fmt_br($list->value); ?>"
                        placeholder="Ex: 999"
                        required/>
             </label>
@@ -54,14 +61,14 @@
 
             <label class="three_label">
                 <span class="field icon-leanpub">Valor de Comissão:</span>
-                <input class="radius" type="text" name="" readonly value="<?= money_fmt_br($list->comission_value); ?>"
+                <input class="radius" type="text" name="" readonly value="<?= money_fmt_br($list->lists()->comission_value); ?>"
                        placeholder="Ex: 999"
                        required/>
             </label>
 
             <label class="three_label">
                 <span class="field icon-leanpub">Valor Líquido:</span>
-                <input class="radius" type="text" name="" readonly value="<?= money_fmt_br($list->net_value); ?>"
+                <input class="radius" type="text" name="" readonly value="<?= money_fmt_br($list->lists()->net_value); ?>"
                        placeholder="Ex: 999"
                        required/>
             </label>
@@ -73,7 +80,11 @@
             <div>
                 <span data-listremove="<?= url("/app/remove-list/{$list->id}") ?>"
                       class="btn_remove transition icon-error">Excluir</span>
+
                 <button class="btn btn_inline radius transition icon-pencil-square-o">Atualizar</button>
+
+                <span data-listsremove="<?= url("/app/remove-lists/{$list->lists()->id}") ?>"
+                      class="btn_remove transition icon-error">Excluir Tudo</span>
             </div>
         </div>
     </form>

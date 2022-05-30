@@ -14,8 +14,8 @@ class FiltersLists extends Filter
         $select = implode(', ', $arraySelects);
 
         $this->model->find(null, null, $select)
-            ->join('hour h', 'lists.id_hour', 'h.id')
-            ->join('loja s', 'lists.id_store', 's.id');
+            ->join('hour h', 'list.id_hour', 'h.id')
+            ->join('loja s', 'list.id_store', 's.id');
         if ($this->implode) {
             $this->model->putQuery($this->implode, ' WHERE ');
         }

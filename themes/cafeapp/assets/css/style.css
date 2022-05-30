@@ -808,6 +808,42 @@ body {
     text-align: right;
 }
 
+.app_launch_item p.list {
+    flex-basis: 11%;
+    margin: 0;
+    padding: 1px 10px;
+    text-align: center;
+}
+
+
+.app_launch_item p.list a {
+    text-align: center;
+    padding: 2px 10px;
+    margin: 0 auto;
+}
+
+.app_launch_item p.desc.list {
+    flex-basis: 11%;
+    text-align: left;
+}
+
+.app_launch_item .desc.list {
+    flex-basis: 11%;
+    text-align: left;
+}
+
+.app_launch_item p.desc_center.list {
+    flex-basis: 11%;
+    text-align: center;
+}
+
+.app_launch_item p.desc_right.list {
+    display: flex;
+    justify-content: space-around;
+    flex-basis: 11%;
+    text-align: right;
+}
+
 /* único para a listagem de centros de custo*/
 .app_launch_item p.desc_right.cost {
     display: flex;
@@ -829,6 +865,12 @@ body {
     flex-wrap: wrap;
 }
 
+.app_launch_item .wrap.list {
+    display: flex;
+    flex-basis: 8.3%;
+    flex-wrap: wrap;
+}
+
 .app_launch_item .price {
     display: flex;
     align-items: center;
@@ -843,18 +885,17 @@ body {
     flex-wrap: nowrap;
 }
 
+.app_launch_item .price.list {
+    display: flex;
+    flex-basis: 11%;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
 .app_launch_item .price .check {
     margin-left: var(--area-small);
     font-size: 1.3em;
     cursor: pointer;
-}
-
-.app_launch_item .price .income {
-    color: var(--color-green);
-}
-
-.app_launch_item .price .expense {
-    color: var(--color-red);
 }
 
 /*INVOICE*/

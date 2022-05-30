@@ -40,6 +40,7 @@ const dataRemoveEntities = {
     "centerremove": "esse centro de custo?",
     "storeremove": "essa loja?",
     "listremove": "essa lista?",
+    "listsremove": "todas as listas do horário?",
     "cashremove": "esse lançamento?",
     "movimentremove": "essa movimentação?"
 }

@@ -1,12 +1,13 @@
 <?php $v->layout("_theme");
-/** @var \Source\Models\Lists $list */
+/** @var \Source\Models\SelfList $list */
 ?>
 
 <div class="app_launch_header">
     <div class="app_flex_title">
         <h2>
-            <a class="color_white font_80_percent icon-user padding_btn transition gradient gradient-green gradient-hover radius box-shadow"
-               title="usuários">Registros de Listas</a></h2>
+            <a class="color_white font_80_percent icon-user padding_btn transition
+            gradient gradient-green gradient-hover radius box-shadow"
+               title="usuários">R. de Listas</a></h2>
     </div>
     <form class="ajax_off app_launch_form_filter app_form" action="<?= url('/app/listas'); ?>" method="post">
 
@@ -53,42 +54,45 @@
 
 <section class="app_launch_box">
     <div class="app_launch_item header">
-        <p class="wrap">ID</p>
-        <p class="wrap">dia da semana</p>
-        <p class="desc">Horário desejado</p>
-        <p class="date">Horário de Movimentação</p>
-        <p class="desc">Loja</p>
-        <p class="price">Valor Bruto</p>
-        <p class="desc_center">Valor Líquido</p>
-        <p class="desc_center">Valor de Comissão</p>
-        <p class="wrap"></p>
+        <p class="wrap font_80_percent list">dia da semana</p>
+        <p class="desc font_80_percent list">Horário desejado</p>
+        <p class="date font_80_percent list">Horário de Movimentação</p>
+        <p class="desc font_80_percent list">Loja</p>
+        <p class="price font_80_percent list">Valor da Lista</p>
+        <p class="price font_80_percent list">Valor Total das Listas</p>
+        <p class="desc_center font_80_percent list">Valor Líquido</p>
+        <p class="desc_center font_80_percent list">Valor de Comissão</p>
+        <p class="wrap font_80_percent list"></p>
     </div>
     <?php if (isnt_empty($lists, 'self')): ?>
         <?php foreach ($lists as $list): ?>
-            <article class="app_launch_item">
-                <p class="wrap"><?= $list->id; ?></p>
-                <p class="wrap app_invoice_link transition">
+            <article class="app_launch_item font_80_percent">
+                <p class="wrap app_invoice_link transition list">
                     <a title="Ver Lista" href="<?= url("/app/horario/{$list->id}"); ?>"><?= $list->week_day; ?></a>
                 </p>
                 <!--03 de 12-->
                 <!--<span class="icon-exchange">Fixa</span>-->
-                <p class="desc"><?= $list->description; ?></p>
-                <p class="date"><?= date_fmt($list->date_moviment, 'd/m/Y') . ' ' . $list->week_day; ?></p>
-                <p class="category"><?= $list->nome_loja; ?></p>
-                <p class="price">
+                <p class="desc  list"><?= $list->description; ?></p>
+                <p class="date list"><?= date_fmt($list->date_moviment, 'd/m/Y') . ' ' . $list->week_day; ?></p>
+                <p class="category list"><?= $list->nome_loja; ?></p>
+                <p class="price list">
                     <span>R$</span>
-                    <span><?= money_fmt_br($list->total_value); ?></span>
+                    <span><?= money_fmt_br($list->value); ?></span>
                 </p>
-                <p class="desc_center">
+                <p class="price list font_120_percent">
                     <span>R$</span>
-                    <span><?= money_fmt_br($list->net_value); ?></span>
+                    <span><?= money_fmt_br($list->lists()->total_value); ?></span>
                 </p>
-                <p class="desc_center">
+                <p class="desc_center list">
                     <span>R$</span>
-                    <span><?= money_fmt_br($list->comission_value); ?></span>
+                    <span><?= money_fmt_br($list->lists()->net_value); ?></span>
                 </p>
-                <p class="wrap gradient gradient-red font_80_percent gradient-hover transition radius">
-                    <a class="color_white " style="text-decoration: none;" href="<?= url("/app/lista/{$list->id}") ?>">Editar</a>
+                <p class="desc_center list">
+                    <span>R$</span>
+                    <span><?= money_fmt_br($list->lists()->comission_value); ?></span>
+                </p>
+                <p class="wrap list gradient gradient-red font_80_percent gradient-hover transition radius">
+                    <a class="color_white list" style="text-decoration: none;" href="<?= url("/app/lista/{$list->id}") ?>">Editar</a>
                 </p>
             </article>
         <?php endforeach; ?>
@@ -98,7 +102,8 @@
         <p></p>
         <p class="font_80_percent jus">Valor total:</p>
         <p class=" font_80_percent icon-thumbs-o-up">R$ <?= money_fmt_br(($allMoney->total ?? "0")); ?></p>
-    </div><div class=" app_launch_item footer">
+    </div>
+    <div class=" app_launch_item footer">
         <p class="desc"></p>
         <p></p>
         <p class="font_80_percent">Valor total de comissão:</p>

@@ -10,6 +10,7 @@ use Source\Models\Center;
 use Source\Models\Hour;
 use Source\Models\Lists;
 use Source\Models\Moviment;
+use Source\Models\SelfList;
 use Source\Models\Store;
 use Source\Models\User;
 use Source\Support\HourManager;
@@ -797,7 +798,7 @@ class App extends Controller
         $head = $this->seo->make("Listas - ", url('app/listas'));
 
         // Classes que se responsabilizam pelos filtros e modelos
-        list($list, $search, $total) = (new Lists())->filter($data);
+        list($list, $search, $total) = (new SelfList())->filter($data);
 
         $page = (!empty($data['page']) ? $data['page'] : 1);
 
@@ -807,7 +808,7 @@ class App extends Controller
 
         echo $this->view->render('lists', [
             'head' => $head,
-            'lists' => $list->order('lists.date_moviment DESC, s.nome_loja ASC')
+            'lists' => $list->order('list.date_moviment DESC, s.nome_loja ASC')
                 ->limit($pager->limit())
                 ->offset($pager->offset())
                 ->fetch(true),
@@ -828,7 +829,7 @@ class App extends Controller
         // META SEO
         $head = $this->seo->make("Listas - ", url('/app/lista'));
 
-        if (empty($id) || empty((new Lists())->findById($id))) {
+        if (empty($id) || empty((new SelfList())->findById($id))) {
             $cafeWeb = (new View());
             echo $cafeWeb->render("not-found", [
                 "head" => $head,
@@ -843,7 +844,7 @@ class App extends Controller
 
         echo $this->view->render('list', [
             'head' => $head,
-            'list' => (new Lists())->findById($id)
+            'list' => (new SelfList())->findById($id)
         ]);
     }
 
@@ -873,8 +874,7 @@ class App extends Controller
         if (!empty($data)) {
 
             // REQUERIDOS
-            $modelVerify = new Lists();
-            $required = $modelVerify->requiredList($data);
+            $required = SelfList::requiredData($data);
             if (!empty($required)) {
                 $json['message'] = $required;
                 echo json_encode($json);
@@ -882,28 +882,19 @@ class App extends Controller
             }
 
             //atualizar
-            $list = (new Lists());
+            $list = (new SelfList());
             if (!empty($data['id'])) {
                 $list = $list->findById($data['id']);
-            } else {
-                $dateMoviment = date_fmt_app($data['date_moviment']);
-                $list = $list->find("DATE(date_moviment) = DATE('{$dateMoviment}') AND id_store = {$data['id_store']} AND id_hour = {$data['id_hour']}")->fetch();
-                $isRepeated = ($list ? true : false);
-                $list = ($list ?: (new Lists()));
             }
 
-            if (!empty($isRepeated)) {
-                    $list->total_value += money_fmt_app($data['total_value']);
-            } else {
-                $list->bootstrap(
-                    $data['id_hour'],
-                    $data['id_store'],
-                    money_fmt_app($data['total_value']),
-                    ($data['date_moviment'])
-                );
-            }
-            /** @var Lists $list */
-            if (!$list->save()) {
+            // SETS
+            $list->id_hour = $data['id_hour'];
+            $list->id_store = $data['id_store'];
+            $list->value = money_fmt_app($data['total_value']);
+            $list->date_moviment = $data['date_moviment'];
+
+            /** @var SelfList $list */
+            if (!$list->saveRoutine()) {
                 $json['message'] = $list->message()->render();
             } else {
                 $json['message'] = $this->message->success("Tudo certo {$this->user->first_name}, a lista atualizado com sucesso!")->render();
@@ -922,6 +913,24 @@ class App extends Controller
      * @return void
      */
     public function removeList(array $data): void
+    {
+        $list = (new SelfList())->findById($data['id']);
+        if ($list) {
+            $list->destroy();
+            // RECALCULA A CADA DELETE
+            SelfList::calc($list);
+        }
+        $this->message->success("Tudo pronto {$this->user->first_name}, lista  removidA com sucesso!")->flash();
+        $json['redirect'] = url('/app/listas');
+        echo json_encode($json);
+    }
+
+    /**
+     * IT REMOVES ALL LISTS OF TABLE WITH ONE CLICK
+     * @param array $data
+     * @return void
+     */
+    public function removeAllLists(array $data): void
     {
         $list = (new Lists())->findById($data['id']);
         if ($list) {

@@ -85,6 +85,7 @@ $route->post('/listas', 'App:lists');
 $route->get('/lista/{id}', 'App:list');
 $route->post('/lista', 'App:saveList');
 $route->post('/remove-list/{id}', 'App:removeList');
+$route->post('/remove-lists/{id}', 'App:removeAllLists');
 
 /** FINANCES */
 $route->get('/fluxos-de-caixa', 'App:cashFlows');
