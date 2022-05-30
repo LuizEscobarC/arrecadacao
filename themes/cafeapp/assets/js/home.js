@@ -1,4 +1,8 @@
-//ANIMATED HOME WITH TOGGLE GRADIENT
+/*ANIMATED HOME WITH TOGGLE GRADIENT, you've acessed your article and then your class, so you've created a function 
+within your ''if?'' named as trade color that probably do the color trasition  in a screen and below yo uset its config...
+*/
+
+
 if (document.querySelector('article.app_flex')) {
     setInterval(function () {
         tradeColor()
