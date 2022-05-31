@@ -10,15 +10,6 @@
         </h2>
     </div>
     <form class="ajax_off app_launch_form_filter app_form" action="<?= url('/app/fluxos-de-caixa'); ?>" method="post">
-
-        <select name="store_situation">
-            <option value="">
-                &ofcir; Lojas Haver / Devem
-            </option>
-            <option value="2">Lojas de haver</option>
-            <option value="1">Lojas que devem</option>
-        </select>
-
         <select name="search_store" class="select2Input operator">
             <option value="">
                 &ofcir; Selecione uma loja

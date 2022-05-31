@@ -2,10 +2,18 @@
 <div class="app_launch_header" xmlns="http://www.w3.org/1999/html">
     <div class="app_flex_title">
         <h2>
-            <a class="color_white font_80_percent icon-user padding_btn transition gradient gradient-green gradient-hover radius box-shadow"
-               title="usuários">Registros de Lojas</a></h2>
+            <a class="color_white font_80_percent icon-user padding_btn transition
+            gradient gradient-green gradient-hover radius box-shadow"
+               title="usuários">R. de Lojas</a></h2>
     </div>
+
     <form class="ajax_off app_launch_form_filter app_form" action="<?= url('/app/lojas') ?>" method="post">
+
+        <select name="store_situation">
+            <option value="">Escolha</option>
+            <option value="1">Lojas de Haver</option>
+            <option vaLue="2">Lojas que Devem</option>
+        </select>
 
         <input type="search" name="search" alt="pesquise por nome ou código" value="<?= $search; ?>"
                placeholder="Nome da loja/código" list="code_store" autocomplete="off"/>
@@ -15,7 +23,7 @@
             <?php foreach ((new \Source\Models\Store())->find()->fetch(true) as $store): ?>
                 <option><?= $store->nome_loja; ?></option>
                 <option><?= $store->code; ?></option>
-            <?php endforeach;?>
+            <?php endforeach; ?>
         </datalist>
 
         <button class="filter radius transition icon-search icon-notext"></button>
@@ -72,13 +80,27 @@
         <?php endforeach; ?>
     <?php endif; ?>
 
-
-    <div class="app_launch_item footer">
+    <div class="font_80_percent app_launch_item footer">
         <p class="desc"></p>
         <p></p>
-        <p></p>
-        <p class="icon-calendar-check-o"></p>
-        <p class="icon-thumbs-o-up"></p>
+        <p class="font_80_percent">Saldo Total:</p>
+        <p class="font_80_percent icon-thumbs-o-up"><?= money_fmt_br(($values->total ?? '0.0'), true); ?></p>
     </div>
+
+    <div class="font_80_percent app_launch_item footer">
+        <p class="desc"></p>
+        <p></p>
+        <p class="font_80_percent">Saldo Receita Total:</p>
+        <p class="font_80_percent icon-thumbs-o-up"><?= money_fmt_br(($values->totalPositive  ?? '0.0'), true); ?></p>
+    </div>
+
+    <div class="font_80_percent app_launch_item footer">
+        <p class="desc"></p>
+        <p></p>
+        <p class="font_80_percent">Saldo Despesa Total:</p>
+        <p class="font_80_percent icon-thumbs-o-up"><?= money_fmt_br(($values->totalNegative ?? '0.0'), true); ?></p>
+    </div>
+
+
     <?= ($paginator ?? null); ?>
 </section>

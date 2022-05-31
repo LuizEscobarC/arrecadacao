@@ -111,7 +111,7 @@ class CashFlow extends Model
 
             $filters = $data;
         } else {
-            $filters = ['search_store' => null, 'search_hour' => null, 'search_date' => null, 'store_situation' => null];
+            $filters = ['search_store' => null, 'search_hour' => null, 'search_date' => null];
         }
 
         $filterClass = new FiltersCashFlow($this, $filters);
@@ -120,13 +120,11 @@ class CashFlow extends Model
             'search_store' => 'like',
             'search_hour' => 'like',
             'search_date' => 'equal',
-            'store_situation' => $situation
         ],
             [
                 'search_store' => 's.nome_loja',
                 'search_hour' => 'h.description',
-                'search_date' => 'DATE(cash_flow.date_moviment)',
-                'store_situation' => 's.valor_saldo'
+                'search_date' => 'DATE(cash_flow.date_moviment)'
             ])
             ->find([
                 'cash_flow.*',

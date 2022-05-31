@@ -293,25 +293,49 @@ class App extends Controller
         $head = $this->seo->make("Lojas - ", url('/app/lojas'));
 
         $search = filter_var((!empty($data['search']) ? $data['search'] : null), FILTER_SANITIZE_STRIPPED);
+        $situation = filter_var((!empty($data['store_situation']) ? $data['store_situation'] : null), FILTER_SANITIZE_STRIPPED);
 
-        if ($search) {
-            $stores = (new Store())->find("nome_loja LIKE '%{$search}%'");
-        } else {
-            $stores = (new Store())->find()->order('code');
-            $search = null;
+        $storeInstance = new Store();
+        $implode[] = ( !empty($search) ? "nome_loja LIKE '%{$search}%'" : null);
+        $implode[] = ( !empty($situation) && $situation == 1 ? "valor_saldo >= 0" : ($situation == 2 ? "valor_saldo < 0" : null));
+
+        foreach($implode as $key => $value) {
+            if (empty($value)) {
+                unset($implode[$key]);
+            }
         }
-        $page = (!empty($data['page']) ? $data['page'] : 1);
 
-        $pager = (new Pager(url('/app/lojas/')));
-        $pager->pager($stores->count(), 20, $page);
+        if (!empty($implode)) {
+            $query = implode(' AND ', $implode);
+        };
+
+
+        $stores = $storeInstance->find(($query ?? null))->order('code');
+
+
+        $values = new \stdClass();
+        $values->total = (new Store())->find('', null, 'sum(valor_saldo) as total')->fetch()->total;
+        $values->totalNegative = (new Store())->find('valor_saldo < 0', null, 'sum(valor_saldo) as total')->fetch()->total;
+        $values->totalPositive = (new Store())->find('valor_saldo >= 0', null, 'sum(valor_saldo) as total')->fetch()->total;
+        if(empty($query)) {
+            $page = (!empty($data['page']) ? $data['page'] : 1);
+            $pager = (new Pager(url('/app/lojas/')));
+            $pager->pager($stores->count(), 20, $page);
+            $paginator = $pager->render();
+            $limit = $pager->limit();
+            $offset = $pager->offset();
+        } else {
+            $paginator = null;
+        }
+
+        $stores = (!empty($paginator) ?  $stores->limit($limit)->offset($offset)->fetch(true) : $stores->fetch(true));
+
         echo $this->view->render("stores", [
             "head" => $head,
-            'stores' => $stores
-                ->limit($pager->limit())
-                ->offset($pager->offset())
-                ->fetch(true),
-            'paginator' => $pager->render(),
-            'search' => ($search ?? null)
+            'stores' => $stores,
+            'paginator' => $paginator,
+            'search' => ($search ?? null),
+            'values' => $values
         ]);
     }
 
