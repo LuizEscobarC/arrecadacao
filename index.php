@@ -138,8 +138,7 @@ $route->get('/despesas-pagas', 'Query:attachExpense');
 $route->post('/despesas-pagas', 'Query:attachExpense');
 // STORE BALANCE
 $route->get('/consultar-saldo-da-loja', 'Query:storeBalance');
-$route->post('/consultar-saldo-da-loja', 'Query:storeBalance');
-
+$route->get('/consultar-saldo-da-loja/{search_date}/{search_store}/{search_hour}', 'Query:storeBalance');
 
 
 /*

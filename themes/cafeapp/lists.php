@@ -100,7 +100,7 @@
     <div class=" app_launch_item footer">
         <p class="desc"></p>
         <p></p>
-        <p class="font_80_percent jus">Valor total:</p>
+        <p class="font_80_percent jus">Valor Total das Listas:</p>
         <p class=" font_80_percent icon-thumbs-o-up">R$ <?= money_fmt_br(($allMoney->total ?? "0")); ?></p>
     </div>
     <div class=" app_launch_item footer">

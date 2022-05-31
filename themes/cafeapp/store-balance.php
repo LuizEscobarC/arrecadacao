@@ -6,34 +6,21 @@
     <div class="app_flex_title">
         <h2>
             <a class="color_white font_60_percent icon-user padding_btn transition gradient gradient-green gradient-hover radius box-shadow"
-               title="usuários">Saldo da loja</a>
+               title="usuários">Saldo do Movimento</a>
         </h2>
     </div>
-    <form class="ajax_off app_launch_form_filter app_form" action="<?= url('/app/consultar-saldo-da-loja'); ?>" method="post">
+    <form class="ajax_off app_launch_form_filter app_form" id="filter_store_balance" action="<?= url('consultas/filters'); ?>" method="post">
 
-        <select name="search_store" class="select2Input operator">
-            <option value="">
-                &ofcir; Selecione uma loja
-            </option>
-            <?php foreach ((new \Source\Models\Store())->find()->fetch(true) as $store): ?>
-                <option <?= (($search->search_store) == $store->nome_loja && $search->search_store !== '' ? 'selected' : ""); ?>
-                        value="<?= $store->nome_loja; ?>">
-                    &ofcir; <?= $store->nome_loja; ?></option>
-            <?php endforeach; ?>
-        </select>
+        <input type="hidden" name="route" value="consultar-saldo-da-loja">
 
-        <select name="search_hour" class="select2Input operator">
-            <option value="">
-                &ofcir; Selecione um horário
-            </option>
+        <input autofocus type="text" list="search_hours" name="search_hour" class="search_hour" placeholder="Escolha um Horário" autocomplete="off">
+        <datalist id="search_hours">
             <?php foreach ((new \Source\Models\Hour())->find()->fetch(true) as $hour): ?>
-                <option <?= ($search->search_hour == $hour->description ? 'selected' : ""); ?>
-                        value="<?= $hour->description; ?>">
-                    &ofcir; <?= $hour->description; ?></option>
-            <?php endforeach; ?>
-        </select>
+            <option data-id="<?= $hour->id; ?>" value="<?= $hour->description; ?>"><?= $hour->week_day ?></option>
+                <?php endforeach; ?>
+        </datalist>
 
-        <input list="datelist" type="text" value="<?= $search->search_date; ?>" class="radius mask-date"
+        <input list="datelist" type="text" value="<?= $search->search_date; ?>" class="radius search_date mask-date"
                name="search_date" placeholder="Data de Movimento">
         <datalist id="datelist">
             <?php for ($range = 1; $range <= 30; $range++):

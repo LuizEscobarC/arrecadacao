@@ -445,4 +445,26 @@ class Moviment extends Model
         $currentHour->current_hour = $id;
         $currentHour->save();
     }
+
+    public function filterQuery(array $filter, string $fixed, ?int $limit = null)
+    {
+
+        // QUERYS
+        $storeQuery = (!empty($filter['search_store']) && $filter['search_store'] != 'all' ? "AND id_store = {$filter['store']}" : null);
+        $hourQuery = (!empty($filter['search_hour']) && $filter['search_hour'] != 'all' ? "AND id_hour = {$filter['search_hour']}" : null);
+        $dateQuery = (!empty($filter['date_moviment']) && $filter['date_moviment'] != 'all' ? "AND DATE(date_moviment) = DATE('{$filter['date_moviment']}')" : null);
+
+        // CASO PROCURE PELO NOME DO HORÁRIO É PRECISO FAZER UM JOIN
+        if ($hourQuery) {
+            $cashFlows = $this->find()
+                ->join('hour h', 'moviment.id_hour', 'h.id');
+            $cashFlows->putQuery("{$fixed} {$storeQuery} {$hourQuery} {$dateQuery}");
+        } else {
+            $cashFlows = $this->find("{$fixed} {$storeQuery} {$hourQuery} {$dateQuery}");
+        }
+        if ($limit) {
+            $cashFlows->limit($limit);
+        }
+        return $cashFlows->fetch(true);
+    }
 }

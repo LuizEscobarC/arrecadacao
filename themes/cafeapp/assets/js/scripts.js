@@ -40,7 +40,7 @@ async function getMoviment(data) {
             <label class="link_current_moviment">
                 <p class="app_widget_title padding_btn gradient gradient-blue gradient-hover radius transition">
                     <a class="desc moviment color_white" style="text-decoration: none;"
-                       href="${link}">Clique para ir a página de edição do movimento Atual.</a></p>
+                       href="${link}">CLIQUE AQUI para editar esse lançamento.</a></p>
             </label>
        `);
             const selector = (selector) => document.querySelector('.' + selector);

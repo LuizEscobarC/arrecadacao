@@ -32,7 +32,6 @@ Abstract class Filter extends FilterQuery implements FilterInterface
                         $keyWhere = $key;
                     }
                 }
-
                 switch ($type[$filterKey]) {
                     case 'like':
                         $this->like($keyWhere, $value);

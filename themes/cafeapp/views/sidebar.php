@@ -17,7 +17,7 @@
             <a class="pointer radius transition" title="Dashboard" href="<?= url('/consultas/premios-pagos'); ?>">Prêmios Pagos</a>
             <!--<a class="pointer radius transition" title="Dashboard" href="<?php //url('/consultas/lancamento-de-entradas'); ?>">Lançamento de entradas</a>
             <a class="pointer radius transition" title="Dashboard" href="<?php //url('/consultas/despesas-pagas'); ?>">Consultar Despesas Pagas</a> -->
-            <a class="pointer radius transition" title="Dashboard" href="<?= url('/consultas/consultar-saldo-da-loja'); ?>">Consultar Saldo da Loja</a>
+            <a class="pointer radius transition" title="Dashboard" href="<?= url('/consultas/consultar-saldo-da-loja'); ?>">Saldo do Movimento</a>
         </div>
         <a class="pointer radius transition" id="sidebar_children2" title="Dashboard">Relatórios</a>
     </div>
