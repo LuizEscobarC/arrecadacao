@@ -48,6 +48,10 @@ class SelfList extends Model
 
     public function saveRoutine(): bool
     {
+
+        // CURRENT HOUR SETTINGS IN DB
+        Moviment::saveCurrentHour($this->id_hour);
+
         $lists = (new Lists())->findByStoreHour($this->id_store, $this->id_hour, $this->date_moviment, false);
         // SE TIVER PAI SÓ ATUALIZA A PAI
         if (!empty($lists)) {

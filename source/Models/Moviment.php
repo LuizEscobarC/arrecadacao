@@ -104,7 +104,7 @@ class Moviment extends Model
         $modelVerify->isEmpty($data);
 
         // CURRENT HOUR SETTINGS IN DB
-        $this->saveCurrentHour($data['id_hour']);
+        Moviment::saveCurrentHour($data['id_hour']);
 
         // Se existir um movimento com a mesma data, horario e loja
         // CREATE OR UPDATE
@@ -439,7 +439,7 @@ class Moviment extends Model
         return $this->find("DATE(date_moviment) = DATE('{$data['date_moviment']}') AND id_hour = {$data['id_hour']} AND id_store = {$data['id_store']}")->fetch();
     }
 
-    private function saveCurrentHour($id)
+    public static function saveCurrentHour($id)
     {
         $currentHour = (new currentHour())->findById(1);
         $currentHour->current_hour = $id;
