@@ -216,7 +216,7 @@ function money_fmt_br(?float $money, bool $brl = false): string
  * @param float|null $money
  * @return string
  */
-function money_fmt_app(?string $money): float
+function money_fmt_app(?string $money)
 {
     if (!strstr($money, ',')) {
         return $money;

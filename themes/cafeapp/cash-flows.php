@@ -99,7 +99,21 @@
         <p class="desc"></p>
         <p></p>
         <p class="font_80_percent">Valor total:</p>
-        <p class="font_80_percent icon-thumbs-o-up"><?= money_fmt_br($allMoney); ?></p>
+        <p class="font_80_percent icon-thumbs-o-up"><?= money_fmt_br($total); ?></p>
+    </div>
+
+    <div class="font_80_percent app_launch_item footer">
+        <p class="desc"></p>
+        <p></p>
+        <p class="font_80_percent">Valor Receita total:</p>
+        <p class="font_80_percent icon-thumbs-o-up"><?= money_fmt_br($income); ?></p>
+    </div>
+
+    <div class="font_80_percent app_launch_item footer">
+        <p class="desc"></p>
+        <p></p>
+        <p class="font_80_percent">Valor Despesa Total:</p>
+        <p class="font_80_percent icon-thumbs-o-up"><?= money_fmt_br($expense); ?></p>
     </div>
     <?= $paginator; ?>
 </section>

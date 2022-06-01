@@ -47,14 +47,16 @@ class FiltersCashFlow extends Filter
                     left join cost cc on cc.id = c.id_cost WHERE type = 2 " . ($this->implode ? "AND {$this->implode} " : " ") . ") AS expense"
         );
 
+
         if ($total = $total->fetch()) {
             if (empty($total->income) && !empty($total->expense)) {
-                $total = -abs($total->expense);
+                $total->total = -abs($total->expense);
             } else {
-                $total = $total->income - $total->expense;
+                $total->total = $total->income - $total->expense;
             }
+            $total->expense = (!empty($total->expense) ? -abs($total->expense) : null);
         } else {
-            $total = null;
+            $total->total = null;
         }
 
         return $total;

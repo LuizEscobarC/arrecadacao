@@ -976,7 +976,6 @@ class App extends Controller
         $head = $this->seo->make("Fluxo - ", url('app/fluxos-de-caixa'));
 
         list($cashFlows, $search, $total) = (new CashFlow())->filter($data);
-        //($moviment = new Moviment())->filter((new Filter($moviment)), $data);
 
         $page = (!empty($data['page']) ? $data['page'] : 1);
 
@@ -989,7 +988,9 @@ class App extends Controller
                 ->limit($pager->limit())
                 ->offset($pager->offset())
                 ->fetch(true),
-            'allMoney' => isnt_empty($total, 'self', '0.00'),
+            'total' => isnt_empty(($total->total ?? null), 'self', '0.00'),
+            'income' => isnt_empty(($total->income ?? null), 'self', '0.00'),
+            'expense' => isnt_empty(($total->expense ?? null), 'self', '0.00'),
             'paginator' => $pager->render(),
             'search' => (object)$search
         ]);
