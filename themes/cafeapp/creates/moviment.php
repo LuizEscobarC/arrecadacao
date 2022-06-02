@@ -1,5 +1,6 @@
 <?php $v->layout("_theme"); ?>
 
+<div class="message icon-info animated color_888">INFO: [ clique I para informações, CTRL para calculadora ]</div>
 <div class="app_invoice app_widget">
     <div class="color_888 app_header">
         <h2 class=" icon-calendar-check-o ">Cadastrar Movimentação:</h2>

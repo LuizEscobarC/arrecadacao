@@ -1,7 +1,7 @@
 <?php $v->layout("_theme");
 /** @var \Source\Models\Moviment $moviment */
 ?>
-
+<div class="message icon-info animated color_888">INFO: [ clique I para informações, CTRL para calculadora ]</div>
 <div class="app_invoice app_widget">
     <div class="color_888 app_header">
         <h2 class=" icon-calendar-check-o ">Atualizar Movimentação:</h2>
@@ -35,7 +35,8 @@
             <label>
                 <span class="field icon-briefcase">Loja:</span>
                 <input type="hidden" name="id_store" value="<?= $moviment->store()->id ?>">
-                <input autofocus type="text" class="store_data_list" list="code_store" name="id_store_fake" autocomplete="off"
+                <input autofocus type="text" class="store_data_list" list="code_store" name="id_store_fake"
+                       autocomplete="off"
                        value="<?= $moviment->store()->nome_loja; ?>"
                        rel="<?= url('/app/get_list'); ?>"
                        data-url="<?= url('/app/get_store'); ?>"
@@ -43,16 +44,19 @@
 
                 <datalist class="datalist_store" id="code_store">
                     <?php foreach ((new \Source\Models\Store())->find()->fetch(true) as $store): ?>
-                            <option data-id_store="<?= $store->id; ?>" value="<?= $store->nome_loja; ?>" name="<?= $store->nome_loja; ?>" <?php ($moviment->store()->id == $store->id ? 'selected' : ''); ?>>
-                            <option data-id_store="<?= $store->id; ?>" value="<?= $store->code; ?>" name="<?= $store->code; ?>">
-                    <?php endforeach; ?>
+                    <option data-id_store="<?= $store->id; ?>" value="<?= $store->nome_loja; ?>"
+                            name="<?= $store->nome_loja; ?>" <?php ($moviment->store()->id == $store->id ? 'selected' : ''); ?>>
+                    <option data-id_store="<?= $store->id; ?>" value="<?= $store->code; ?>" name="<?= $store->code; ?>">
+                        <?php endforeach; ?>
                 </datalist>
             </label>
 
             <label>
                 <span class="field icon-leanpub">Saldo Atual da Loja:</span>
-                <input class="mask-money-negative" type="text" name="last_value" value="<?= money_fmt_br($moviment->last_value) ?>">
-                <p style="display:none;" class="app_widget_title last_value"><?= $moviment->last_value - $moviment->lists()->net_value; ?></p>
+                <input class="mask-money-negative" type="text" name="last_value"
+                       value="<?= money_fmt_br($moviment->last_value) ?>">
+                <p style="display:none;"
+                   class="app_widget_title last_value"><?= $moviment->last_value - $moviment->lists()->net_value; ?></p>
             </label>
         </div>
 
@@ -88,7 +92,8 @@
                 <span class="field icon-leanpub">Valor Despesas:</span>
                 <input class="radius box-shadow mask-money required-input" type="text" name="expend"
                        placeholder="Ex: 999"
-                       value="<?= (!empty($moviment->expend) ? ( $moviment->expend ? money_fmt_br($moviment->expend) : '0') : '0'); ?>" required/>
+                       value="<?= (!empty($moviment->expend) ? ($moviment->expend ? money_fmt_br($moviment->expend) : '0') : '0'); ?>"
+                       required/>
             </label>
             <label class="three_label">
                 <span class="field icon-leanpub">Valor Recolhido:</span>
@@ -121,13 +126,14 @@
         <div class="label_group">
             <label class="prize_input">
                 <span class="field icon-leanpub">Valor Premio:</span>
-                <input class="radius mask-money" type="text" name="prize" placeholder="Ex: 999" value="<?= ($moviment->prize ?? 0 )?>"/>
+                <input class="radius mask-money" type="text" name="prize" placeholder="Ex: 999"
+                       value="<?= ($moviment->prize ?? 0) ?>"/>
             </label>
 
             <label class="prize_output">
-                <input type="hidden" name="beat_prize" value="<?= ( $moviment->beat_prize ?? 0); ?>">
-                <input type="hidden" name="prize_office" value="<?= ( $moviment->prize_office ?? 0); ?>">
-                <input type="hidden" name="prize_store" value="<?= ( $moviment->prize_store ?? 0); ?>">
+                <input type="hidden" name="beat_prize" value="<?= ($moviment->beat_prize ?? 0); ?>">
+                <input type="hidden" name="prize_office" value="<?= ($moviment->prize_office ?? 0); ?>">
+                <input type="hidden" name="prize_store" value="<?= ($moviment->prize_store ?? 0); ?>">
             </label>
         </div>
 
@@ -140,7 +146,7 @@
 
     <?= $view->render('views/fragments/moviment-viewer',
         [
-           'moviment' => $moviment,
+            'moviment' => $moviment,
         ]);
     ?>
 
