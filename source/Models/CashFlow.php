@@ -231,7 +231,7 @@ class CashFlow extends Model
         return $chartData;
     }
 
-    public function filterQuery(array $filter, string $fixed, ?int $limit = null)
+    public function filterQuery(array $filter, string $fixed, ?int $limit = null , bool $total = false)
     {
 
         // QUERYS
@@ -242,15 +242,30 @@ class CashFlow extends Model
 
         // CASO PROCURE PELO NOME DO HORÁRIO É PRECISO FAZER UM JOIN
         if ($hourQuery) {
-            $cashFlows = $this->find(null, null, '*, sum(value) as totalPrizeExpense')
+            $cashFlows = $this->find()
                 ->join('hour h', 'cash_flow.id_hour', 'h.id');
             $cashFlows->putQuery("{$fixed} {$storeQuery} {$costQuery} {$hourQuery} {$dateQuery}");
 
         } else {
-            $cashFlows = $this->find("{$fixed} {$storeQuery} {$costQuery} {$hourQuery} {$dateQuery}", null,
-                '*, sum(value) as totalPrizeExpense');
-
+            $cashFlows = $this->find("{$fixed} {$storeQuery} {$costQuery} {$hourQuery} {$dateQuery}");
         }
+
+        if ($total) {
+            if ($hourQuery) {
+                $cashFlows = $this->find(null, null, 'sum(cash_flow.value) as totalPrizeExpense')
+                    ->join('hour h', 'cash_flow.id_hour', 'h.id');
+                $cashFlows->putQuery("{$fixed} {$storeQuery} {$costQuery} {$hourQuery} {$dateQuery}");
+
+            } else {
+                $cashFlows = $this->find("{$fixed} {$storeQuery} {$costQuery} {$hourQuery} {$dateQuery}", null,
+                    'sum(cash_flow.value) as totalPrizeExpense');
+            }
+            if ($limit) {
+                $cashFlows->limit($limit);
+            }
+            return $cashFlows->fetch();
+        }
+
         if ($limit) {
             $cashFlows->limit($limit);
         }

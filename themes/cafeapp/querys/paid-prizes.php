@@ -77,7 +77,7 @@
         <p class="desc"></p>
         <p></p>
         <p class="font_80_percent jus">Total de Premios Pagos:</p>
-        <p class=" font_80_percent icon-thumbs-o-up">R$ <?= money_fmt_br(($prize->totalPrizeExpense ?? "0")); ?></p>
+        <p class=" font_80_percent icon-thumbs-o-up">R$ <?= money_fmt_br(($total->totalPrizeExpense ?? "0")); ?></p>
     </div>
     <?= '';//$paginator;  ?>
 </section>

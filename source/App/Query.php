@@ -34,6 +34,7 @@ class Query extends App
             [
                 'head' => $head,
                 'prizes' => (new CashFlow())->filterQuery($data, "{$fixed} type = 2"),
+                'total' =>  (new CashFlow())->filterQuery($data, "{$fixed} type = 2", null, true),
                 'filter' => (object)[
                     "store" => ($data["store"] ?? null),
                     "cost" => ($data["cost"] ?? null),
@@ -99,6 +100,7 @@ class Query extends App
     }
 
     /**
+     * METODO RESPONVEL PELA FILTRAGEM E LSITAGEM DE TOTALIZAÇÕES DE MOVIMENTO OU FECHAMENTO DE MOVIMENTO
      * @param array $data
      * @return void
      */
