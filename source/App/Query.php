@@ -87,9 +87,11 @@ class Query extends App
 
         $dataObject->date_moviment = (!empty($data['search_date']) ? $dateApp : 'all');
 
-        $dataObject->cost = (!empty($data['cost']) && filter_var($data['cost'], FILTER_VALIDATE_INT) ? $data['cost'] : 'all');
+        $dataObject->cost = (!empty($data['cost']) && filter_var($data['cost'],
+            FILTER_VALIDATE_INT) ? $data['cost'] : 'all');
         $dataObject->date = (!empty($data['date']) ? $dateApp : 'all');
-        $dataObject->store = (!empty($data['store']) && filter_var($data['store'], FILTER_VALIDATE_INT) ? $data['store'] : 'all');
+        $dataObject->store = (!empty($data['store']) && filter_var($data['store'],
+            FILTER_VALIDATE_INT) ? $data['store'] : 'all');
         $dataObject->hour = (!empty($data['hour']) ? $data['hour'] : 'all');
 
         // ESCOLHE UMA ROTA E REDIRECIONA
@@ -106,17 +108,22 @@ class Query extends App
         $head = $this->seo->make("Movimentação - ", url('/app/movimentacoes'));
 
         // QUERYS
-        $data['search_store'] = (!empty($data['search_store']) && $data['search_store'] != 'all' ? "AND id_store = {$data['search_store']}" : null);
-        $data['search_hour'] = (!empty($data['search_hour']) && $data['search_hour'] != 'all' ? "AND id_hour = {$data['search_hour']}" : null);
-        $data['search_date'] = (!empty($data['search_date']) && $data['search_date'] != 'all' ? "AND DATE(date_moviment) = DATE('{$data['search_date']}')" : null);
+        $hour = (!empty($data['search_hour']) && $data['search_hour'] != 'all' ? "moviment.id_hour = {$data['search_hour']}" : null);
+        $date = (!empty($data['search_date']) && $data['search_date'] != 'all' ? "DATE(moviment.date_moviment) = DATE('{$data['search_date']}')" : null);
 
+        $total = (new Moviment());
+        $total->find(null, null, 'sum(prize) as total_prize, sum(expend) as total_expend, sum(get_value) as total_get_value,
+         sum(net_value) as total_net_value ')->join('lists l', 'moviment.id_list', 'l.id');;
+        if ($hour || $date) {
+            $total->putQuery("{$hour}" . ($date ? ' AND ' : null) . "{$date}", ' WHERE ');
+        }
 
-        list($moviments, $search, $total) = (new Moviment())->filter($data);
+        $total = $total->fetch();
 
         echo $this->view->render('store-balance', [
             'head' => $head,
             'allMoney' => isnt_empty($total, 'self', '0.00'),
-            'search' => (object)$search
+            'search' => (object)$data
         ]);
     }
 

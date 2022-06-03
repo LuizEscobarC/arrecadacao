@@ -307,7 +307,6 @@ class Moviment extends Model
             'get_value' => 'total_get_value'
 
         ], new Moviment());
-
         if (!empty($date)) {
             $arrayFilterReturn[1]['search_date'] = date_fmt_app($date);
         }
