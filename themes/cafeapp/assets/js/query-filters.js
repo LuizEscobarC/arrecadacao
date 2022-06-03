@@ -36,17 +36,14 @@ const ajaxPaidPrize = async (element) => {
 // BEGIN STORE BALANCE
 const ajaxStoreBalance = async (element) => {
     // BEGIN GETTING DATALIST IDS
-    const store = document.querySelector('.search_store').value;
     const hour = (document.querySelector('.search_hour').value ?? '');
     const dateMoviment = (document.querySelector('.search_date').value ?? '');
 
-    const storeId = (store ? document.querySelector(`#search_stores option[value='${store}']`).dataset.id : '');
     const hourId = (hour ? document.querySelector(`#search_hours option[value='${hour}']`).dataset.id : '');
-
     // END GETTING DATALIST ID
 
     // OBJECT DATA
-    const data = {store: storeId, hour: hourId, date_moviment: dateMoviment, route: 'consultar-saldo-da-loja'};
+    const data = {hour: hourId, date_moviment: dateMoviment, route: 'consultar-saldo-da-loja'};
 
     const url = element.getAttribute('action');
     const method = 'POST';

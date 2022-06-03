@@ -285,6 +285,7 @@ class Moviment extends Model
         } else {
             $filters = ['search_store' => '', 'search_hour' => '', 'search_date' => ''];
         }
+
         // passo o modelo e os filtros vazios ou não
         $filterClass = new FilterMoviment($this, $filters);
 
@@ -307,6 +308,9 @@ class Moviment extends Model
 
         ], new Moviment());
 
+        if (!empty($date)) {
+            $arrayFilterReturn[1]['search_date'] = date_fmt_app($date);
+        }
         return array_merge($arrayFilterReturn, [$total]);
     }
 

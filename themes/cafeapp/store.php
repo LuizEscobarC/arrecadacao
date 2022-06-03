@@ -38,7 +38,7 @@
 
             <label>
                 <span class="field icon-filter">Aluguel Dia:</span>
-                <input class="radius" type="text" name="aluguel dia" value="<?= money_fmt_br($store->comissao); ?>"/>
+                <input class="radius filter_day mask-day" type="text" name="aluguel dia" value="<?= money_fmt_br($store->comissao); ?>"/>
             </label>
         </div>
 
@@ -51,7 +51,7 @@
 
             <label>
                 <span class="field icon-filter">Gratificação Dia:</span>
-                <input class="radius" type="text" name="gratificacao_dia"
+                <input class="radius filter_day mask-day" type="text" name="gratificacao_dia"
                        value="<?= $store->gratificacao_dia; ?>"/>
             </label>
         </div>

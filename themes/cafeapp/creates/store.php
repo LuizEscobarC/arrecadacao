@@ -37,7 +37,7 @@
 
             <label>
                 <span class="field icon-filter">Aluguel Dia:</span>
-                <input class="radius" type="text" name="aluguel_dia" />
+                <input class="radius filter_day mask-day" type="text" name="aluguel_dia" />
             </label>
         </div>
 
@@ -49,7 +49,7 @@
 
             <label>
                 <span class="field icon-filter">Gratificação Dia:</span>
-                <input class="radius" type="text" name="gratificacao_dia" />
+                <input class="radius filter_day mask-day" type="text" name="gratificacao_dia" />
             </label>
         </div>
 

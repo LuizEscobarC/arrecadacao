@@ -242,11 +242,14 @@ class CashFlow extends Model
 
         // CASO PROCURE PELO NOME DO HORÁRIO É PRECISO FAZER UM JOIN
         if ($hourQuery) {
-            $cashFlows = $this->find()
+            $cashFlows = $this->find(null, null, '*, sum(value) as totalPrizeExpense')
                 ->join('hour h', 'cash_flow.id_hour', 'h.id');
             $cashFlows->putQuery("{$fixed} {$storeQuery} {$costQuery} {$hourQuery} {$dateQuery}");
+
         } else {
-            $cashFlows = $this->find("{$fixed} {$storeQuery} {$costQuery} {$hourQuery} {$dateQuery}");
+            $cashFlows = $this->find("{$fixed} {$storeQuery} {$costQuery} {$hourQuery} {$dateQuery}", null,
+                '*, sum(value) as totalPrizeExpense');
+
         }
         if ($limit) {
             $cashFlows->limit($limit);

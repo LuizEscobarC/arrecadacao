@@ -33,12 +33,12 @@
             <?php endforeach; ?>
         </select>
 
-        <input list="datelist" type="text" value="<?= $search->search_date; ?>" class="radius mask-date"
+        <input list="datelist" type="text" value="<?= date_fmt($search->search_date, 'd/m/Y'); ?>" class="radius mask-date"
                name="search_date" placeholder="Data de Movimento">
         <datalist id="datelist">
             <?php for ($range = 1; $range <= 30; $range++):
                 $date = date("d/m/Y", strtotime("+{$range} month")); ?>
-                <option <?= ($search->search_date == $date ? 'selected' : null); ?> value="<?= $date; ?>"/>
+                <option value="<?= $date; ?>"/>
             <?php endfor; ?>
         </datalist>
         <button class="filter radius transition icon-filter icon-notext"></button>

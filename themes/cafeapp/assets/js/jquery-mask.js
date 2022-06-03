@@ -19,5 +19,4 @@ $(function () {
     $("select.select2Input").select2({
         width: '100%'
     });
-
 });
