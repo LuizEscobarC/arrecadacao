@@ -135,27 +135,13 @@ class Moviment extends Model
 
         // END STORE
 
-        // SE EXISTIR ID ATUALIZA, SE NÃO SALVA O MESMO VALOR
-        if (!empty($moviment->id)) {
-            $moviment->date_moviment = (!empty($moviment->id) ? $data['date_moviment'] : $moviment->date_moviment);
-            $moviment->id_store = ((!empty($moviment->id)) ? $data['id_store'] : $moviment->id_store);
-            $moviment->id_hour = (!empty($moviment->id) ? $data['id_hour'] : $moviment->id_hour);
-            $moviment->id_list = (!empty($moviment->id) && !empty($data['id_list']) ? $data['id_list'] : $moviment->id_list);
-            $moviment->beat_value = (!empty($moviment->id) ? money_fmt_app($data['beat_value']) : $moviment->beat_value);
-            $moviment->paying_now = (!empty($moviment->id) && is_not_zero($data['paying_now']) ? money_fmt_app($data['paying_now']) : $moviment->paying_now);
-            $moviment->expend = (!empty($moviment->id) && is_not_zero($data['expend']) ? money_fmt_app($data['expend']) : $moviment->expend);
-            $moviment->last_value = (!empty($moviment->id) ? $moviment->last_value : money_fmt_app($data['last_value']));
-            $moviment->get_value = (!empty($moviment->id) && is_not_zero($data['paying_now']) ? money_fmt_app($data['get_value']) : $moviment->get_value);
-            $moviment->new_value = (!empty($moviment->id) ? money_fmt_app($data['new_value']) : $moviment->new_value);
-            $moviment->prize = (!empty($moviment->id) ? (money_fmt_app($data['prize']) + $moviment->prize) : $moviment->prize);
-            $moviment->beat_prize = (!empty($moviment->id) ? (money_fmt_app($data['beat_prize']) + $moviment->beat_prize) : $moviment->beat_prize);
-            $moviment->prize_store = (!empty($moviment->id) ? (money_fmt_app($data['prize_store']) + $moviment->prize_store) : $moviment->prize_store);
-            $moviment->prize_office = (!empty($moviment->id) ? (money_fmt_app($data['prize_office']) + $moviment->prize_office) : $moviment->prize_office);
-        } else {
+
+        // CASO SEJA EDIÇÃO NÃO APLICA AS REGRAS DE INCLEMENTO DE DADOS
+        if (!empty($data['edit'])) {
             $moviment->date_moviment = $data['date_moviment'];
             $moviment->id_store = $data['id_store'];
             $moviment->id_hour = $data['id_hour'];
-            $moviment->id_list = !empty($data['id_list']) ? $data['id_list'] : null;
+            $moviment->id_list = (!empty($data['id_list']) ? $data['id_list'] : null);
             $moviment->beat_value = money_fmt_app($data['beat_value']);
             $moviment->paying_now = money_fmt_app($data['paying_now']);
             $moviment->expend = money_fmt_app($data['expend']);
@@ -166,6 +152,39 @@ class Moviment extends Model
             $moviment->beat_prize = money_fmt_app($data['beat_prize']);
             $moviment->prize_store = money_fmt_app($data['prize_store']);
             $moviment->prize_office = money_fmt_app($data['prize_office']);
+        } else {
+            if (!empty($moviment->id)) {
+                // SE EXISTIR ID ATUALIZA, SE NÃO SALVA O MESMO VALOR
+                $moviment->date_moviment = (!empty($moviment->id) ? $data['date_moviment'] : $moviment->date_moviment);
+                $moviment->id_store = ((!empty($moviment->id)) ? $data['id_store'] : $moviment->id_store);
+                $moviment->id_hour = (!empty($moviment->id) ? $data['id_hour'] : $moviment->id_hour);
+                $moviment->id_list = (!empty($moviment->id) && !empty($data['id_list']) ? $data['id_list'] : $moviment->id_list);
+                $moviment->beat_value = (!empty($moviment->id) ? money_fmt_app($data['beat_value']) : $moviment->beat_value);
+                $moviment->paying_now = (!empty($moviment->id) && is_not_zero($data['paying_now']) ? money_fmt_app($data['paying_now']) : $moviment->paying_now);
+                $moviment->expend = (!empty($moviment->id) && is_not_zero($data['expend']) ? money_fmt_app($data['expend']) : $moviment->expend);
+                $moviment->last_value = (!empty($moviment->id) ? $moviment->last_value : money_fmt_app($data['last_value']));
+                $moviment->get_value = (!empty($moviment->id) && is_not_zero($data['paying_now']) ? money_fmt_app($data['get_value']) : $moviment->get_value);
+                $moviment->new_value = (!empty($moviment->id) ? money_fmt_app($data['new_value']) : $moviment->new_value);
+                $moviment->prize = (!empty($moviment->id) ? (money_fmt_app($data['prize']) + $moviment->prize) : $moviment->prize);
+                $moviment->beat_prize = (!empty($moviment->id) ? (money_fmt_app($data['beat_prize']) + $moviment->beat_prize) : $moviment->beat_prize);
+                $moviment->prize_store = (!empty($moviment->id) ? (money_fmt_app($data['prize_store']) + $moviment->prize_store) : $moviment->prize_store);
+                $moviment->prize_office = (!empty($moviment->id) ? (money_fmt_app($data['prize_office']) + $moviment->prize_office) : $moviment->prize_office);
+            } else {
+                $moviment->date_moviment = $data['date_moviment'];
+                $moviment->id_store = $data['id_store'];
+                $moviment->id_hour = $data['id_hour'];
+                $moviment->id_list = !empty($data['id_list']) ? $data['id_list'] : null;
+                $moviment->beat_value = money_fmt_app($data['beat_value']);
+                $moviment->paying_now = money_fmt_app($data['paying_now']);
+                $moviment->expend = money_fmt_app($data['expend']);
+                $moviment->last_value = money_fmt_app($data['last_value']);
+                $moviment->get_value = money_fmt_app($data['get_value']);
+                $moviment->new_value = money_fmt_app($data['new_value']);
+                $moviment->prize = money_fmt_app($data['prize']);
+                $moviment->beat_prize = money_fmt_app($data['beat_prize']);
+                $moviment->prize_store = money_fmt_app($data['prize_store']);
+                $moviment->prize_office = money_fmt_app($data['prize_office']);
+            }
         }
 
         if ($moviment->save()) {

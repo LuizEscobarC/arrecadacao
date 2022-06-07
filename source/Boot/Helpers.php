@@ -433,9 +433,16 @@ function is_not_zero($value)
 {
     return (
         !empty($value)
+        && money_fmt_app($value) !== '0'
         && money_fmt_app($value) !== 0
+        && money_fmt_app($value) !== '0.00'
         && money_fmt_app($value) !== 0.00
+        && money_fmt_app($value) !== '00.0'
         && money_fmt_app($value) !== 00.00
+        && money_fmt_app($value) !== '00.00'
         && money_fmt_app($value) !== 00.0
+        && money_fmt_app($value) !== '00.0'
+        && money_fmt_app($value) !== 00.0
+        && money_fmt_app($value) !== '00.0'
     );
 }

@@ -48,15 +48,18 @@ $route->post("/cadastrar", "App:register");
 $route->post('/remove-user/{id}', 'App:removeUser');
 $route->get("/sair", "App:logout");
 
-/** STORES */
-$route->get('/lojas', 'App:stores');
-$route->get('/cadastrar-loja', 'App:createStore');
-$route->get('/lojas/{page}', 'App:stores');
-$route->post('/lojas', 'App:stores');
-$route->get('/loja/{id}', 'App:store');
-$route->post('/loja-salvar', 'App:saveStore');
-$route->post('/remove-store/{id}', 'App:removeStore');
+$route->namespace("Source\App\Store");
 
+/** STORES */
+$route->get('/lojas', 'StoreController:stores');
+$route->get('/cadastrar-loja', 'StoreController:createStore');
+$route->get('/lojas/{page}', 'StoreController:stores');
+$route->post('/lojas', 'StoreController:stores');
+$route->get('/loja/{id}', 'StoreController:store');
+$route->post('/loja-salvar', 'StoreController:saveStore');
+$route->post('/remove-store/{id}', 'StoreController:removeStore');
+
+$route->namespace("Source\App");
 
 /** COST CENTER */
 $route->get('/centros-de-custo', 'App:costCenters');

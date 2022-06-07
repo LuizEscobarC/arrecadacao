@@ -47,7 +47,7 @@
                     <option data-id_store="<?= $store->id; ?>" value="<?= $store->nome_loja; ?>"
                             name="<?= $store->nome_loja; ?>" <?php ($moviment->store()->id == $store->id ? 'selected' : ''); ?>>
                     <option data-id_store="<?= $store->id; ?>" value="<?= $store->code; ?>" name="<?= $store->code; ?>">
-                        <?php endforeach; ?>
+                    <?php endforeach; ?>
                 </datalist>
             </label>
 
@@ -56,7 +56,7 @@
                 <input class="mask-money-negative" type="text" name="last_value"
                        value="<?= money_fmt_br($moviment->last_value) ?>">
                 <p style="display:none;"
-                   class="app_widget_title last_value"><?= $moviment->last_value - $moviment->lists()->net_value; ?></p>
+                   class="app_widget_title last_value"><?= $moviment->last_value - (!empty($moviment->lists()) ? $moviment->lists()->net_value : 0); ?></p>
             </label>
         </div>
 

@@ -374,7 +374,7 @@ if (formMovimentGlobalVar) {
             if (storeNewValue < 0) {
                 const negativeValue = window.confirm('Deseja abater o saldo da loja?');
                 if (negativeValue) {
-                    const storeValuePositive = Math.abs(storeNewValue);
+                    const storeValuePositive = Math.abs(parseFloat(last_val.textContent.replaceAll('.', '').replace(',', '.')));
                     let prizeOffice = null;
                     let prizeStore = null;
                     let beatPrize = null;
