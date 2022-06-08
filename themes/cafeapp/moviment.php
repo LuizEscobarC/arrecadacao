@@ -127,7 +127,7 @@
             <label class="prize_input">
                 <span class="field icon-leanpub">Valor Premio:</span>
                 <input class="radius mask-money" type="text" name="prize" placeholder="Ex: 999"
-                       value="<?= ($moviment->prize ?? 0) ?>"/>
+                       value="<?= (money_fmt_br($moviment->prize) ?? 0) ?>"/>
             </label>
 
             <label class="prize_output">

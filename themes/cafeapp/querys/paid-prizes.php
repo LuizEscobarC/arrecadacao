@@ -28,7 +28,7 @@
         <input autofocus type="text" list="search_hours" name="search_hour" class="search_hour" placeholder="Escolha um Horário" autocomplete="off">
         <datalist id="search_hours">
             <?php foreach ((new \Source\Models\Hour())->find()->fetch(true) as $hour): ?>
-            <option value="<?= $hour->description; ?>">
+                <option value="<?= $hour->description; ?>"><?= $hour->week_day ?></option>
                 <?php endforeach; ?>
         </datalist>
 

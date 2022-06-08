@@ -116,9 +116,8 @@ class Moviment extends Model
             $store = $store->findById($data['id_store']);
         }
 
-
         // BEGIN STORE
-        if (!empty($data['beat_prize'])) {
+        if (!empty($data['beat_prize']) && money_fmt_app($data['new_value']) > 0.999) {
             $store->valor_saldo = (money_fmt_app($data['new_value']) + money_fmt_app($data['prize']));
             //  PARA ATUALIZAR O SALDO NO MOVIMENT
             $data['new_value'] = $store->valor_saldo;
@@ -134,7 +133,6 @@ class Moviment extends Model
         }
 
         // END STORE
-
 
         // CASO SEJA EDIÇÃO NÃO APLICA AS REGRAS DE INCLEMENTO DE DADOS
         if (!empty($data['edit'])) {

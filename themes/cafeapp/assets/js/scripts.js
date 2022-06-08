@@ -426,9 +426,10 @@ if (formMovimentGlobalVar) {
 
                     // SE TIVER CENTAVOS NO PAGAMENTO DE PREMIO DO ESCRITÓRIO
                     // if (prizeOfficeBrl)
+                    console.log(newStoreValueBrl)
 
-                    document.getElementsByClassName('new_value').textContent = newStoreValueBrl;
-                    document.querySelector("input[name='new_value']").textContent = newStoreValueBrl;
+                    document.querySelector('p.new_value').textContent = newStoreValueBrl;
+                    document.querySelector("input[name='new_value']").value = newStoreValueBrl;
 
                     document.querySelector('label.prize_output').insertAdjacentHTML('afterbegin', `<span class="field icon-leanpub">Valor de Abate Premio:</span>
                             <p class="app_widget_title beat_prize">${beatPrize}</p>

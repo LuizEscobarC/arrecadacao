@@ -140,7 +140,7 @@ class Query extends App
         // VERIFICA A ROTA E REDIRECIONA
         switch ($data->route) {
             case 'premios-pagos':
-                $json['redirect'] = url("/consultas/{$data->route}/{$data->cost}/{$data->date}/{$data->store}/$data->hour}");
+                $json['redirect'] = url("/consultas/{$data->route}/{$data->cost}/{$data->date}/{$data->store}/{$data->hour}");
                 break;
             case 'consultar-saldo-da-loja':
                 $json['redirect'] = url("/consultas/{$data->route}/{$data->date_moviment}/{$data->store}/{$data->hour}");
