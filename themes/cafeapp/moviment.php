@@ -134,11 +134,14 @@
                 <input type="hidden" name="beat_prize" value="<?= ($moviment->beat_prize ?? 0); ?>">
                 <input type="hidden" name="prize_office" value="<?= ($moviment->prize_office ?? 0); ?>">
                 <input type="hidden" name="prize_store" value="<?= ($moviment->prize_store ?? 0); ?>">
+                <input type="hidden" name="new_value_with_cents" value="">
             </label>
         </div>
 
         <div class="al-center">
             <div>
+                  <span data-movimentremove="<?= url("/app/remove-moviment/{$moviment->id}") ?>"
+                        class="btn_remove transition icon-error">Excluir</span>
                 <button class="btn btn_inline radius transition icon-pencil-square-o" id="moviment_btn">Lançar</button>
             </div>
         </div>

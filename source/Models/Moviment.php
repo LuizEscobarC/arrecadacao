@@ -117,8 +117,9 @@ class Moviment extends Model
         }
 
         // BEGIN STORE
-        if (!empty($data['beat_prize']) && money_fmt_app($data['new_value']) > 0.999) {
-            $store->valor_saldo = (money_fmt_app($data['new_value']) + money_fmt_app($data['prize']));
+        // CASO TENHA CENTAVOS E O VALOR SEJA ABATIDO
+        if (!empty($data['new_value_with_cents'])) {
+            $store->valor_saldo = money_fmt_app($data['new_value_with_cents']);
             //  PARA ATUALIZAR O SALDO NO MOVIMENT
             $data['new_value'] = $store->valor_saldo;
         } else {
@@ -339,7 +340,7 @@ class Moviment extends Model
 
         $cashSearch = new CashFlow();
 
-        if (is_not_zero($data['prize_office'])) {
+        if (is_not_zero((float)money_fmt_app($data['prize_office']))) {
             $cash = ($cashSearch->findByDateMoviment($idMoviment, 2,
                     17) ?? new CashFlow());
 
@@ -367,7 +368,7 @@ class Moviment extends Model
             }
         }
 
-        if (is_not_zero($data['prize_store'])) {
+        if (is_not_zero((float)money_fmt_app($data['prize_store']))) {
             $cash = ($cashSearch->findByDateMoviment($idMoviment, 2,
                     4) ?? new CashFlow());
 
@@ -395,7 +396,7 @@ class Moviment extends Model
             }
         }
 
-        if (is_not_zero($data['get_value'])) {
+        if (is_not_zero((float)money_fmt_app($data['get_value']))) {
             $cash = ($cashSearch->findByDateMoviment($idMoviment, 1,
                     16) ?? new CashFlow());
 
@@ -423,7 +424,7 @@ class Moviment extends Model
             }
 
             // DESPESAS DA LOJA
-            if (is_not_zero($data['expend'])) {
+            if (is_not_zero((float)money_fmt_app($data['expend']))) {
                 $cash = ($cashSearch->findByDateMoviment($idMoviment, 2,
                         2) ?? new CashFlow());
 

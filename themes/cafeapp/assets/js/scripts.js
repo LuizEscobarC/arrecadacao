@@ -1,5 +1,25 @@
 const formMovimentGlobalVar = document.querySelector('form.app_form#moviment');
 
+
+function blockerButton(button) {
+    button.setAttribute('disabled', true);
+}
+
+function addButtonMoviment(button) {
+    button.removeAttribute('disabled');
+}
+
+function toAppNumber(value) {
+    return parseFloat(value.replaceAll('.', '').replace(',', '.'));
+}
+
+function toBrNumber(value) {
+    return value.toLocaleString('pt-br', {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2
+    });
+}
+
 // BEGIN FUNCTIONS
 async function getHours(inputSelect) {
     const select = document.querySelector('select.callback');
@@ -259,15 +279,15 @@ function calc(value, $this) {
     //Case o input esteja vazio, para não retornar NaN
     if (input.value) {
         // VALOR DESPESAS
-        const expense = parseFloat($this.value.replaceAll('.', '').replace(',', '.'));
+        const expense = toAppNumber($this.value);
         // VALOR DINHEIRO
-        const paying = parseFloat(input.value.replaceAll('.', '').replace(',', '.'));
+        const paying = toAppNumber(input.value);
         /* Valor reclohido + despesas*/
 
         // VALOR RECOLHIDO
         const getValue = (paying + expense);
         // VALOR RECOLHIDO EM BRL
-        const getValueBr = getValue.toLocaleString('pt-br', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        const getValueBr = toBrNumber(getValue);
         /* Valor a acertar é o valor líquido da lista*/
         // VALOR LÍQUIDO | VALOR ACERTAR
         const netValue = document.querySelector('p.net_value').textContent;
@@ -281,9 +301,7 @@ function calc(value, $this) {
             last_val = document.querySelector('p.last_value').textContent
         }
 
-        document.querySelector("input[name='last_value']").value = last_val.toLocaleString('pt-br', {
-            minimumFractionDigits: 2, maximumFractionDigits: 2
-        });
+        document.querySelector("input[name='last_value']").value = toBrNumber(last_val);
 
         document.querySelector("input[name='net_value']").value = netValue;
         document.querySelector("input[name='get_value']").value = getValueBr;
@@ -292,17 +310,12 @@ function calc(value, $this) {
         if (last_val && netValue) {
             // É o valor que tem que ser abatido  com o valor recolhido + o valor de despesas
             // VALOR A ACERTAR | VALOR LIQUIDO
-            const beatValue = (getValue - parseFloat(netValue.replaceAll('.', '')
-                .replace(',', '.')));
+            const beatValue = (getValue - toAppNumber(netValue));
 
             // NOVO VALOR ATUAL | SALDO ANTERIOR
-            const newValue = (parseFloat(last_val.replaceAll('.', '')
-                .replace(',', '.')) + beatValue)
-                .toLocaleString('pt-br', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            const newValue = toBrNumber(toAppNumber(last_val) + beatValue);
+            const beatValueBrl = toBrNumber(beatValue);
 
-            const beatValueBrl = beatValue.toLocaleString('pt-br', {
-                minimumFractionDigits: 2, maximumFractionDigits: 2
-            });
             document.querySelector('p.beat_value').innerHTML = beatValueBrl;
             document.querySelector('.new_value').innerHTML = newValue;
             document.querySelector("input[name='beat_value']").value = beatValueBrl;
@@ -347,16 +360,18 @@ formulário é enviado*/
 if (formMovimentGlobalVar) {
     formMovimentGlobalVar.addEventListener('submit', function (e) {
         e.preventDefault();
+        const buttonMoviment = document.querySelector('#moviment_btn');
+        blockerButton(buttonMoviment);
         //realiza os calculos para caso os valores não sejam typados
         const $input = document.querySelector("input[name='expend']");
         calc('paying_now', $input);
         let inputPrize = document.querySelector("input[name='prize']").value;
         if (inputPrize) {
-            inputPrize = parseFloat(inputPrize.replaceAll('.', '').replace(',', '.'));
+            inputPrize = toAppNumber(inputPrize);
             // VALOR DESPESAS
-            const expense = parseFloat($input.value.replaceAll('.', '').replace(',', '.'));
+            const expense = toAppNumber($input.value);
             // VALOR DINHEIRO
-            const paying = parseFloat(document.querySelector("input[name='paying_now']").value.replaceAll('.', '').replace(',', '.'));
+            const paying = toAppNumber(document.querySelector("input[name='paying_now']").value);
             /* Valor reclohido + despesas*/
             // VALOR RECOLHIDO
             const getValue = (paying + expense);
@@ -367,14 +382,13 @@ if (formMovimentGlobalVar) {
             // VALOR ANTERIOR | SALDO ATUAL
             const last_val = document.querySelector('p.last_value');
             // VALOR A ACERTAR | VALOR LIQUIDO
-            const beatValue = (getValue - parseFloat(netValue.replaceAll('.', '').replace(',', '.')));
+            const beatValue = (getValue - toAppNumber(netValue));
             // NOVO VALOR ATUAL | SALDO ANTERIOR
-            const storeNewValue = (parseFloat(last_val.textContent.replaceAll('.', '').replace(',', '.')) + beatValue);
-
-            if (storeNewValue < 0) {
+            const storeNewValue = (toAppNumber(last_val.textContent) + beatValue);
+            if (toAppNumber(last_val.textContent) < 0) {
                 const negativeValue = window.confirm('Deseja abater o saldo da loja?');
                 if (negativeValue) {
-                    const storeValuePositive = Math.abs(parseFloat(last_val.textContent.replaceAll('.', '').replace(',', '.')));
+                    const storeValuePositive = Math.abs(toAppNumber(last_val.textContent));
                     let prizeOffice = null;
                     let prizeStore = null;
                     let beatPrize = null;
@@ -388,7 +402,8 @@ if (formMovimentGlobalVar) {
 
                         // VERIFICA SE O VALOR DO ESCRITÓRIO TEM CENTAVOS E SE SIM APLICA AO NOVO VALOR DA LOJA
                         prizeOfficeToString = prizeOffice.toFixed(2).toString();
-                        const hasCents = prizeOfficeToString.search(/.([1-9]+)/);
+
+                        const hasCents = prizeOfficeToString.search(/\.[0-9]{1,}$/);
                         if (hasCents !== -1) {
                             let cents = prizeOfficeToString.slice(-2);
                             let newOfficePrizePay = prizeOfficeToString.slice(0, hasCents);
@@ -408,28 +423,12 @@ if (formMovimentGlobalVar) {
                         newStoreValue = 0;
                     }
 
-                    const newStoreValueBrl = newStoreValue.toLocaleString('pt-br', {
-                        minimumFractionDigits: 2, maximumFractionDigits: 2
-                    });
+                    const newStoreValueBrl = toBrNumber(newStoreValue);
+                    const beatPrizeBrl = toBrNumber(beatPrize);
+                    const prizeOfficeBrl = toBrNumber(prizeOffice);
+                    const prizeStoreBrl = toBrNumber(prizeStore);
 
-                    const beatPrizeBrl = beatPrize.toLocaleString('pt-br', {
-                        minimumFractionDigits: 2, maximumFractionDigits: 2
-                    });
-
-                    const prizeOfficeBrl = prizeOffice.toLocaleString('pt-br', {
-                        minimumFractionDigits: 2, maximumFractionDigits: 2
-                    });
-
-                    const prizeStoreBrl = prizeStore.toLocaleString('pt-br', {
-                        minimumFractionDigits: 2, maximumFractionDigits: 2
-                    });
-
-                    // SE TIVER CENTAVOS NO PAGAMENTO DE PREMIO DO ESCRITÓRIO
-                    // if (prizeOfficeBrl)
-                    console.log(newStoreValueBrl)
-
-                    document.querySelector('p.new_value').textContent = newStoreValueBrl;
-                    document.querySelector("input[name='new_value']").value = newStoreValueBrl;
+                    document.querySelector("input[name='new_value_with_cents']").value = newStoreValueBrl;
 
                     document.querySelector('label.prize_output').insertAdjacentHTML('afterbegin', `<span class="field icon-leanpub">Valor de Abate Premio:</span>
                             <p class="app_widget_title beat_prize">${beatPrize}</p>
@@ -440,28 +439,25 @@ if (formMovimentGlobalVar) {
                      O escritório pagará: R$${prizeOfficeBrl}.`);
                 } else {
 
-                    const beatPrizeBrl = inputPrize.toLocaleString('pt-br', {
-                        minimumFractionDigits: 2, maximumFractionDigits: 2
-                    });
+                    const beatPrizeBrl = toBrNumber(inputPrize);
 
                     document.querySelector('label.prize_output').insertAdjacentHTML('afterbegin', `<span class="field icon-leanpub">Valor de Abate Premio:</span>
                             <input type="hidden" name="beat_prize" value="0">
                             <input type="hidden" name="prize_office" value="${beatPrizeBrl}">
-                            <input type="hidden" name="prize_store" value="0">`);
-                    alert(`<h1>O escritório pagará: R$${beatPrizeBrl}.</h1>`);
+                            <input type="hidden" name="prize_store" value="0">
+                            <input type="hidden" name="prize" value="${beatPrizeBrl}">`);
+                    alert(`O escritório pagará: R$${beatPrizeBrl}.`);
                 }
             } else {
-                inputPrize = inputPrize.toLocaleString('pt-br', {
-                    minimumFractionDigits: 2, maximumFractionDigits: 2
-                });
+                inputPrizeBrl = toBrNumber(inputPrize);
                 document.querySelector('label.prize_output').insertAdjacentHTML('afterbegin', `<span class="field icon-leanpub">Sem abate</span>
                             <input type="hidden" name="beat_prize" value="0">
                             <input type="hidden" name="prize_office" value="${inputPrize}">
                             <input type="hidden" name="prize_store" value="0">`);
             }
         }
-        const formMoviment = formMovimentGlobalVar;
-        formSub(formMoviment);
+        formSub(formMovimentGlobalVar);
+        addButtonMoviment(buttonMoviment);
     });
 }
 // END MOVIMENT CALCS
@@ -545,19 +541,12 @@ if (document.querySelector('.app_form#moviment')) {
                 e.preventDefault();
                 let currentValue = currentResult.textContent;
                 if (currentValue) {
-                    currentValue = parseFloat(currentValue.replaceAll('.', '').replace(',', '.'));
-                    currentValue += parseFloat(inputCalc.value.replaceAll('.', '').replace(',', '.'));
-                    currentResult.textContent = currentValue.toLocaleString('pt-br', {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2
-                    });
+                    currentValue = toAppNumber(currentValue);
+                    currentValue += toAppNumber(inputCalc.value);
+                    currentResult.textContent = toBrNumber(currentValue);
                 } else {
-                    currentResult.textContent = inputCalc.value.toLocaleString('pt-br', {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2
-                    });
+                    currentResult.textContent = toBrNumber(inputCalc.value);
                 }
-
                 inputCalc.value = null;
                 inputCalc.focus();
             }
@@ -593,9 +582,9 @@ if (hasStore) {
     formCashFlow.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        let storeNewValue = parseFloat(document.querySelector('.last_value').textContent.replaceAll('.', '').replace(',', '.'));
+        let storeNewValue = toAppNumber(document.querySelector('.last_value').textContent);
         let isDebtChecked = document.querySelector('input[name="type"]:checked').value;
-        let inputValueCash = parseFloat(document.querySelector('.cash_value').value.replaceAll('.', '').replace(',', '.'));
+        let inputValueCash = toAppNumber(document.querySelector('.cash_value').value);
 
         if (isDebtChecked && (isDebtChecked === '2') && (storeNewValue < 0)) {
             const negativeValue = window.confirm('Deseja abater o saldo da loja?');
@@ -631,21 +620,13 @@ if (hasStore) {
                     newStoreValue = 0;
                 }
 
-                const newStoreValueBrl = newStoreValue.toLocaleString('pt-br', {
-                    minimumFractionDigits: 2, maximumFractionDigits: 2
-                });
-                const beatValueBrl = beatValue.toLocaleString('pt-br', {
-                    minimumFractionDigits: 2, maximumFractionDigits: 2
-                });
-                const valueOfficeToPayBrl = valueOfficeToPay.toLocaleString('pt-br', {
-                    minimumFractionDigits: 2, maximumFractionDigits: 2
-                });
+                const newStoreValueBrl = toBrNumber(newStoreValue);
+                const beatValueBrl = toBrNumber(beatValue);
+                const valueOfficeToPayBrl = toBrNumber(valueOfficeToPay);
 
-                // SE TIVER CENTAVOS NO PAGAMENTO DE PREMIO DO ESCRITÓRIO
-                // if (prizeOfficeBrl)
 
-                document.getElementsByClassName('last_value').textContent = newStoreValueBrl;
-                document.querySelector("input[name='last_value']").value = newStoreValueBrl;
+                document.getElementsByClassName('new_value').textContent = newStoreValueBrl;
+                document.querySelector("input[name='new_value']").value = newStoreValueBrl;
 
                 document.querySelector('label.prize_output').insertAdjacentHTML('afterbegin', `<span class="field icon-leanpub">Valor de Abate:</span>
                             <p class="app_widget_title beat_value_store">${beatValueBrl}</p>
@@ -655,9 +636,7 @@ if (hasStore) {
                      O escritório pagará em dinheiro: R$${valueOfficeToPayBrl}.`);
             }
         } else {
-            inputValueCashBrl = inputValueCash.toLocaleString('pt-br', {
-                minimumFractionDigits: 2, maximumFractionDigits: 2
-            });
+            inputValueCashBrl = toBrNumber(inputValueCash);
             document.querySelector('label.prize_output').insertAdjacentHTML('afterbegin', `<span class="field icon-leanpub">Sem abate</span>
                             <input type="hidden" name="beat_prize" value="0">
                             <input type="hidden" name="prize_office" value="${inputValueCashBrl}">

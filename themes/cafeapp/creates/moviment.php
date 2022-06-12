@@ -105,6 +105,7 @@
                 <span class="field icon-leanpub">Novo Saldo:</span>
                 <p class="app_widget_title new_value"></p>
                 <input type="hidden" name="new_value"/>
+                <input type="hidden" name="new_value_with_cents"/>
 
             </label>
 
@@ -127,7 +128,7 @@
         </div>
 
         <div class="al-center">
-            <div>
+            <div id="div_moviment_btn">
                 <button class="btn btn_inline radius transition icon-pencil-square-o" id="moviment_btn">Lançar</button>
             </div>
         </div>

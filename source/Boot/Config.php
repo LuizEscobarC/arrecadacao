@@ -7,7 +7,7 @@ if (strpos($_SERVER['HTTP_HOST'], "localhost")) {
     define("CONF_DB_HOST", "localhost");
     define("CONF_DB_USER", "root");
     define("CONF_DB_PASS", "");
-    define("CONF_DB_NAME", "arrecadacao");
+    define("CONF_DB_NAME", "arrecada");
 } else {
     define("CONF_DB_HOST", "arrecada.mysql.dbaas.com.br");
     define("CONF_DB_USER", "arrecada");
