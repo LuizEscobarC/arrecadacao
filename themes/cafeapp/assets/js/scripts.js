@@ -360,8 +360,11 @@ formulário é enviado*/
 if (formMovimentGlobalVar) {
     formMovimentGlobalVar.addEventListener('submit', function (e) {
         e.preventDefault();
+
+        // NAO PERMITE A PASSAGEM DE MAIS DE UM SUBMIT
         const buttonMoviment = document.querySelector('#moviment_btn');
         blockerButton(buttonMoviment);
+
         //realiza os calculos para caso os valores não sejam typados
         const $input = document.querySelector("input[name='expend']");
         calc('paying_now', $input);
@@ -457,7 +460,6 @@ if (formMovimentGlobalVar) {
             }
         }
         formSub(formMovimentGlobalVar);
-        addButtonMoviment(buttonMoviment);
     });
 }
 // END MOVIMENT CALCS

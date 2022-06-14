@@ -32,6 +32,7 @@ async function formSub(form) {
 
     //MANIPULA OS DADOS
     if (response) {
+
         if (response.scroll) {
             window.scrollTo({top: response.scroll, behavior: 'smooth'});
         }
@@ -65,5 +66,9 @@ async function formSub(form) {
         }
         // AO FINAL DE TUDO O LOADER SAÍ
         load.style.display = "none";
+        if (form.getAttribute('id') === 'moviment') {
+            const buttonMoviment = document.querySelector('#moviment_btn');
+            addButtonMoviment(buttonMoviment)
+        }
     }
 }
