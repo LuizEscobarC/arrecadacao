@@ -128,13 +128,10 @@
                 <span class="field icon-leanpub">Valor Premio:</span>
                 <input class="radius mask-money" type="text" name="prize" placeholder="Ex: 999"
                        value="<?= (money_fmt_br($moviment->prize) ?? 0) ?>"/>
+                <input type="hidden" name="new_value_with_cents" value="">
             </label>
 
             <label class="prize_output">
-                <input type="hidden" name="beat_prize" value="<?= ($moviment->beat_prize ?? 0); ?>">
-                <input type="hidden" name="prize_office" value="<?= ($moviment->prize_office ?? 0); ?>">
-                <input type="hidden" name="prize_store" value="<?= ($moviment->prize_store ?? 0); ?>">
-                <input type="hidden" name="new_value_with_cents" value="">
             </label>
         </div>
 

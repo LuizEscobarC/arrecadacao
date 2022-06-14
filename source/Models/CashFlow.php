@@ -88,6 +88,14 @@ class CashFlow extends Model
         return null;
     }
 
+    public function moviment()
+    {
+        if ($this->id_moviment) {
+            return (new Moviment())->findById($this->id_moviment);
+        }
+        return null;
+    }
+
     public function findByDateMoviment($idMoviment, int $type, int $cost): ?CashFlow
     {
         return $this->find("id_moviment = {$idMoviment} AND type = {$type} AND id_cost = {$cost}")->fetch();
