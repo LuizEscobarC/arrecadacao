@@ -1002,31 +1002,12 @@ class App extends Controller
      */
     public function saveMoviment(?array $data): void
     {
-        /** TESTE  $data = [
-         * 'date_moviment' => '2022-03-09',
-         * 'id_hour' => '107',
-         * 'id_store' => '26',
-         * 'last_value' => '-1.713,00',
-         * 'id_list' => '19',
-         * 'net_value' => '0',
-         * 'paying_now' => '0',
-         * 'expend' => '0',
-         * 'get_value' => '0',
-         * 'beat_value' => '0',
-         * 'new_value' => '0',
-         * 'prize' => '0',
-         * 'beat_prize' => '0',
-         * 'prize_office' => '0',
-         * 'prize_store' => '0'
-         * ]; */
-
-        if (!empty($data)) {
-            // Metodo que realiza toda a regra de negócio e automatização do lançamento de movimento
-            (new Moviment())->attach($data, $this->user);
+        if (empty($data['calculate'])) {
+            Moviment::calculateMoviment($data);
         } else {
-            $json['message'] = $this->message->warning("Todos os campos são necessários!")->render();
-            echo json_encode($json);
+            //(new Moviment)->saveMoviment($data, $this->user);
         }
+        // Metodo que realiza toda a regra de negócio e automatização do lançamento de movimento
     }
 
     /**

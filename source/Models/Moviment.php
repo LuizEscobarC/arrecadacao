@@ -91,6 +91,60 @@ class Moviment extends Model
         return null;
     }
 
+    public static function calculateMoviment(array $data): object
+    {
+        $data = (object)$data;
+        $data->id_list = (!empty($data->id_list) ? $data->id_list : null);
+        $data->cents = (!empty($data->cents) ? money_fmt_app($data->cents) : null);
+        $prize = (!empty($data->prize) ? money_fmt_app($data->prize) : 0);
+        $data->last_value = money_fmt_app($data->last_value);
+        $data->prize = $prize;
+        $data->paying_now = money_fmt_app($data->paying_now);
+        $data->expend = money_fmt_app($data->expend);
+        $getValue = $data->paying_now + $data->expend ;
+        $data->get_value = $getValue;
+        $beatValue = money_fmt_app($data->last_value) + ($getValue + money_fmt_app($data->net_value));
+        $data->beat_value = $beatValue;
+
+        if ($beatValue >= 0) {
+            $data->prize_store = 0;
+            $data->prize_office = $prize;
+            $data->new_value = $beatValue;
+        }
+
+        // SE O SALDO DO HORÁRIO DA LOJA FOR NEGATIVO
+        if ($beatValue < 0) {
+          if($data['shouldBeatPrizeStore']) {
+              $beatValueInverted = ($beatValue * (-1));
+              if ($prize < $beatValueInverted) {
+                  $data->prize_store = $prize;
+                  $data->prize_office = 0;
+                  $data->new_value = $prize - $beatValueInverted;
+              }
+
+              if ($prize >= $beatValueInverted) {
+                  $data->prize_store = $beatValueInverted;
+                  $data->prize_office = ($prize - $beatValueInverted);
+                  $data->new_value = 0;
+              }
+          }
+
+          // SE NÃO FOR ABATER NO SALDO DA LOJA
+          if (!$data['shouldBeatPrizeStore']) {
+              $data->prize_store = 0;
+              $dataprize_office = $prize;
+              $data->new_value = $beatValue;
+          }
+
+          if ($data->cents) {
+              $data->new_value += $data->cents;
+          }
+        }
+        var_dump($data);die();
+        // DEVE RETORNAR OS DADOS CALCULADOS CORRETAMENTE
+        return $data;
+    }
+
     public function attach(array $data, User $user): bool
     {
         $modelVerify = new Moviment();

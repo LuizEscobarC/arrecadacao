@@ -18,7 +18,6 @@ async function formSub(form) {
     const flash = document.querySelector("." + flashClass);
 
     load.style.display = "flex";
-
     // ESPERA O ENVIO COM O RETORNO
     const callback = await fetch(
         form.getAttribute("action"), {
@@ -32,6 +31,12 @@ async function formSub(form) {
 
     //MANIPULA OS DADOS
     if (response) {
+
+        // REGRA DE NEGÓCIO DO MOVIMENTO
+        if (moviment.dataToConfirm) {
+            return moviment.dataToConfirm;
+        }
+        // FIM REGRA DE NEGÓCIO DO MOVIMENTO
 
         if (response.scroll) {
             window.scrollTo({top: response.scroll, behavior: 'smooth'});
@@ -70,5 +75,6 @@ async function formSub(form) {
             const buttonMoviment = document.querySelector('#moviment_btn');
             addButtonMoviment(buttonMoviment)
         }
+        return true;
     }
 }

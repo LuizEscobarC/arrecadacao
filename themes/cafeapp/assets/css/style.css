@@ -11,9 +11,15 @@ body {
 }
 
 /* FORM */
-.app_form label {
+.app_form label:not(.moviment) {
     display: block;
     margin-bottom: var(--area-normal);
+    cursor: pointer;
+}
+
+.app_form label.moviment {
+    display: block;
+    margin-bottom: var(--area-small);
     cursor: pointer;
 }
 
