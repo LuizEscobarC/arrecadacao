@@ -4,10 +4,11 @@
 <div class="color_888 app_header">
     <h2 class=" icon-calendar-check-o ">Cadastrar Movimentação:</h2>
 </div>
-<div class=" app_widget">
-    <form class="app_form" id="moviment" action="<?= url("/app/movimentacao"); ?>"
+<div class="app_widget app_launch_box">
+    <form class="app_form " id="moviment" action="<?= url("/app/movimentacao"); ?>"
           data-getmoviment="<?= url("app/get-moviment"); ?>" method="post">
         <div class="ajax_response"><?= flash(); ?></div>
+        <input type="hidden" class="id_temporary_moviment" name="id_temporary_moviment">
 
         <div class="label_group">
             <label class="three_label moviment">
@@ -50,9 +51,9 @@
                 </datalist>
             </label>
 
-            <label class=" moviment">
+            <label class="app_launch_item moviment">
                 <span class="field icon-leanpub">Saldo Atual da Loja:</span>
-                <p class="app_widget_title last_value"></p>
+                <p class="last_value"></p>
                 <input type="hidden" name="last_value">
             </label>
         </div>
@@ -68,9 +69,9 @@
                        />
             </label>
 
-            <label class=" moviment">
+            <label class="app_launch_item moviment">
                 <span class="field icon-leanpub">(lista)Valor Venda:</span>
-                <p class="app_widget_title total_value"></p>
+                <p class="total_value"></p>
                 <input type="hidden" name="total_value">
             </label>
 
@@ -84,9 +85,9 @@
                        />
             </label>
 
-            <label class=" moviment">
+            <label class="app_launch_item moviment">
                 <span class="field icon-leanpub">(lista)Valor Comissão:</span>
-                <p class="app_widget_title comission_value"></p>
+                <p class="comission_value"></p>
                 <input type="hidden" name="comission_value">
             </label>
         </div>
@@ -95,19 +96,18 @@
 
             <label class="prize_input  moviment">
                 <span class="field icon-leanpub">Valor Premio:</span>
-                <input class="radius mask-money" type="text" name="prize" autocomplete="off" placeholder="Ex: 999"/>
+                <input class="radius mask-money prize" type="text" name="prize" autocomplete="off" placeholder="Ex: 999"/>
             </label>
 
-            <label class=" moviment">
+            <label class="app_launch_item moviment">
                 <span class="field icon-leanpub">(lista)Valor Líquido:</span>
-                <p class="app_widget_title net_value"></p>
+                <p class="net_value"></p>
                 <input type="hidden" name="net_value">
             </label>
         </div>
 
         <div class="message icon-info animated info">Os dados abaixo serão gerados automaticamente para a confirmação:
         </div>
-        <div class="app_launch_box">
             <div class="label_group">
                 <label class=" moviment app_launch_item">
                     <span class="field icon-leanpub">Valor Recebido:</span>
@@ -135,7 +135,7 @@
             <div class="label_group">
                 <label class=" moviment app_launch_item">
                     <span class="field icon-leanpub">Centavos Trânsferidos:</span>
-                    <p class=" cents price"></p>
+                    <p class="cents price"></p>
                     <input type="hidden" name="cents"/>
                 </label>
                 <label class=" moviment app_launch_item">
@@ -144,11 +144,10 @@
                     <input type="hidden" name="new_value"/>
                 </label>
             </div>
-        </div>
 
         <div class="al-center">
             <div id="div_moviment_btn">
-                <button class="btn btn_inline radius transition icon-pencil-square-o" id="moviment_btn">Lançar</button>
+                <button class="btn btn_inline radius transition icon-pencil-square-o" data-savetemp="" id="moviment_btn">Lançar</button>
             </div>
         </div>
     </form>

@@ -570,7 +570,7 @@ class App extends Controller
         if (!empty($callback)) {
             $json['link'] = url("app/movimentacao/{$callback->id}");
             $json['moviment'] = (array)$callback->data();
-            $json['moviment']['list'] = (array)$callback->lists()->data();
+            $json['moviment']['list'] = (array)(!empty($callback->lists()) ? $callback->lists()->data() : null);
             $json['moviment']['hour'] = (array)$callback->hour()->data();
             $json['moviment']['store'] = (array)$callback->store()->data();
         }
@@ -1002,12 +1002,46 @@ class App extends Controller
      */
     public function saveMoviment(?array $data): void
     {
-        if (empty($data['calculate'])) {
-            Moviment::calculateMoviment($data);
-        } else {
-            //(new Moviment)->saveMoviment($data, $this->user);
+        // SALVA AS ROTINAS DE LOJA E FLUXO DE CAIXA
+        if (!empty($data['doTheJobs']) && !empty($data['id_temporary_moviment'])) {
+            $moviment = (new Moviment())->findById($data['id_temporary_moviment']);
+            $idMoviment = $moviment->id;
+            $data = $moviment->data();
+            // Metodo que realiza toda a regra de negócio e automatização do lançamento de movimento
+            if (!(new Moviment)->attach((array)$data, $this->user, $idMoviment)) {
+                return;
+            }
+            return;
         }
-        // Metodo que realiza toda a regra de negócio e automatização do lançamento de movimento
+
+        // REQUERIDOS
+        $required = SelfList::requiredData($data);
+        if (!empty($required)) {
+            $json['message'] = $required;
+            $this->call(200)->back($json);
+            return;
+        }
+
+        // DELETA SE ALGO ESTIVER ERRADO
+        if ($data['id_temporary_moviment'] && $data['delete']) {
+            (new Moviment())->findById($data['id_temporary_moviment'])->destroy();
+            $this->call(200)->back(['reload' => true]);
+            return;
+        }
+
+        // FAZ O CALCULO E SALVA SÓ A TABELA MOVIMENTO
+        if (empty($data['id_temporary_moviment'])) {
+            if (Moviment::repeatedVerify($id)) {
+
+            }
+
+            $newDataCalculed = Moviment::calculateMoviment($data);
+            if (is_object($newDataCalculed)) {
+                $this->call(200)->back(['data' => $newDataCalculed]);
+                return;
+            }
+            $this->call(404)->back(['message' => $newDataCalculed]);
+        }
     }
 
     /**

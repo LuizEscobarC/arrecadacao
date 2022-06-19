@@ -2,6 +2,7 @@
 
 namespace Source\Models;
 
+use Source\Core\Controller;
 use Source\Core\Model;
 use Source\Support\Filters\FilterMoviment;
 
@@ -91,7 +92,7 @@ class Moviment extends Model
         return null;
     }
 
-    public static function calculateMoviment(array $data): object
+    public static function calculateMoviment(array $data)
     {
         $data = (object)$data;
         $data->id_list = (!empty($data->id_list) ? $data->id_list : null);
@@ -99,6 +100,7 @@ class Moviment extends Model
         $prize = (!empty($data->prize) ? money_fmt_app($data->prize) : 0);
         $data->last_value = money_fmt_app($data->last_value);
         $data->prize = $prize;
+        $data->beat_prize = $prize;
         $data->paying_now = money_fmt_app($data->paying_now);
         $data->expend = money_fmt_app($data->expend);
         $getValue = $data->paying_now + $data->expend ;
@@ -114,7 +116,7 @@ class Moviment extends Model
 
         // SE O SALDO DO HORÁRIO DA LOJA FOR NEGATIVO
         if ($beatValue < 0) {
-          if($data['shouldBeatPrizeStore']) {
+          if($data->shouldBeatPrizeStore) {
               $beatValueInverted = ($beatValue * (-1));
               if ($prize < $beatValueInverted) {
                   $data->prize_store = $prize;
@@ -127,12 +129,19 @@ class Moviment extends Model
                   $data->prize_office = ($prize - $beatValueInverted);
                   $data->new_value = 0;
               }
+
+              // VERIFICA SE TEM CENTAVOS
+              if (preg_match("/\.([0-9]{1,}$)/", $data->prize_office, $matchs)) {
+                  $data->cents = '0.' . $matchs[1];
+                  $data->cents = (float)$data->cents;
+              }
+
           }
 
           // SE NÃO FOR ABATER NO SALDO DA LOJA
-          if (!$data['shouldBeatPrizeStore']) {
+          if (!$data->shouldBeatPrizeStore) {
               $data->prize_store = 0;
-              $dataprize_office = $prize;
+              $data->prize_office = $prize;
               $data->new_value = $beatValue;
           }
 
@@ -140,30 +149,27 @@ class Moviment extends Model
               $data->new_value += $data->cents;
           }
         }
-        var_dump($data);die();
+        $data->calc = true;
+
+        // save temp
+        $moviment = (new self);
+        $moviment = $moviment->saveMoviment($moviment, $data);
+        if (!$moviment->save()) {
+            return $moviment->message()->render();
+        }
+        $data->idMovimentTemporary = $moviment->id;
+
         // DEVE RETORNAR OS DADOS CALCULADOS CORRETAMENTE
         return $data;
     }
 
-    public function attach(array $data, User $user): bool
+    public function attach(array $data, User $user, int $movimentId): bool
     {
-        $modelVerify = new Moviment();
-        $required = $modelVerify->requiredMoviment($data);
-        if (!empty($required)) {
-            $json['message'] = $required;
-            echo json_encode($json);
-            return false;
-        }
-        // referencia
-        $modelVerify->isEmpty($data);
-
         // CURRENT HOUR SETTINGS IN DB
         Moviment::saveCurrentHour($data['id_hour']);
 
         // Se existir um movimento com a mesma data, horario e loja
         // CREATE OR UPDATE
-        $moviment = ($modelVerify->isRepeated($data['date_moviment'], $data['id_hour'],
-                $data['id_store']) ?? new Moviment());
 
         if (!empty($data['id_store'])) {
             $store = (new Store());
@@ -171,24 +177,34 @@ class Moviment extends Model
         }
 
         // BEGIN STORE
-        // CASO TENHA CENTAVOS E O VALOR SEJA ABATIDO
-        if (!empty($data['new_value_with_cents'])) {
-            $store->valor_saldo = money_fmt_app($data['new_value_with_cents']);
-            //  PARA ATUALIZAR O SALDO NO MOVIMENT
-            $data['new_value'] = $store->valor_saldo;
-        } else {
+        if (!empty($data['new_value'])) {
             $store->valor_saldo = money_fmt_app($data['new_value']);
         }
-
         // ATUALIZA O SALDO DA LOJA DE UM MOVIMENTOU OU CRIA
         if (!$store->save()) {
             $json['message'] = $store->message()->getText();
             echo json_encode($json);
             return false;
         }
-
         // END STORE
 
+        // BEGIN CASH FLOWS
+        // retorna null se cadastrou tudo
+        if (!empty($message = $this->cashFlowMoviment($data, $store, $movimentId))) {
+            $json['message'] = $message;
+            echo json_encode($json);
+            return false;
+        }
+        // END CASH FLOWS
+        $json['message'] = $this->message->success('Acerto de Loja cadastrado com sucesso!')->render();
+        echo json_encode($json);
+        return true;
+    }
+
+    public function editAndIncrementMoviment($data)
+    {
+        // CREATE OR UPDATE
+        $moviment = Moviment::repeatedVerify($data);
         // CASO SEJA EDIÇÃO NÃO APLICA AS REGRAS DE INCLEMENTO DE DADOS
         if (!empty($data['edit'])) {
             $moviment->date_moviment = $data['date_moviment'];
@@ -225,8 +241,11 @@ class Moviment extends Model
             $moviment->prize_store =  (money_fmt_app($data['prize_store']) + $moviment->prize_store);
             $moviment->prize_office = (money_fmt_app($data['prize_office']) + $moviment->prize_office);
         }
+    }
 
-        // CADASTRA
+    public function saveMoviment(Moviment $moviment, $data)
+    {
+        $data = (array)$data;
         if (empty($moviment->id)) {
             $moviment->date_moviment = $data['date_moviment'];
             $moviment->id_store = $data['id_store'];
@@ -244,29 +263,7 @@ class Moviment extends Model
             $moviment->prize_office = money_fmt_app($data['prize_office']);
         }
 
-
-        if ($moviment->save()) {
-            $json['message'] = $this->message->success("Tudo certo {$user->first_name}, o movimento atualizado com sucesso!")->render();
-            $this->message->success("Tudo certo {$user->first_name}, o movimento atualizado com sucesso!")->flash();
-            $json['reload'] = true;
-            $json['scroll'] = 2;
-        } else {
-            $json['message'] = $moviment->message()->render();
-            echo json_encode($json);
-            return false;
-        }
-
-        // BEGIN CASH FLOWS
-        // retorna null se cadastrou tudo
-        if (!empty($message = $this->cashFlowMoviment($data, $store, $moviment->id))) {
-            $json['message'] = $message;
-            echo json_encode($json);
-            return false;
-        }
-        // END CASH FLOWS
-
-        echo json_encode($json);
-        return true;
+        return $moviment;
     }
 
     public function requiredMoviment(?array $data): ?string
@@ -546,5 +543,14 @@ class Moviment extends Model
             $cashFlows->limit($limit);
         }
         return $cashFlows->fetch(true);
+    }
+
+    public static function repeatedVerify(array $data)
+    {
+        if (!empty($data['id_hour']) && !empty($data['id_store']) && !empty($data['date_moviment'])) {
+         $repeated = (new self)->isRepeated($data['date_moviment'], $data['id_hour'],
+            $data['id_store']);
+        }
+         return (!empty($repeated) ? true : false);
     }
 }

@@ -747,7 +747,10 @@ body {
     color: #888888;
 }
 
-.app_launch_item:nth-child(2n+1) {
+.app_launch_item:nth-child(2n+1):not(.moviment) {
+    background: rgba(0, 0, 0, 0.05);
+}
+.app_launch_item.moviment{
     background: rgba(0, 0, 0, 0.05);
 }
 
