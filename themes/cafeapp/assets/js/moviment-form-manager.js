@@ -1,4 +1,6 @@
 const formMoviment = document.querySelector('.app_form#moviment');
+const flashClass = "ajax_response";
+const flash = document.querySelector("." + flashClass);
 if (formMoviment) {
     formMoviment.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -17,7 +19,7 @@ if (formMoviment) {
                             flash.classList.add('bounce', 'animated')
                         } else {
                             // INSERE NO COMEÇO DO FORMULÁRIO
-                            form.insertAdjacentHTML("afterbegin",
+                            formMoviment.insertAdjacentHTML("afterbegin",
                                 "<div class='" + flashClass + " bounce animated'>" + response.message + "</div>");
                         }
 
@@ -95,7 +97,7 @@ const ajaxFormMoviment = async (formDataParam) => {
                 flash.classList.add('bounce', 'animated')
             } else {
                 // INSERE NO COMEÇO DO FORMULÁRIO
-                form.insertAdjacentHTML("afterbegin",
+                formMoviment.insertAdjacentHTML("afterbegin",
                     "<div class='" + flashClass + " bounce animated'>" + response.message + "</div>");
             }
 

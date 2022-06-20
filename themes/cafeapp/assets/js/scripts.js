@@ -55,14 +55,14 @@ async function getMoviment(data) {
     });
     return await callback.json().then((response) => {
         if (response) {
-            let link = response.link;
+           /* let link = response.link;
             document.querySelector('.app_form#moviment').insertAdjacentHTML('afterbegin', `
             <label class="link_current_moviment">
                 <p class="app_widget_title padding_btn gradient gradient-blue gradient-hover radius transition">
                     <a class="desc moviment color_white" style="text-decoration: none;"
                        href="${link}">CLIQUE AQUI para editar esse lançamento.</a></p>
             </label>
-       `);
+       `); */
             const selector = (selector) => document.querySelector('.' + selector);
 
             selector('date_moviment_view').textContent = response.moviment.date_moviment;
@@ -83,6 +83,10 @@ async function getMoviment(data) {
             selector('beat_prize_view').textContent = response.moviment.beat_prize;
             selector('prize_office_view').textContent = response.moviment.prize_office;
             selector('prize_store_view').textContent = response.moviment.prize_store;
+
+            document.querySelector('input[name="last_value"]').value = (response.moviment.last_value);
+            document.querySelector('p.last_value').textContent = toBrNumber(response.moviment.last_value);
+            console.log(response.moviment.last_value)
 
 
             return true;
@@ -160,6 +164,7 @@ async function getStoreValueNow(inputDataList, idStore) {
     if (content) {
         lastValue.textContent = parseFloat(content.valor_saldo).toLocaleString('pt-br', {minimumFractionDigits: 2});
         inpuLastValue.value = toBrNumber(parseFloat(content.valor_saldo));
+        getMoviment(document.querySelector('.app_form#moviment'));
     }
 }
 

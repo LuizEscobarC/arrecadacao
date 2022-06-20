@@ -547,10 +547,7 @@ class Moviment extends Model
 
     public static function repeatedVerify(array $data)
     {
-        if (!empty($data['id_hour']) && !empty($data['id_store']) && !empty($data['date_moviment'])) {
-         $repeated = (new self)->isRepeated($data['date_moviment'], $data['id_hour'],
+         return (new self)->isRepeated($data['date_moviment'], $data['id_hour'],
             $data['id_store']);
-        }
-         return (!empty($repeated) ? true : false);
     }
 }

@@ -1029,18 +1029,17 @@ class App extends Controller
             return;
         }
 
-        // FAZ O CALCULO E SALVA SÓ A TABELA MOVIMENTO
+        // FAZ O CALCULO E SALVA SÓ A TABELA MOVIMENTO E DELETA O LANÇAMENTO ANTIGO SE TIVER
         if (empty($data['id_temporary_moviment'])) {
-            if (Moviment::repeatedVerify($id)) {
-
+            if ($movimentRepeated = Moviment::repeatedVerify($data)) {
+                $movimentRepeated->destroy();
             }
-
             $newDataCalculed = Moviment::calculateMoviment($data);
             if (is_object($newDataCalculed)) {
                 $this->call(200)->back(['data' => $newDataCalculed]);
                 return;
             }
-            $this->call(404)->back(['message' => $newDataCalculed]);
+            $this->call(404)->back(['message' => $newDataCalculed, 'reload' => true]);
         }
     }
 
