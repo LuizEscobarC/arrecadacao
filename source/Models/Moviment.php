@@ -197,6 +197,7 @@ class Moviment extends Model
         }
         // END CASH FLOWS
         $json['message'] = $this->message->success('Acerto de Loja cadastrado com sucesso!')->render();
+        $json['reload'] = true;
         echo json_encode($json);
         return true;
     }

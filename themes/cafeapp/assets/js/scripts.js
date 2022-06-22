@@ -14,7 +14,7 @@ function toAppNumber(value) {
 }
 
 function toBrNumber(value) {
-    return value.toLocaleString('pt-br', {
+    return parseFloat(value).toLocaleString('pt-br', {
         maximumFractionDigits: 2,
         minimumFractionDigits: 2
     });
@@ -83,12 +83,6 @@ async function getMoviment(data) {
             selector('beat_prize_view').textContent = response.moviment.beat_prize;
             selector('prize_office_view').textContent = response.moviment.prize_office;
             selector('prize_store_view').textContent = response.moviment.prize_store;
-
-            document.querySelector('input[name="last_value"]').value = (response.moviment.last_value);
-            document.querySelector('p.last_value').textContent = toBrNumber(response.moviment.last_value);
-            console.log(response.moviment.last_value)
-
-
             return true;
         } else {
             return false;
@@ -113,14 +107,6 @@ async function getList(inputDataList, idHour, idStore, dateMoviment) {
     let comissionValue = null;
     let netValue = null;
 
-    // SE TIVER LINK REMOVE NAO IMPORTA SE EXISTE LISTA OU NAO
-    const hasLink = document.querySelectorAll('.link_current_moviment');
-    if (hasLink) {
-        for (link of hasLink) {
-            link.remove();
-        }
-    }
-
     // SE HOUVER RETORNO DE LISTA BY DATA, LOJA E HORARIO
     if (response) {
         totalValue = parseFloat(response.total_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
@@ -128,13 +114,8 @@ async function getList(inputDataList, idHour, idStore, dateMoviment) {
         netValue = parseFloat(response.net_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
         document.querySelector("input[name='id_list']").value = parseInt(response.id)
     } else {
-        // JÁ EXISTE UM LANÇAMENTO
-        const movimentExists = await getMoviment(data);
-        if (movimentExists) {
-            ajaxResponse.innerHTML = `<div class="message success icon-info bounce animated">Os valores das listas foram zerados pois já foram calculados nesse horário.</div>`;
-        } else {
-            ajaxResponse.innerHTML = `<div class="message info icon-info bounce animated">Não existe uma lista para a loja neste horário.</div>`;
-        }
+        ajaxResponse.innerHTML = `<div class="message info icon-info bounce animated">Não existe uma lista para a loja neste horário.</div>`;
+
         totalValue = 0;
         comissionValue = 0;
         netValue = 0;
@@ -149,12 +130,14 @@ async function getList(inputDataList, idHour, idStore, dateMoviment) {
     document.querySelector("input[name='net_value']").value = netValue;
 }
 
-async function getStoreValueNow(inputDataList, idStore) {
+async function getStoreValueNow(inputDataList, idStore, idHour, dateMoviment) {
     const data = {};
     lastValue = document.querySelector('.last_value');
     inpuLastValue = document.querySelector("input[name='last_value']");
 
     data['id_store'] = idStore;
+    data['id_hour'] = idHour;
+    data['date_moviment'] = dateMoviment;
     const callback = await fetch(inputDataList.dataset.url, {
         method: 'POST', body: new URLSearchParams(data)
     })
@@ -162,9 +145,10 @@ async function getStoreValueNow(inputDataList, idStore) {
     const content = await callback.json();
 
     if (content) {
-        lastValue.textContent = parseFloat(content.valor_saldo).toLocaleString('pt-br', {minimumFractionDigits: 2});
-        inpuLastValue.value = toBrNumber(parseFloat(content.valor_saldo));
-        getMoviment(document.querySelector('.app_form#moviment'));
+        const storeValue = content.store_value;
+        lastValue.textContent = toBrNumber(storeValue ?? 0);
+        inpuLastValue.value = toBrNumber(storeValue ?? 0);
+        getMoviment(new FormData(document.querySelector('.app_form#moviment')));
     }
 }
 
@@ -256,8 +240,15 @@ if (storeDataListInput) {
 
     storeDataListInput.addEventListener('change', function () {
         // PEGA DO DATA-LIST O ID STORE DO OPTION
-        const storeOption = document.getElementById(dataValue).options.namedItem(this.value);
+        let storeOption = document.getElementById(dataValue).options.namedItem(this.value);
         const idStoreHidden = document.querySelector("input[name='id_store']");
+        const idHour = document.querySelector("select[name='id_hour']").value;
+        const dateMoviment = document.querySelector("input[name='date_moviment']").value;
+
+        if (!(idStoreHidden && idHour && dateMoviment)) {
+            alert('Data de movimento e horário são necessários.');
+            window.location.reload();
+        }
 
         // SE EXISTIR
         if (storeOption) {
@@ -266,7 +257,7 @@ if (storeDataListInput) {
             idStoreHidden.value = idStore;
             //FAZ AS ROTINAS DE VERIFICAÇÃO E FETCH NOS DADOS NECESSÁRIOS SOMENTE PARA O MOVIMENT
             if (document.querySelector('form.app_form#moviment, .cash_flow')) {
-                getStoreValueNow(this, idStore);
+                getStoreValueNow(this, idStore, idHour, dateMoviment);
                 if (document.querySelector('form.app_form#moviment')) {
                     //storeVerify(idStore);
                     movimentDatas(this, idStore)
@@ -276,17 +267,105 @@ if (storeDataListInput) {
     });
 }
 
-/**
- *                         const hasCents = prizeOfficeToString.search(/\.[0-9]{1,}$/);
- *                         if (hasCents !== -1) {
- *                             let cents = prizeOfficeToString.slice(-2);
- *                             let newOfficePrizePay = prizeOfficeToString.slice(0, hasCents);
- *                             prizeOffice = parseFloat(newOfficePrizePay);
- *                             newStoreValue = parseFloat('0.' + cents);
- *                         }
- */
-
 // END CALC EVENT LISTENNERS
+
+if (document.querySelector('.app_form#moviment')) {
+    const parentModal = document.querySelector('.app_modal.modal_calc_parent');
+
+    // ABRE E FECHA MODAL DE CALCULADORA
+    document.addEventListener('keyup', function (e) {
+        const modal = document.querySelector('.app_modal_calc');
+
+        if (e.key === 'Control') {
+            parentModal.style.display = 'flex';
+            modal.style.display = 'block';
+            parentModal.dataset.modalclose = 'false';
+            // FAZ FOCAR NO INPUT
+            modal.children[1].children[0].children[1].focus();
+
+            const payingNow = document.querySelector("input[name=paying_now]");
+            const currentResult = document.querySelector('.current_result');
+            currentResult.textContent = payingNow.value.toLocaleString('pt-br', {
+                maximumFractionDigits: 2,
+                minimumFractionDigits: 2
+            });
+        }
+
+        if (e.key === 'Escape') {
+            modal.style.display = 'none';
+            parentModal.style.display = 'none';
+            parentModal.dataset.modalclose = 'true';
+
+            // ADICIONA O VALOR CALCULADO NO INPUT DE VALOR DINHEIRO CASO EXISTA
+            let resultCurrentValue = document.querySelector('.current_result').textContent;
+            if (resultCurrentValue) {
+                const inputPayingNow = document.querySelector("input[name='paying_now']");
+                inputPayingNow.value = resultCurrentValue;
+                //re-faz os calculos
+                calc('paying_now', document.querySelector("input[name='expend']"));
+                inputPayingNow.focus();
+            }
+        }
+    })
+
+    const modalCalc = document.querySelector('.app_modal_calc');
+    if (modalCalc) {
+        const payingNow = document.querySelector("input[name='paying_now']").value;
+        const formCalc = document.querySelector('.app_form.ajax_off');
+        const inputCalc = document.querySelector('.input_calc');
+        const currentResult = document.querySelector('.current_result');
+
+        // SE JÁ HOUVER VALOR NO INPUT ADICIONA
+        if (payingNow) {
+            currentResult.textContent = payingNow;
+        }
+        // REALIZA OS CALCULOS
+        formCalc.addEventListener('submit', (e) => {
+
+            if (modalCalc.style.display === 'block') {
+                e.preventDefault();
+                let currentValue = currentResult.textContent;
+                if (currentValue) {
+                    currentValue = parseFloat(currentValue.replaceAll('.', '').replace(',', '.'));
+                    currentValue += parseFloat(inputCalc.value.replaceAll('.', '').replace(',', '.'));
+                    currentResult.textContent = currentValue.toLocaleString('pt-br', {
+                        maximumFractionDigits: 2,
+                        minimumFractionDigits: 2
+                    });
+                } else {
+                    currentResult.textContent = inputCalc.value.toLocaleString('pt-br', {
+                        maximumFractionDigits: 2,
+                        minimumFractionDigits: 2
+                    });
+                }
+
+                inputCalc.value = null;
+                inputCalc.focus();
+            }
+        })
+    }
+
+
+    // ABRE O MODAL DE DADOS DO MOVIMENTO
+    const modalMoviment = document.querySelector('.app_modal_moviment');
+    const parentModalMoviment = document.querySelector('.app_modal.app_form.modal_moviment_parent');
+    if (modalMoviment) {
+        document.addEventListener('keyup', function (e) {
+            if (e.key === 'i') {
+                parentModalMoviment.style.display = 'flex';
+                modalMoviment.style.display = 'block';
+                parentModalMoviment.dataset.modalclose = 'false';
+            }
+
+            if (e.key === 'Escape') {
+                modalMoviment.style.display = 'none';
+                parentModalMoviment.style.display = 'none';
+                parentModalMoviment.dataset.modalclose = 'true';
+            }
+        })
+    }
+
+}
 
 // BEGIN COMO DEFAULT ELE SETA OS INPUTS DE DATA DOS CADASTROS COM A DATA ATUAL
 if (window.location.toString() === 'http://www.ihsistemas.com/app/cadastrar-lista' ||

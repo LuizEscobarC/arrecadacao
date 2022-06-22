@@ -550,12 +550,6 @@ class App extends Controller
     public function getList(array $data): void
     {
         $callback = (new Lists())->findByStoreHour($data['id_store'], $data['id_hour'], $data['date_moviment']);
-        // O REG EXP SERVE PARA VERIFICAR SE ESTÁ NO MODO EDIÇÃO PARA TRAZER A LISTA MESMO SE JÁ EXISTIR E TIVER LANÇADO
-        if (!empty($callback->id) && (new Moviment())->findByIdList($callback->id) && !preg_match('/movimentacao\//i',
-                $_SERVER['HTTP_REFERER'])) {
-            // JÁ FOI LANÇADO
-            $callback = null;
-        }
         echo json_encode($callback);
     }
 
@@ -583,11 +577,16 @@ class App extends Controller
      */
     public function getStore(array $data): void
     {
-        $callback = (new Store())->findById($data['id_store']);
+        if ($moviment = Moviment::repeatedVerify($data)) {
+            $callback = $moviment->last_value;
+        } else {
+            $store =  (new Store())->findById($data['id_store']);
+            $callback = (!empty($store) ? $store->total_value : null);
+        }
         if (empty($callback)) {
             echo json_encode($callback);
         } else {
-            echo json_encode($callback->data());
+            echo json_encode(['store_value' => $callback]);
         }
     }
 

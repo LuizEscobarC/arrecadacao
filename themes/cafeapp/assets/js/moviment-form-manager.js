@@ -68,9 +68,6 @@ const ajaxFormMoviment = async (formDataParam) => {
 
     if (response) {
 
-        // atualiza se salvou
-        (response.reload ? window.location.reload() : null);
-
         if (response.data.idMovimentTemporary) {
             const data = response.data;
             const selector = (selector) => document.querySelector('.' + selector);

@@ -139,7 +139,6 @@
             <div>
                   <span data-movimentremove="<?= url("/app/remove-moviment/{$moviment->id}") ?>"
                         class="btn_remove transition icon-error">Excluir</span>
-                <button class="btn btn_inline radius transition icon-pencil-square-o" id="moviment_btn">Lançar</button>
             </div>
         </div>
     </form>

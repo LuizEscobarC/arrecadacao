@@ -32,10 +32,6 @@ async function formSub(form) {
     //MANIPULA OS DADOS
     if (response) {
 
-        // REGRA DE NEGÓCIO DO MOVIMENTO
-        if (moviment.dataToConfirm) {
-            return moviment.dataToConfirm;
-        }
         // FIM REGRA DE NEGÓCIO DO MOVIMENTO
 
         if (response.scroll) {
