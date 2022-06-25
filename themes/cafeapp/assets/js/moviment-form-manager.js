@@ -9,7 +9,10 @@ if (formMoviment) {
             const wantSave = confirm('Deseja mesmo salvar esse movimento?');
             // SALVA O MOVIMENTO TEMPORARIO
             if (wantSave) {
-                ajax(formMoviment.getAttribute('action'), new URLSearchParams({doTheJobs: true, id_temporary_moviment: idSaveTemp}), 'POST',
+                ajax(formMoviment.getAttribute('action'), new URLSearchParams({
+                        doTheJobs: true,
+                        id_temporary_moviment: idSaveTemp
+                    }), 'POST',
                     'application/x-www-form-urlencoded').then(response => {
                     if (response.message) {
                         if (!flash.textContent) {
@@ -34,9 +37,12 @@ if (formMoviment) {
                 });
             }
 
-            if (!wantSave){
+            if (!wantSave) {
                 // DELETA O MOVIMENTO TEMPORÁRIO
-                ajax(formMoviment.getAttribute('action'), new URLSearchParams({id_temporary_moviment: idSaveTemp, delete: true}), 'POST', 'application/x-www-form-urlencoded');
+                ajax(formMoviment.getAttribute('action'), new URLSearchParams({
+                    id_temporary_moviment: idSaveTemp,
+                    delete: true
+                }), 'POST', 'application/x-www-form-urlencoded');
             }
         } else {
             ajaxFormMoviment(formMoviment);
@@ -49,12 +55,15 @@ if (formMoviment) {
 const ajaxFormMoviment = async (formDataParam) => {
     formDataParam = new FormData(formDataParam);
     formDataParam.set('shouldBeatPrizeStore', false);
+    const beatValue = selector('beat_value');
 
-    if (toAppNumber(formDataParam.get('last_value')) < 0) {
-        if (toAppNumber(formDataParam.get('prize')) > 0) {
-            const shouldBeatPrizeStore = confirm('Deseja abater no saldo da loja?');
-            if (shouldBeatPrizeStore) {
-                formDataParam.set('shouldBeatPrizeStore', true);
+    if (beatValue) {
+        if (toAppNumber(beatValue) < 0) {
+            if (toAppNumber(formDataParam.get('prize')) > 0) {
+                const shouldBeatPrizeStore = confirm('Deseja abater no saldo da loja?');
+                if (shouldBeatPrizeStore) {
+                    formDataParam.set('shouldBeatPrizeStore', true);
+                }
             }
         }
     }
