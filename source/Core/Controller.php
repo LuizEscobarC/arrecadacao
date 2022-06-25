@@ -70,6 +70,7 @@ class Controller
             $this->response = (!empty($this->response) ? array_merge($this->response, $response) : $response);
         }
 
+
         echo json_encode($this->response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         return $this;
     }

@@ -1,20 +1,5 @@
 // FUNCTION THAT CLEAR TEMP MESSAGES
 const clearMessages = () => setTimeout(() => document.querySelector('.message.animated.bounce').remove(), 10000)
-
-const ajax = async (url, data, method, contentType) => {
-    const load = document.querySelector(".ajax_load");
-    load.style.display = 'flex';
-    const callback = await fetch(url, {
-        method: method,
-        body: data,
-        headers: {
-            'Content-Type': contentType
-        }
-    });
-    load.style.display = 'none';
-    return await callback.json();
-}
-
 // BEGIN UPDATE STATUS CLOSE/OPEN
 // BEGIN CALL AJAX STATUS HOUR
 const updateStatusHour = async (element) => {

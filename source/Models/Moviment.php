@@ -103,16 +103,29 @@ class Moviment extends Model
         $data->beat_prize = $prize;
         $data->paying_now = money_fmt_app($data->paying_now);
         $data->expend = money_fmt_app($data->expend);
-        $getValue = $data->paying_now + $data->expend ;
+        $getValue = $data->paying_now + $data->expend;
         $data->get_value = $getValue;
-        $beatValue = money_fmt_app($data->last_value) + ($getValue + money_fmt_app($data->net_value));
+        $beatValue = money_fmt_app($data->last_value) + ($getValue - money_fmt_app($data->net_value));
         $data->beat_value = $beatValue;
 
-        if ($beatValue >= 0) {
+        if ($beatValue >= 0 && $prize == 0) {
             $data->prize_store = 0;
-            $data->prize_office = $prize;
-            $data->new_value = $beatValue;
+            $data->prize_office = 0;
+            $data->new_value = $data->beat_value;
         }
+
+        if ($beatValue < 0 && $prize != 0 ) {
+            $data->prize_store = 0;
+            $data->prize_office = $data->prize;
+            $data->new_value = $data->beat_value;
+        }
+
+        if ($beatValue >= 0 && $prize != 0 ) {
+            $data->prize_store = 0;
+            $data->prize_office = $data->prize;
+            $data->new_value = $data->beat_value;
+        }
+
 
         // SE O SALDO DO HORÁRIO DA LOJA FOR NEGATIVO
         if ($beatValue < 0) {
@@ -142,7 +155,7 @@ class Moviment extends Model
           if (!$data->shouldBeatPrizeStore) {
               $data->prize_store = 0;
               $data->prize_office = $prize;
-              $data->new_value = $beatValue;
+              $data->new_value = ($data->new_value - $beatValue);
           }
 
           if ($data->cents) {

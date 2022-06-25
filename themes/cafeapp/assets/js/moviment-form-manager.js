@@ -65,7 +65,6 @@ const ajaxFormMoviment = async (formDataParam) => {
     const contentType = 'application/x-www-form-urlencoded';
 
     const response = await ajax(url, body, method, contentType);
-
     if (response) {
 
         if (response.data.idMovimentTemporary) {
@@ -74,7 +73,7 @@ const ajaxFormMoviment = async (formDataParam) => {
             // APRESENTANDO OS DADOS NOS CAMPOS DE APRESENTAÇÃO
             selector('new_value').textContent = data.new_value;
             selector('get_value').textContent = data.get_value;
-            selector('cents').textContent = data.cents;
+            selector('cents').textContent = (data.cents ?? 0);
             selector('cents').value = data.cents;
             selector('beat_value').textContent = data.beat_value;
             selector('prize').value = data.prize;

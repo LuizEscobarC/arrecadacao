@@ -581,7 +581,7 @@ class App extends Controller
             $callback = $moviment->last_value;
         } else {
             $store =  (new Store())->findById($data['id_store']);
-            $callback = (!empty($store) ? $store->total_value : null);
+            $callback = (!empty($store) ? $store->valor_saldo : null);
         }
         if (empty($callback)) {
             echo json_encode($callback);
@@ -1030,6 +1030,7 @@ class App extends Controller
 
         // FAZ O CALCULO E SALVA SÓ A TABELA MOVIMENTO E DELETA O LANÇAMENTO ANTIGO SE TIVER
         if (empty($data['id_temporary_moviment'])) {
+
             if ($movimentRepeated = Moviment::repeatedVerify($data)) {
                 $movimentRepeated->destroy();
             }
