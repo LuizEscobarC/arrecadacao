@@ -25,10 +25,6 @@ if (formMoviment) {
                             formMoviment.insertAdjacentHTML("afterbegin",
                                 "<div class='" + flashClass + " bounce animated'>" + response.message + "</div>");
                         }
-
-                        if (response.message.reload) {
-                            window.location.reload();
-                        }
                     }
 
                     if (response.reload) {
@@ -42,7 +38,11 @@ if (formMoviment) {
                 ajax(formMoviment.getAttribute('action'), new URLSearchParams({
                     id_temporary_moviment: idSaveTemp,
                     delete: true
-                }), 'POST', 'application/x-www-form-urlencoded');
+                }), 'POST', 'application/x-www-form-urlencoded').then( response => {
+                    if (response) {
+                        window.location.reload();
+                    }
+                });
             }
         } else {
             ajaxFormMoviment(formMoviment);
@@ -55,7 +55,7 @@ if (formMoviment) {
 const ajaxFormMoviment = async (formDataParam) => {
     formDataParam = new FormData(formDataParam);
     formDataParam.set('shouldBeatPrizeStore', false);
-    const beatValue = selector('beat_value');
+    const beatValue = document.querySelector('.beat_value').textContent;
 
     if (beatValue) {
         if (toAppNumber(beatValue) < 0) {
@@ -80,14 +80,14 @@ const ajaxFormMoviment = async (formDataParam) => {
             const data = response.data;
             const selector = (selector) => document.querySelector('.' + selector);
             // APRESENTANDO OS DADOS NOS CAMPOS DE APRESENTAÇÃO
-            selector('new_value').textContent = data.new_value;
-            selector('get_value').textContent = data.get_value;
-            selector('cents').textContent = (data.cents ?? 0);
-            selector('cents').value = data.cents;
-            selector('beat_value').textContent = data.beat_value;
-            selector('prize').value = data.prize;
-            selector('prize_office').textContent = data.prize_office;
-            selector('prize_store').textContent = data.prize_store;
+            selector('new_value').textContent = toBrNumber(data.new_value);
+            selector('get_value').textContent = toBrNumber(data.get_value);
+            selector('cents').textContent = toBrNumber((data.cents ?? 0));
+            selector('cents').value = toBrNumber(data.cents);
+            selector('beat_value').textContent = toBrNumber(data.beat_value);
+            selector('prize').value = toBrNumber(data.prize);
+            selector('prize_office').textContent = toBrNumber(data.prize_office);
+            selector('prize_store').textContent = toBrNumber(data.prize_store);
             selector('id_temporary_moviment').value = data.idMovimentTemporary;
             document.querySelector("#moviment_btn").textContent = 'Salvar o Movimento';
             document.querySelector("#moviment_btn").dataset.savetemp = data.idMovimentTemporary;

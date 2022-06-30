@@ -88,11 +88,14 @@ async function getMoviment(data) {
             selector('comission_value_view').textContent = response.moviment.list.comission_value;
             selector('net_value_view').textContent = response.moviment.list.net_value;
             selector('paying_now_view').textContent = response.moviment.paying_now;
+            document.querySelector('input[name="paying_now"]').value = (response.moviment.paying_now ?? 0);
             selector('expend_view').textContent = response.moviment.expend;
+            document.querySelector('input[name="expend"]').value = (response.moviment.expend ?? 0);
             selector('get_value_view').textContent = response.moviment.get_value;
             selector('beat_value_view').textContent = response.moviment.beat_value;
             selector('new_value_view').textContent = response.moviment.new_value;
             selector('prize_value_view').textContent = response.moviment.prize;
+            document.querySelector('input[name="prize"]').value = (response.moviment.prize ?? 0);
             selector('beat_prize_view').textContent = response.moviment.beat_prize;
             selector('prize_office_view').textContent = response.moviment.prize_office;
             selector('prize_store_view').textContent = response.moviment.prize_store;

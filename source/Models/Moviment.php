@@ -2,6 +2,7 @@
 
 namespace Source\Models;
 
+use Composer\Package\Loader\ValidatingArrayLoader;
 use Source\Core\Controller;
 use Source\Core\Model;
 use Source\Support\Filters\FilterMoviment;
