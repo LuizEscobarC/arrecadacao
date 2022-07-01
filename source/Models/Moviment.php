@@ -167,11 +167,11 @@ class Moviment extends Model
         $data->calc = true;
 
         // save temp
-//        $moviment = (new self);
-//        $moviment = $moviment->saveMoviment($moviment, $data);
-//        if (!$moviment->save()) {
-//            return $moviment->message()->render();
-//        }
+        $moviment = (new self);
+        $moviment = $moviment->saveMoviment($moviment, $data);
+        if (!$moviment->save()) {
+            return $moviment->message()->render();
+        }
         $data->idMovimentTemporary = 1;
 
         // DEVE RETORNAR OS DADOS CALCULADOS CORRETAMENTE

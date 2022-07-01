@@ -62,7 +62,6 @@ const ajaxFormMoviment = async (formDataParam) => {
     const toCalcNetValue = (formDataParam.get('net_value') === '' ? 0 : toAppNumber(formDataParam.get('net_value')));
     // vai no back e pega o valor se abate ante de realizar os calculos
     const beatValue = toCalcLastValue + (toCalcPayingNow + toCalcExpend - toCalcNetValue);
-    console.log(beatValue)
     if (beatValue) {
         if (beatValue < 0) {
             if (toAppNumber(formDataParam.get('prize')) > 0) {
