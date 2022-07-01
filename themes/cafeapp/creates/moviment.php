@@ -147,7 +147,7 @@
 
         <div class="al-center">
             <div id="div_moviment_btn">
-                <button class="btn btn_inline radius transition icon-pencil-square-o" data-savetemp="" id="moviment_btn">Lançar</button>
+                <button class="btn btn_inline radius transition icon-pencil-square-o" data-savetemp="" id="moviment_btn">Calcular</button>
             </div>
         </div>
     </form>

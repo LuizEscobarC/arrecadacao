@@ -54,15 +54,16 @@ if (formMoviment) {
 // ajax
 const ajaxFormMoviment = async (formDataParam) => {
     formDataParam = new FormData(formDataParam);
-    formDataParam.set('shouldBeatPrizeStore', false);
-    const beatValue = document.querySelector('.beat_value').textContent;
+    formDataParam.set('shouldBeatPrizeStore', 0);
 
+    // vai no back e pega o valor se abate ante de realizar os calculos
+    const beatValue = (toAppNumber(formDataParam.get('last_value')) + (toAppNumber(formDataParam.get('paying_now')) + toAppNumber(formDataParam.get('expend'))) - toAppNumber(formDataParam.get('net_value')));
     if (beatValue) {
-        if (toAppNumber(beatValue) < 0) {
+        if (beatValue < 0) {
             if (toAppNumber(formDataParam.get('prize')) > 0) {
                 const shouldBeatPrizeStore = confirm('Deseja abater no saldo da loja?');
                 if (shouldBeatPrizeStore) {
-                    formDataParam.set('shouldBeatPrizeStore', true);
+                    formDataParam.set('shouldBeatPrizeStore', 1);
                 }
             }
         }

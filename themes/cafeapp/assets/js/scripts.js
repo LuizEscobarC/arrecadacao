@@ -23,6 +23,7 @@ function addButtonMoviment(button) {
 }
 
 function toAppNumber(value) {
+    console.log(value)
     return parseFloat(value.replaceAll('.', '').replace(',', '.'));
 }
 

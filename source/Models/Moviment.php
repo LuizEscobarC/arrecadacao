@@ -108,6 +108,7 @@ class Moviment extends Model
         $data->get_value = $getValue;
         $beatValue = money_fmt_app($data->last_value) + ($getValue - money_fmt_app($data->net_value));
         $data->beat_value = $beatValue;
+        $data->shouldBeatPrizeStore = (boolean)$data->shouldBeatPrizeStore;
 
         if ($beatValue >= 0 && $prize == 0) {
             $data->prize_store = 0;
