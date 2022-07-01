@@ -157,7 +157,7 @@ class Moviment extends Model
           if (!$data->shouldBeatPrizeStore) {
               $data->prize_store = 0;
               $data->prize_office = $prize;
-              $data->new_value = ($data->new_value - $beatValue);
+              $data->new_value = ($data->new_value + $beatValue);
           }
 
           if ($data->cents) {
@@ -167,12 +167,12 @@ class Moviment extends Model
         $data->calc = true;
 
         // save temp
-        $moviment = (new self);
-        $moviment = $moviment->saveMoviment($moviment, $data);
-        if (!$moviment->save()) {
-            return $moviment->message()->render();
-        }
-        $data->idMovimentTemporary = $moviment->id;
+//        $moviment = (new self);
+//        $moviment = $moviment->saveMoviment($moviment, $data);
+//        if (!$moviment->save()) {
+//            return $moviment->message()->render();
+//        }
+        $data->idMovimentTemporary = 1;
 
         // DEVE RETORNAR OS DADOS CALCULADOS CORRETAMENTE
         return $data;

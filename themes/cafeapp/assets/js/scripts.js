@@ -139,6 +139,9 @@ async function getList(inputDataList, idHour, idStore, dateMoviment) {
         document.querySelector("input[name='id_list']").value = '';
     }
 
+    // TEST DE MOVIMENTO
+   // netValue = 28;
+
     document.querySelector('.total_value').textContent = totalValue;
     document.querySelector("input[name='total_value']").value = totalValue;
     document.querySelector('.comission_value').textContent = comissionValue;
@@ -165,6 +168,11 @@ async function getStoreValueNow(inputDataList, idStore, idHour, dateMoviment) {
         const storeValue = content.store_value;
         lastValue.textContent = toBrNumber(storeValue ?? 0);
         inpuLastValue.value = toBrNumber(storeValue ?? 0);
+
+        // TEST DE MOVIMENTO
+        // lastValue.textContent = -100;
+        // inpuLastValue.value = -100;
+
         getMoviment(new FormData(document.querySelector('.app_form#moviment')));
     }
 }

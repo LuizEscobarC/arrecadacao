@@ -56,8 +56,13 @@ const ajaxFormMoviment = async (formDataParam) => {
     formDataParam = new FormData(formDataParam);
     formDataParam.set('shouldBeatPrizeStore', 0);
 
+    const toCalcLastValue = (formDataParam.get('last_value') === '' ? 0 : toAppNumber(formDataParam.get('last_value')));
+    const toCalcPayingNow = (formDataParam.get('paying_now') === '' ? 0 : toAppNumber(formDataParam.get('paying_now')));
+    const toCalcExpend = (formDataParam.get('expend') === '' ? 0 : toAppNumber(formDataParam.get('expend')));
+    const toCalcNetValue = (formDataParam.get('net_value') === '' ? 0 : toAppNumber(formDataParam.get('net_value')));
     // vai no back e pega o valor se abate ante de realizar os calculos
-    const beatValue = (toAppNumber(formDataParam.get('last_value')) + (toAppNumber(formDataParam.get('paying_now')) + toAppNumber(formDataParam.get('expend'))) - toAppNumber(formDataParam.get('net_value')));
+    const beatValue = toCalcLastValue + (toCalcPayingNow + toCalcExpend - toCalcNetValue);
+    console.log(beatValue)
     if (beatValue) {
         if (beatValue < 0) {
             if (toAppNumber(formDataParam.get('prize')) > 0) {
