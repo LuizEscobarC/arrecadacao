@@ -161,12 +161,15 @@ async function getStoreValueNow(inputDataList, idStore, idHour, dateMoviment) {
 
     const content = await callback.json();
 
+    const formMoviment = document.querySelector('.app_form#moviment');
     if (content) {
         const storeValue = content.store_value;
         lastValue.textContent = toBrNumber(storeValue ?? 0);
         inpuLastValue.value = toBrNumber(storeValue ?? 0);
 
-        getMoviment(new FormData(document.querySelector('.app_form#moviment')));
+        if (formMoviment) {
+            getMoviment(new FormData(formMoviment));
+        }
     }
 }
 
