@@ -1,11 +1,13 @@
 <?php $v->layout("_theme"); ?>
 
-<div class="app_invoice app_widget">
+<div class="app_invoice app_launch_box">
     <div class="color_888 app_header">
         <h2 class=" icon-calendar-check-o ">Cadastrar Lançamento:</h2>
     </div>
     <form class="app_form cash_flow ajax_off" action="<?= url("/app/fluxo-de-caixa"); ?>" method="post">
         <div class="ajax_response"><?= flash(); ?></div>
+       <!-- Apresenta se a valor foi manual ou maquina -->
+        <input type="hidden" name="system" value="0">
 
         <div class="label_group">
             <label class="three_label">
@@ -15,8 +17,8 @@
                        required/>
             </label>
 
-            <label class="three_label">
-                <p id="label" class="app_widget_title"></p>
+            <label class="three_label app_launch_item">
+                <p id="label"></p>
             </label>
 
             <label class="three_label">
@@ -42,10 +44,24 @@
                 </datalist>
             </label>
 
-            <label>
-                <span class="field icon-leanpub">Saldo Atual da Loja:</span>
-                <p class="app_widget_title last_value"></p>
+            <label class="app_launch_item">
+                <span class="icon-leanpub">Saldo Atual da Loja:</span>
+                <p class=" last_value"></p>
                 <input type="hidden" name="last_value">
+            </label>
+        </div>
+
+        <div class="label_group">
+            <label class="app_launch_item">
+                <span class="icon-leanpub">valor despesa loja:</span>
+                <p class="expense_store"></p>
+                <input type="hidden" name="expense_store">
+            </label>
+
+            <label class="app_launch_item">
+                <span class="icon-leanpub">valor despesa escritório:</span>
+                <p class="expense_office"></p>
+                <input type="hidden" name="expense_office">
             </label>
         </div>
 
@@ -89,8 +105,13 @@
 
         <div class="al-center">
             <div>
-                <button class="btn btn_inline radius transition icon-pencil-square-o">Lançar</button>
+                <button class="btn btn_inline radius transition icon-pencil-square-o">Calcular</button>
             </div>
         </div>
     </form>
+
+    <?= $v->start('scripts'); ?>
+    <script src="<?= theme("/assets/js/cashflow-form-manager.js", CONF_VIEW_APP) ?>"></script>
+    <?= $v->end('scripts'); ?>
+
 </div>
