@@ -580,7 +580,7 @@ class App extends Controller
         if ($moviment = Moviment::repeatedVerify($data)) {
             $callback = $moviment->last_value;
         } else {
-            $store =  (new Store())->findById($data['id_store']);
+            $store = (new Store())->findById($data['id_store']);
             $callback = (!empty($store) ? $store->valor_saldo : null);
         }
         if (empty($callback)) {
@@ -1001,8 +1001,10 @@ class App extends Controller
      */
     public function saveMoviment(?array $data): void
     {
+        $delete = (!empty($data['delete']) ? (bool)$data['delete'] : null);
+
         // SALVA AS ROTINAS DE LOJA E FLUXO DE CAIXA
-        if (!empty($data['doTheJobs']) && !empty($data['id_temporary_moviment'])) {
+        if (!empty($data['doTheJobs']) && (bool)$data['doTheJobs'] && !empty($data['id_temporary_moviment']) && empty($delete)) {
             $moviment = (new Moviment())->findById($data['id_temporary_moviment']);
             $idMoviment = $moviment->id;
             $data = $moviment->data();
@@ -1014,16 +1016,19 @@ class App extends Controller
         }
 
         // REQUERIDOS
-        $required = SelfList::requiredData($data);
-        if (!empty($required)) {
-            $json['message'] = $required;
-            $this->call(200)->back($json);
-            return;
+        if (empty($data['delete'])) {
+            $required = SelfList::requiredData($data);
+            if (is_string($required)) {
+                $json['message'] = $required;
+                $this->call(200)->back($json);
+                return;
+            }
         }
 
         // DELETA SE ALGO ESTIVER ERRADO
-        if ($data['id_temporary_moviment'] && $data['delete']) {
-            (new Moviment())->findById($data['id_temporary_moviment'])->destroy();
+        if (!empty($data['id_temporary_moviment']) && $delete) {
+
+            ((new Moviment())->findById($data['id_temporary_moviment']))->destroy();
             $this->call(200)->back(['reload' => true]);
             return;
         }

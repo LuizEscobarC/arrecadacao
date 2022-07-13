@@ -150,14 +150,13 @@ class Moviment extends Model
                   $data->cents = '0.' . $matchs[1];
                   $data->cents = (float)$data->cents;
               }
-
           }
 
           // SE NÃO FOR ABATER NO SALDO DA LOJA
           if (!$data->shouldBeatPrizeStore) {
               $data->prize_store = 0;
               $data->prize_office = $prize;
-              $data->new_value = ($data->new_value + $beatValue);
+              $data->new_value = $beatValue;
           }
 
           if ($data->cents) {
@@ -172,7 +171,7 @@ class Moviment extends Model
         if (!$moviment->save()) {
             return $moviment->message()->render();
         }
-        $data->idMovimentTemporary = 1;
+        $data->idMovimentTemporary = $moviment->id;
 
         // DEVE RETORNAR OS DADOS CALCULADOS CORRETAMENTE
         return $data;

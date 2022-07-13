@@ -40,10 +40,10 @@ class SelfList extends Model
     public static function requiredData($data)
     {
         $required = new Lists();
-        if (!$required->requiredList($data)) {
-            return false;
+        if ($message = $required->requiredList($data)) {
+            return $message;
         }
-        return true;
+        return false;
     }
 
     public function saveRoutine(): bool

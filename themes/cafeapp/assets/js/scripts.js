@@ -68,7 +68,14 @@ async function getMoviment(data) {
     });
     return await callback.json().then((response) => {
         if (response) {
-
+           /* let link = response.link;
+            document.querySelector('.app_form#moviment').insertAdjacentHTML('afterbegin', `
+            <label class="link_current_moviment">
+                <p class="app_widget_title padding_btn gradient gradient-blue gradient-hover radius transition">
+                    <a class="desc moviment color_white" style="text-decoration: none;"
+                       href="${link}">CLIQUE AQUI para editar esse lançamento.</a></p>
+            </label>
+       `); */
             const selector = (selector) => document.querySelector('.' + selector);
 
             selector('date_moviment_view').textContent = response.moviment.date_moviment;
@@ -118,7 +125,6 @@ async function getList(inputDataList, idHour, idStore, dateMoviment) {
 
     // SE HOUVER RETORNO DE LISTA BY DATA, LOJA E HORARIO
     if (response) {
-        console.log(response.net_value, '128')
         totalValue = parseFloat(response.total_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
         comissionValue = parseFloat(response.comission_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
         netValue = parseFloat(response.net_value).toLocaleString('pt-br', {minimumFractionDigits: 2});
@@ -132,11 +138,11 @@ async function getList(inputDataList, idHour, idStore, dateMoviment) {
         document.querySelector("input[name='id_list']").value = '';
     }
 
+
     document.querySelector('.total_value').textContent = totalValue;
     document.querySelector("input[name='total_value']").value = totalValue;
     document.querySelector('.comission_value').textContent = comissionValue;
     document.querySelector("input[name='comission_value']").value = comissionValue;
-    console.log(netValue, '149')
     document.querySelector('.net_value').textContent = netValue;
     document.querySelector("input[name='net_value']").value = netValue;
 }

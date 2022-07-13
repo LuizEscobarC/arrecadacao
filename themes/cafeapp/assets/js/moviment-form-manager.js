@@ -10,7 +10,7 @@ if (formMoviment) {
             // SALVA O MOVIMENTO TEMPORARIO
             if (wantSave) {
                 ajax(formMoviment.getAttribute('action'), new URLSearchParams({
-                        doTheJobs: true,
+                        doTheJobs: 1,
                         id_temporary_moviment: idSaveTemp
                     }), 'POST',
                     'application/x-www-form-urlencoded').then(response => {
@@ -37,7 +37,7 @@ if (formMoviment) {
                 // DELETA O MOVIMENTO TEMPORÁRIO
                 ajax(formMoviment.getAttribute('action'), new URLSearchParams({
                     id_temporary_moviment: idSaveTemp,
-                    delete: true
+                    delete: 1
                 }), 'POST', 'application/x-www-form-urlencoded').then( response => {
                     if (response) {
                         window.location.reload();
