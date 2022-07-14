@@ -861,47 +861,82 @@ class App extends Controller
      */
     public function saveCashFlow(?array $data): void
     {
-        if (!empty($data)) {
+        $data = (object)$data;
+        $data->last_value = money_fmt_app($data->last_value);
+        $data->value = money_fmt_app($data->value);
 
-            // CASO UM FLUXO DE CAIXA SEJA UMA SAIDA DA LOJA
-            if (!empty($data['id_store'])) {
-                $store = (new Store())->findById($data['id_store']);
-                $store->valor_saldo = money_fmt_app($data['last_value']);
-                if (!$store->save()) {
-                    $json['message'] = $store->message()->render();
-                    return;
+        if ($data->id_store) {
+            if ($data->last_value < 0 && $data->type === '2' && $data->value !== 0) {
+                if ($data->beat) {
+                    $lastValueInverted = abs($data->last_value);
+                    if ($lastValueInverted > $data->value) {
+                        $data->office_expense = 0;
+                        $data->store_expense = $data->value;
+                        $data->new_value = ($data->value - $lastValueInverted);
+                    }
+
+                    if ($lastValueInverted <= $data->value) {
+                        $data->store_expense = $lastValueInverted;
+                        $data->office_expense = ($data->value - $lastValueInverted);
+                        $data->new_value = 0;
+                    }
+                }
+
+                if (!$data->beat) {
+                    $data->store_expense = 0;
+                    $data->office_expense = $data->value;
+                    $data->new_value = $data->last_value;
                 }
             }
 
-            $cash = (new CashFlow());
-
-            if (!empty($data['id'])) {
-                $cash = $cash->findById($data['id']);
+            if ($data->last_value >= 0 && $data->type === '2' && $data->value !== 0) {
+                $data->store_expense = 0;
+                $data->office_expense = $data->value;
+                $data->new_value = $data->last_value;
             }
 
-            $cash->bootstrap(
-                $data["date_moviment"],
-                (!empty($data["id_store"]) ? $data["id_store"] : null),
-                $data["id_hour"],
-                $data["description"],
-                money_fmt_app($data["value"]),
-                $data["type"],
-                (!empty($data["id_cost"]) ? $data["id_cost"] : null)
-            );
-
-            if (!$cash->save()) {
-                $json['message'] = $cash->message()->render();
-            } else {
-                $json['message'] = $this->message->success("Lançamento atualizado com sucesso!")->render();
-                $this->message->success("Lançamento atualizado com sucesso!")->flash();
-                $json['reload'] = true;
-                $json['scroll'] = 100;
+            // VERIFICA SE TEM CENTAVOS
+            if (preg_match("/\.([0-9]{1,}$)/", $data->office_expense, $matchs)) {
+                $data->office_expense = floor($data->office_expense);
+                $data->cents = '0.' . $matchs[1];
+                $data->cents = (float)$data->cents;
             }
-        } else {
-            $json['message'] = $this->message->warning("Todos os campos são necessários!")->render();
+
+            if (!empty($data->cents)) {
+                $data->new_value += $data->cents;
+            }
+
+            $store = (new Store())->findById($data->id_store);
+            $store->valor_saldo = $data->new_value;
+
+            if (!$store->save()) {
+                $this->call(400, 'error', $store->message()->render())->back();
+            }
+
         }
 
-        echo json_encode($json);
+
+        $cashFlow = new CashFlow();
+
+        $cashFlow->date_moviment = $data->date_moviment;
+        $cashFlow->id_store = ($data->id_store ?? null);
+        $cashFlow->id_hour = $data->id_hour;
+        $cashFlow->id_cost = ($data->id_cost ?? null);
+        $cashFlow->description = ($data->description ?? null);
+        $cashFlow->value = $data->value;
+        $cashFlow->type = $data->type;
+        $cashFlow->id_moviment = null;
+        $cashFlow->store_expense = (!empty($data->store_expense) ? $data->store_expense : 0);
+        $cashFlow->office_expense = (!empty($data->office_expense) ? $data->office_expense : 0);
+        $cashFlow->system = $data->system;
+
+        if (!$cashFlow->save()) {
+            $this->call(400, 'error', $cashFlow->message()->render())->back();
+        }
+
+        // SE DEU TUDO CERTO
+        $this->call(200, 'success', $this->message->success('Tudo certo, foi lançado com sucesso!')->render(), 'success')
+            ->back((array)$data);
     }
 
     /**

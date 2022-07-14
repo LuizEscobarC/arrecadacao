@@ -147,6 +147,7 @@ class Moviment extends Model
 
               // VERIFICA SE TEM CENTAVOS
               if (preg_match("/\.([0-9]{1,}$)/", $data->prize_office, $matchs)) {
+                  $data->prize_office = floor($data->prize_office);
                   $data->cents = '0.' . $matchs[1];
                   $data->cents = (float)$data->cents;
               }

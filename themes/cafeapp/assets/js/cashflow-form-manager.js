@@ -1,4 +1,9 @@
 const cashFlowForm = document.querySelector('.app_form.cash_flow');
+const urlCashFlow = cashFlowForm.getAttribute('action');
+// MESSAGE NODES
+const flashClass = "ajax_response";
+const flash = document.querySelector("." + flashClass);
+
 if (cashFlowForm) {
     cashFlowForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -10,35 +15,32 @@ if (cashFlowForm) {
 
         if (lastValue < 0 && typeOperation === '2' && value !== 0) {
             // INVERTE O VALOR PARA OS CALCULOS
-            const lastValueInverted = Math.abs(lastValue);
             const beat = confirm('Deseja abater no saldo da loja?');
+            formDataCashFlow.set('beat', ((beat) ? 1 : 0));
 
-            if (beat) {
-                if (lastValueInverted > value) {
-                    const expenseOffice = 0;
-                    const expenseStore = value - lastValueInverted;
-                }
-
-                if (lastValueInverted <= value) {
-                    const expenseStore = lastValueInverted;
-                    const expenseOffice = (value - lastValueInverted);
-                    const newValue = 0;
-                }
-                const beatValue = 0;
-            }
-
-            if (!beat) {
-                const expenseStore = 0;
-                const expenseOffice = value;
-                const newValue = lastValue;
-            }
         }
 
-        if (lastValue > 0 && typeOperation === '2' && value !== 0) {
-            const expenseStore = 0;
-            const expenseOffice = value;
-            const newValue = lastValue;
-        }
+        ajax(urlCashFlow, new URLSearchParams(formDataCashFlow), 'POST', 'application/x-www-form-urlencoded').then(response => {
+            if (response.success) {
+                flash.innerHTML = response.success.message;
+                flash.style.display = 'flex';
+                flash.classList.add('bounce', 'animated');
+                if (response.expense_office !== '' && response.expense_store !== '') {
+                    document.querySelector('.expense_store').textContent = toBrNumber(response.expense_store);
+                    document.querySelector('.expense_office').textContent = toBrNumber(response.expense_office);
+                    if (response.beat) {
+                        alert(`A loja pagou: ${response.expense_store} e o escritório pagou ${response.expense_office}`)
+                    }
+                }
+
+            }
+
+            if (response.error) {
+                flash.innerHTML = response.error.message;
+                flash.style.display = 'flex';
+                flash.classList.add('bounce', 'animated');
+            }
+        })
 
     });
 }
