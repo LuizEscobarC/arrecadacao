@@ -54,14 +54,12 @@
         <div class="label_group">
             <label class="app_launch_item">
                 <span class="icon-leanpub">valor despesa loja:</span>
-                <p class="expense_store"></p>
-                <input type="hidden" name="expense_store">
+                <p class="store_expense"></p>
             </label>
 
             <label class="app_launch_item">
                 <span class="icon-leanpub">valor despesa escritório:</span>
-                <p class="expense_office"></p>
-                <input type="hidden" name="expense_office">
+                <p class="office_expense"></p>
             </label>
         </div>
 

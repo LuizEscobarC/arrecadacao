@@ -865,7 +865,7 @@ class App extends Controller
         $data->last_value = money_fmt_app($data->last_value);
         $data->value = money_fmt_app($data->value);
 
-        if ($data->id_store) {
+        if ($data->id_store && $data->type === '2') {
             if ($data->last_value < 0 && $data->type === '2' && $data->value !== 0) {
                 if ($data->beat) {
                     $lastValueInverted = abs($data->last_value);
@@ -911,6 +911,7 @@ class App extends Controller
 
             if (!$store->save()) {
                 $this->call(400, 'error', $store->message()->render())->back();
+                return;
             }
 
         }
@@ -931,7 +932,8 @@ class App extends Controller
         $cashFlow->system = $data->system;
 
         if (!$cashFlow->save()) {
-            $this->call(400, 'error', $cashFlow->message()->render())->back();
+            $this->call(400, 'error', '$cashFlow->message()->render()')->back();
+            return;
         }
 
         // SE DEU TUDO CERTO
