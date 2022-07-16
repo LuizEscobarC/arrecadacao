@@ -1,8 +1,8 @@
 const cashFlowForm = document.querySelector('.app_form.cash_flow');
 const urlCashFlow = cashFlowForm.getAttribute('action');
 // MESSAGE NODES
-const flashClass = "ajax_response";
-const flash = document.querySelector("." + flashClass);
+const flashClassCashFlow = "ajax_response";
+const flashCashFlow = document.querySelector("." + flashClassCashFlow);
 
 if (cashFlowForm) {
     cashFlowForm.addEventListener('submit', (e) => {
@@ -21,9 +21,9 @@ if (cashFlowForm) {
 
         ajax(urlCashFlow, new URLSearchParams(formDataCashFlow), 'POST', 'application/x-www-form-urlencoded').then(response => {
             if (response.success) {
-                flash.innerHTML = response.success.message;
-                flash.style.display = 'flex';
-                flash.classList.add('bounce', 'animated');
+                flashCashFlow.innerHTML = response.success.message;
+                flashCashFlow.style.display = 'flex';
+                flashCashFlow.classList.add('bounce', 'animated');
                 if (response.office_expense !== '' && response.store_expense !== '') {
                     document.querySelector('.store_expense').textContent = toBrNumber(response.store_expense);
                     document.querySelector('.office_expense').textContent = toBrNumber(response.office_expense);
@@ -38,9 +38,9 @@ if (cashFlowForm) {
             }
 
             if (response.error) {
-                flash.innerHTML = response.error.message;
-                flash.style.display = 'flex';
-                flash.classList.add('bounce', 'animated');
+                flashCashFlow.innerHTML = response.error.message;
+                flashCashFlow.style.display = 'flex';
+                flashCashFlow.classList.add('bounce', 'animated');
             }
         })
 

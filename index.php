@@ -1,5 +1,5 @@
 <?php
-ob_start();
+ob_start('ob_gzhandler');
 require __DIR__ . "/vendor/autoload.php";
 
 /**

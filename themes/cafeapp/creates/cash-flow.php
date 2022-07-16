@@ -103,13 +103,13 @@
 
         <div class="al-center">
             <div>
-                <button class="btn btn_inline radius transition icon-pencil-square-o">Calcular</button>
+                <button class="btn btn_inline radius transition icon-pencil-square-o">Lançar</button>
             </div>
         </div>
     </form>
 
     <?= $v->start('scripts'); ?>
-    <script src="<?= theme("/assets/js/cashflow-form-manager.js", CONF_VIEW_APP) ?>"></script>
+    <script src="<?= theme("/assets/nocompressed/cashflow-form-manager.js", CONF_VIEW_APP) ?>"></script>
     <?= $v->end('scripts'); ?>
 
 </div>
