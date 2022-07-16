@@ -80,7 +80,6 @@
         </section>
     </div>
 </footer>
-
 <script src="<?= theme("/assets/scripts.js"); ?>"></script>
 <?= $v->section("scripts"); ?>
 

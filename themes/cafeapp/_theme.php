@@ -59,6 +59,7 @@
     <script src="<?= url("shared/scripts/jquery.mask.js") ?>"></script>
     <script src="<?= url("shared/scripts/highcharts.js") ?>"></script>
     <script src="<?= url("shared/scripts/ajaxCad.js") ?>"></script>
+<?= $v->section("scriptsup"); ?>
     <script src="<?= theme("/assets/js/scripts.js", CONF_VIEW_APP) ?>"></script>
     <script src="<?= theme("/assets/js/sidebar.js", CONF_VIEW_APP) ?>"></script>
     <script src="<?= theme("/assets/js/removes.js", CONF_VIEW_APP) ?>"></script>

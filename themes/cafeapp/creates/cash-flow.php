@@ -108,6 +108,10 @@
         </div>
     </form>
 
+    <?= $v->start('scriptsup'); ?>
+    <script src="<?= theme("/assets/nocompressed/get-store-value.js", CONF_VIEW_APP) ?>"></script>
+    <?= $v->end('scriptsup'); ?>
+
     <?= $v->start('scripts'); ?>
     <script src="<?= theme("/assets/nocompressed/cashflow-form-manager.js", CONF_VIEW_APP) ?>"></script>
     <?= $v->end('scripts'); ?>

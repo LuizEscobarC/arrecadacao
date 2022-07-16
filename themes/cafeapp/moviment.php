@@ -149,4 +149,8 @@
         ]);
     ?>
 
+    <?= $v->start('scripts'); ?>
+    <script src="<?= theme("/assets/nocompressed/get-store-value.js", CONF_VIEW_APP) ?>"></script>
+    <?= $v->end('scripts'); ?>
+
 </div>

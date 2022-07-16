@@ -27,7 +27,7 @@
 
         <label>
             <span class="field icon-leanpub">Comissão:</span>
-            <input class="radius mask-money-negative" type="text" name="comissao" value="<?= money_fmt_br($store->comissao); ?>" placeholder="Ex: Bentão"/>
+            <input class="radius" type="number" name="comissao" value="<?= (int)$store->comissao; ?>" placeholder="Ex: Bentão"/>
         </label>
 
         <div class="label_group">

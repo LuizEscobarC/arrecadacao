@@ -26,7 +26,7 @@
 
         <label>
             <span class="field icon-leanpub">Comissão:</span>
-            <input class="radius mask-money-negative box-shadow" type="text" name="comissao" required/>
+            <input class="radius box-shadow" type="number" name="comissao" required/>
         </label>
 
         <div class="label_group">
