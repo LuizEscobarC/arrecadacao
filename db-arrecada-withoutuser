@@ -1,0 +1,369 @@
+-- MySQL dump 10.13  Distrib 5.5.62, for Win64 (AMD64)
+--
+-- Host: arrecada.mysql.dbaas.com.br    Database: arrecada
+-- ------------------------------------------------------
+-- Server version	5.7.32-35-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `address`
+--
+
+DROP TABLE IF EXISTS `address`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `address` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) unsigned DEFAULT NULL,
+  `street` varchar(255) NOT NULL DEFAULT '',
+  `number` varchar(255) NOT NULL DEFAULT '',
+  `complement` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `addr_user` (`user_id`),
+  CONSTRAINT `user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `address`
+--
+
+LOCK TABLES `address` WRITE;
+/*!40000 ALTER TABLE `address` DISABLE KEYS */;
+INSERT INTO `address` VALUES (1,1,'rua manoel pedro vieira, 810','810','casa 1','2018-09-03 20:40:57','2018-09-16 23:39:59');
+/*!40000 ALTER TABLE `address` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cash_flow`
+--
+
+DROP TABLE IF EXISTS `cash_flow`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cash_flow` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date_moviment` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `id_store` int(11) DEFAULT NULL,
+  `id_hour` int(11) NOT NULL,
+  `id_cost` int(11) DEFAULT NULL,
+  `description` varchar(1000) CHARACTER SET utf8 DEFAULT NULL,
+  `value` float NOT NULL,
+  `type` int(11) NOT NULL COMMENT '1: entrada, 2: saída',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `id_moviment` int(11) DEFAULT NULL,
+  `store_expense` float DEFAULT '0',
+  `office_expense` float DEFAULT '0',
+  `system` tinyint(1) DEFAULT '1' COMMENT 'foi uma operação do sistema?',
+  `last_value` float DEFAULT NULL COMMENT 'valor antigo da loja',
+  PRIMARY KEY (`id`),
+  KEY `cash_flow_FK` (`id_store`),
+  KEY `cash_flow_FK_1` (`id_hour`),
+  KEY `cash_flow_FK_2` (`id_cost`),
+  KEY `cash_flow_FK_3` (`id_moviment`),
+  CONSTRAINT `cash_flow_FK` FOREIGN KEY (`id_store`) REFERENCES `loja` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `cash_flow_FK_1` FOREIGN KEY (`id_hour`) REFERENCES `hour` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `cash_flow_FK_2` FOREIGN KEY (`id_cost`) REFERENCES `cost` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `cash_flow_FK_3` FOREIGN KEY (`id_moviment`) REFERENCES `moviment` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=174 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cash_flow`
+--
+
+LOCK TABLES `cash_flow` WRITE;
+/*!40000 ALTER TABLE `cash_flow` DISABLE KEYS */;
+INSERT INTO `cash_flow` VALUES (171,'2022-07-20 03:00:00',161,108,16,' Entrada de lj 512',73.6,1,'2022-07-20 18:55:03',NULL,139,0,0,1,NULL);
+/*!40000 ALTER TABLE `cash_flow` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `hour_settings`
+--
+
+DROP TABLE IF EXISTS `hour_settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `hour_settings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `current_hour` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `hour_settings_FK` (`current_hour`),
+  CONSTRAINT `hour_settings_FK` FOREIGN KEY (`current_hour`) REFERENCES `hour` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `hour_settings`
+--
+
+LOCK TABLES `hour_settings` WRITE;
+/*!40000 ALTER TABLE `hour_settings` DISABLE KEYS */;
+INSERT INTO `hour_settings` VALUES (1,108);
+/*!40000 ALTER TABLE `hour_settings` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cost`
+--
+
+DROP TABLE IF EXISTS `cost`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cost` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `description` varchar(45) CHARACTER SET utf8 NOT NULL,
+  `emit` int(11) NOT NULL COMMENT '1: emitir, 2: não emitir',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=129 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cost`
+--
+
+LOCK TABLES `cost` WRITE;
+/*!40000 ALTER TABLE `cost` DISABLE KEYS */;
+INSERT INTO `cost` VALUES (2,'DESPESA LOJA',2,'2022-01-18 04:03:51','2022-04-29 04:57:27'),(4,'PG PREMIO LOJA',2,'2022-01-19 04:34:01','2022-04-29 04:57:31'),(16,'RECEITA (Acerto lojas)',2,'2022-02-04 23:36:52','2022-04-29 04:57:49'),(17,'PG PREMIO ESCRITORIO',2,'2022-03-16 23:12:09','2022-04-29 04:57:56'),(18,'PG DESPESA ESCRITORIO',2,'2022-03-16 23:17:26','2022-04-29 04:58:01'),(19,'13  SALARIO ',1,'2022-03-23 13:12:22','2022-04-29 04:58:09'),(20,'Acerto funcionario',1,'2022-04-05 19:17:08','2022-04-05 19:25:35'),(21,'Advogado',1,'2022-04-05 19:17:18','2022-04-05 19:26:06'),(23,'Agua e Luz',1,'2022-04-05 19:17:39',NULL),(24,'Agua mineral',1,'2022-04-05 19:17:53',NULL),(28,'Agua (% da conta)',1,'2022-04-05 19:18:34',NULL),(31,'Alo Recarga',1,'2022-04-05 19:18:47',NULL),(32,'Baiano',1,'2022-04-05 19:18:56',NULL),(33,'Balcao',1,'2022-04-05 19:19:04',NULL),(34,'Banquetas',1,'2022-04-05 19:19:15',NULL),(35,'Blocos',1,'2022-04-05 19:19:23',NULL),(36,'Bobinas maq. lojas',1,'2022-04-05 19:19:43',NULL),(37,'Bolsa',1,'2022-04-05 19:19:55',NULL),(38,'13* Salario',1,'2022-04-05 19:20:49',NULL),(39,'13* Salario adiantado',1,'2022-04-05 19:21:10',NULL),(40,'Cabo \\ Sedex',1,'2022-04-05 19:30:31',NULL),(41,'Cadeiras',1,'2022-04-05 19:30:40',NULL),(42,'Cafe escritorio',1,'2022-04-05 19:30:57',NULL),(43,'Cafe mensal loja',1,'2022-04-05 19:31:08',NULL),(44,'Carimbos',1,'2022-04-05 19:31:22',NULL),(45,'Cartazes',1,'2022-04-05 19:31:33',NULL),(46,'Cemig',1,'2022-04-05 19:31:41',NULL),(47,'Cesta de Natal',1,'2022-04-05 19:31:53',NULL),(48,'Chip Futebol',1,'2022-04-05 19:32:12',NULL),(49,'Comissao 30% Bar \\ Outros',1,'2022-04-05 19:33:46',NULL),(50,'Comissao 50% Loja',1,'2022-04-05 19:34:08',NULL),(51,'Compras Escritorio',1,'2022-04-05 19:34:23',NULL),(52,'Condominio loja',1,'2022-04-05 19:34:36',NULL),(53,'Conserto maquina',1,'2022-04-05 19:34:48',NULL),(54,'Conserto Porta de a&ccedil;o',1,'2022-04-05 19:35:09',NULL),(55,'Copasa',1,'2022-04-05 19:35:23',NULL),(56,'Copinhos decartaveis',1,'2022-04-05 19:35:36',NULL),(57,'Correio',1,'2022-04-05 19:35:54',NULL),(58,'Deposio Banco',1,'2022-04-05 19:36:19',NULL),(59,'Descarga Escritorio',1,'2022-04-05 19:36:42',NULL),(60,'Descarga Sete Lagoas',1,'2022-04-05 19:36:59',NULL),(61,'Des. Loja',1,'2022-04-05 19:37:13',NULL),(62,'Despesa Funcionario',1,'2022-04-05 19:37:29',NULL),(63,'Despesa Saveiro',1,'2022-04-05 19:37:44',NULL),(64,'Dif. Gasolina',1,'2022-04-05 19:38:00',NULL),(65,'Dif. premio',1,'2022-04-05 19:38:15',NULL),(66,'Dif. Aluguel',1,'2022-04-05 19:38:28',NULL),(67,'Dif. de Caixa',1,'2022-04-05 19:38:44',NULL),(68,'Dif. Moedas',1,'2022-04-05 19:38:57',NULL),(69,'Dif. de soma',1,'2022-04-05 19:39:27',NULL),(70,'Emprestimo 201',1,'2022-04-05 19:39:41',NULL),(71,'Faxineira',1,'2022-04-05 19:39:52',NULL),(72,'Ferias Funcionario',1,'2022-04-05 19:40:06',NULL),(73,'Folinhas',1,'2022-04-05 19:40:23',NULL),(74,'Gasolina Marcelio',1,'2022-04-05 19:40:51',NULL),(75,'Gasolina Carlos',1,'2022-04-05 19:41:03',NULL),(76,'Gasolina Genilson',1,'2022-04-05 19:41:20',NULL),(77,'Gasolina Cleidson',1,'2022-04-05 19:41:35',NULL),(78,'Gasolina Saveiro',1,'2022-04-05 19:41:48',NULL),(79,'INSS Funcionario',1,'2022-04-05 19:42:02',NULL),(80,'Judiciario',1,'2022-04-05 19:42:12',NULL),(81,'Lanche',1,'2022-04-05 19:42:22',NULL),(82,'Luz',1,'2022-04-05 19:42:32',NULL),(83,'Material de limpeza',1,'2022-04-05 20:10:05',NULL),(84,'Mensal terminal',1,'2022-04-05 20:10:46',NULL),(85,'Mesas e cadeiras',1,'2022-04-05 20:11:10',NULL),(86,'Miguel',1,'2022-04-05 20:11:31',NULL),(87,'Milhar de brinde',1,'2022-04-05 20:11:50',NULL),(88,'Onlink chip',1,'2022-04-05 20:12:55',NULL),(89,'Pgto IPTU',1,'2022-04-05 20:13:32',NULL),(90,'Pgto almo&ccedil;o',1,'2022-04-05 20:14:02',NULL),(91,'Pgto emprestimo',1,'2022-04-05 20:14:32',NULL),(92,'Pgto terminal',1,'2022-04-05 20:14:52',NULL),(93,'Pgto aluguel',1,'2022-04-05 20:15:16',NULL),(94,'Pgto conta telefone',1,'2022-04-05 20:16:17',NULL),(95,'Pgto conta telefone',1,'2022-04-05 20:16:18',NULL),(96,'Pgto conta telefone',1,'2022-04-05 20:16:28',NULL),(97,'Pgto conta telefone',1,'2022-04-05 20:16:33',NULL),(98,'Pgto conta telefone',1,'2022-04-05 20:16:38',NULL),(99,'Pgto conta telefone',1,'2022-04-05 20:16:38',NULL),(100,'Pgto conta telefone',1,'2022-04-05 20:16:48',NULL),(101,'Pgto conta telefone',1,'2022-04-05 20:17:04',NULL),(102,'Pgto conta telefone',1,'2022-04-05 20:17:04',NULL),(103,'Pgto conta telefone',1,'2022-04-05 20:17:09',NULL),(104,'Pgto conta telefone',1,'2022-04-05 20:17:14',NULL),(105,'Pgto conta telefone',1,'2022-04-05 20:17:35',NULL),(106,'Pgto conta telefone',1,'2022-04-05 20:17:35',NULL),(107,'Pgto conta telefone',1,'2022-04-05 20:17:35',NULL),(108,'Pgto funcionario',1,'2022-04-05 20:18:02',NULL),(109,'Pgto gratificacao',1,'2022-04-05 20:18:20',NULL),(110,'Pgto haveres',1,'2022-04-05 20:18:43',NULL),(111,'Pgto informatica',1,'2022-04-05 20:19:42',NULL),(112,'Pgto informatica',1,'2022-04-05 20:19:42',NULL),(113,'Pgto mat. escritorio',1,'2022-04-05 20:20:13',NULL),(114,'Pgto pneus pickup',1,'2022-04-05 20:20:50',NULL),(115,'pgto central super 5\\6',1,'2022-04-05 20:23:18',NULL),(116,'Presente funcionario',1,'2022-04-05 20:24:35',NULL),(117,'Presta&ccedil;ao de servi&ccedil;o de moto',1,'2022-04-05 20:25:33',NULL),(118,'Quadros',1,'2022-04-05 20:26:01',NULL),(119,'Recarga telefone',1,'2022-04-05 20:26:48',NULL),(120,'Roubo',1,'2022-04-05 20:27:15',NULL),(121,'Tinta de parede',1,'2022-04-05 20:27:33',NULL),(122,'Toldo',1,'2022-04-05 20:27:43',NULL),(123,'Up chip',1,'2022-04-05 20:28:26',NULL),(124,'Vale cambista',1,'2022-04-05 20:29:01',NULL),(125,'Vale funcionario',1,'2022-04-05 20:29:20',NULL),(126,'Vale transporte',1,'2022-04-05 20:29:40',NULL),(127,'Xerox',1,'2022-04-05 20:29:50',NULL),(128,'FUNDO DE RESERVA ',2,'2022-05-17 14:05:53',NULL);
+/*!40000 ALTER TABLE `cost` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `hour`
+--
+
+DROP TABLE IF EXISTS `hour`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `hour` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `number_day` int(11) NOT NULL,
+  `week_day` varchar(15) CHARACTER SET utf8mb4 NOT NULL,
+  `description` varchar(20) CHARACTER SET utf8 NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  FULLTEXT KEY `description` (`description`)
+) ENGINE=InnoDB AUTO_INCREMENT=119 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `hour`
+--
+
+LOCK TABLES `hour` WRITE;
+/*!40000 ALTER TABLE `hour` DISABLE KEYS */;
+INSERT INTO `hour` VALUES (87,4,'Quinta-feira','ALVORADA','2022-01-21 05:21:51','2022-06-09 15:28:59',0),(100,1,'segunda-feira','ALVORADA','2022-02-09 15:12:10','2022-06-13 19:54:31',1),(101,1,'segunda-feira','DIA','2022-02-09 15:12:21','2022-06-13 19:54:36',1),(102,1,'segunda-feira','NOITE','2022-02-09 15:12:36','2022-06-06 04:06:24',1),(103,2,'terça-feira','ALVORADA','2022-02-09 15:13:30','2022-05-17 14:31:32',1),(104,2,'terça-feira','DIA','2022-02-09 15:13:40','2022-05-06 23:50:21',1),(105,2,'terça-feira','NOITE','2022-02-09 15:13:49','2022-05-06 23:50:21',1),(106,3,'Quarta-feira','ALVORADA','2022-02-09 15:13:59','2022-06-29 14:10:30',1),(107,3,'Quarta-feira','DIA','2022-02-09 15:14:09','2022-05-06 23:50:22',1),(108,3,'Quarta-feira','FEDERAL','2022-02-09 15:14:22','2022-05-06 23:50:22',1),(110,4,'Quinta-feira','DIA','2022-02-09 15:14:44','2022-05-06 23:50:22',1),(111,4,'Quinta-feira','NOITE','2022-02-09 15:14:56','2022-05-06 23:50:22',1),(112,5,'Sexta-feira','ALVORADA','2022-02-09 15:16:00','2022-06-03 21:39:49',1),(113,5,'Sexta-feira','DIA','2022-02-09 15:16:14','2022-06-03 21:39:49',1),(114,5,'Sexta-feira','NOITE','2022-02-09 15:16:26','2022-06-03 21:40:46',1),(115,6,'Sábado','ALVORADA','2022-02-09 15:16:38','2022-05-06 23:50:23',1),(116,6,'Sábado','DIA','2022-02-09 15:16:49','2022-05-06 23:50:23',1),(117,6,'Sábado','FEDERAL','2022-02-09 15:16:59','2022-05-06 23:50:23',1),(118,0,'domingo','SALVAÇÃO','2022-02-09 15:29:46','2022-05-06 23:50:23',1);
+/*!40000 ALTER TABLE `hour` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `moviment`
+--
+
+DROP TABLE IF EXISTS `moviment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `moviment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date_moviment` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `id_hour` int(11) NOT NULL,
+  `id_store` int(11) NOT NULL,
+  `beat_value` float NOT NULL,
+  `paying_now` float NOT NULL,
+  `expend` float NOT NULL,
+  `last_value` float NOT NULL,
+  `get_value` float NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `new_value` float NOT NULL,
+  `prize` float DEFAULT NULL,
+  `beat_prize` float DEFAULT NULL,
+  `prize_office` float DEFAULT NULL,
+  `prize_store` float DEFAULT NULL,
+  `id_list` int(11) DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `moviment_FK` (`id_hour`),
+  KEY `moviment_FK_1` (`id_store`),
+  KEY `moviment_FK_2` (`id_list`),
+  CONSTRAINT `moviment_FK` FOREIGN KEY (`id_hour`) REFERENCES `hour` (`id`),
+  CONSTRAINT `moviment_FK_1` FOREIGN KEY (`id_store`) REFERENCES `loja` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `moviment_FK_2` FOREIGN KEY (`id_list`) REFERENCES `lists` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=142 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `moviment`
+--
+
+LOCK TABLES `moviment` WRITE;
+/*!40000 ALTER TABLE `moviment` DISABLE KEYS */;
+INSERT INTO `moviment` VALUES (139,'2022-07-20 03:00:00',108,161,-42.5,73.6,0,-22.5,73.6,'2022-07-20 18:55:01',-42.5,0,0,0,0,95,NULL),(141,'2022-07-20 03:00:00',108,159,0,0,0,0,0,'2022-07-20 18:55:50',0,0,0,0,0,NULL,NULL);
+/*!40000 ALTER TABLE `moviment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `loja`
+--
+
+DROP TABLE IF EXISTS `loja`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `loja` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome_loja` varchar(35) NOT NULL,
+  `valor_saldo` float NOT NULL,
+  `comissao` int(2) NOT NULL,
+  `valor_aluguel` float DEFAULT NULL,
+  `aluguel_dia` int(11) DEFAULT NULL,
+  `valor_gratificacao` float DEFAULT NULL,
+  `gratificacao_dia` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `code` varchar(35) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`),
+  FULLTEXT KEY `nome_loja` (`nome_loja`,`code`)
+) ENGINE=InnoDB AUTO_INCREMENT=162 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `loja`
+--
+
+LOCK TABLES `loja` WRITE;
+/*!40000 ALTER TABLE `loja` DISABLE KEYS */;
+INSERT INTO `loja` VALUES (31,'loja 3',15.5,20,1,1,1,1,'2022-02-23 00:25:04','2022-06-11 12:25:21','3'),(34,'LJ 100',11.4,20,3390,20,NULL,NULL,'2022-03-23 14:08:25','2022-06-06 19:56:13','100'),(35,'LJ 002',132.927,30,0,30,300,20,'2022-03-23 20:07:13','2022-05-12 15:52:14','002'),(36,'LJ 053',0,20,0,20,0,NULL,'2022-03-23 20:20:14','2022-05-09 18:30:27','053'),(37,'LJ 034',0,20,450,20,0,NULL,'2022-03-23 20:22:13','2022-05-09 18:13:57','034'),(38,'LJ 024',0,20,0,20,500,20,'2022-03-23 20:23:34','2022-05-09 15:06:07','024'),(39,'LJ 025',0,20,0,20,0,NULL,'2022-03-23 20:24:04','2022-05-09 15:06:34','025'),(40,'LJ 049',0.84,20,700,20,0,NULL,'2022-03-23 20:25:04','2022-05-09 18:17:17','049'),(41,'LJ 028',0,20,100,20,200,6,'2022-03-23 20:26:19','2022-05-09 15:08:10','028'),(42,'LJ 029',-35,20,400,20,200,6,'2022-03-23 20:27:47','2022-06-11 12:27:38','029'),(43,'LJ 041',0,20,0,20,150,26,'2022-03-23 20:31:58','2022-05-09 18:15:27','041'),(44,'LJ 006',0,20,0,20,140,9,'2022-03-23 20:56:21','2022-05-09 14:57:22','006'),(45,'LJ 005',-20.91,20,0,20,0,NULL,'2022-03-23 20:59:43','2022-05-09 14:57:11','005'),(46,'LJ 013',0,20,880,20,0,NULL,'2022-03-23 21:01:35','2022-05-09 14:58:04','013'),(47,'LJ 014',0,20,1000,20,0,NULL,'2022-03-23 21:02:12','2022-05-09 14:58:15','014'),(48,'LJ 022',0,20,500,20,0,NULL,'2022-03-23 21:03:15','2022-05-09 15:05:44','022'),(49,'LJ 045',0,20,400,20,400,26,'2022-03-23 21:04:14','2022-05-09 18:16:28','045'),(50,'LJ 060',0,20,600,20,120,21,'2022-03-24 20:38:31','2022-05-10 12:54:07','060'),(51,'LJ 078',0,20,0,20,200,26,'2022-03-24 20:41:41','2022-05-09 18:37:34','078'),(52,'LJ 082',0,20,0,20,200,15,'2022-03-24 20:44:43','2022-05-09 18:38:40','082'),(53,'LJ 061',0,20,250,20,0,NULL,'2022-03-24 20:48:20','2022-05-09 18:32:41','061'),(54,'LJ 063',0,30,0,30,0,NULL,'2022-03-25 20:06:30','2022-05-09 18:33:14','063'),(55,'LJ 089',0,20,250,20,200,10,'2022-03-25 20:07:36','2022-05-09 18:40:28','089'),(56,'LJ 080',0,20,300,20,170,24,'2022-03-25 20:08:33','2022-05-09 18:38:06','080'),(57,'LJ 071',0,20,500,20,0,NULL,'2022-03-25 20:09:47','2022-05-09 18:35:20','071'),(58,'LJ 077',0,30,0,30,0,NULL,'2022-03-25 20:22:59','2022-05-09 18:37:19','077'),(59,'LJ 073',0,20,800,20,150,17,'2022-03-25 20:25:15','2022-05-09 18:36:13','073'),(60,'LJ 079',0,20,350,20,0,NULL,'2022-03-25 20:26:05','2022-05-09 18:37:49','079'),(61,'LJ 068',0,20,500,20,400,1,'2022-03-25 20:27:32','2022-05-09 18:34:31','068'),(62,'LJ 090',44.16,20,0,20,150,21,'2022-03-25 20:29:27','2022-05-09 18:40:42','090'),(63,'LJ 086',0,20,0,20,150,17,'2022-03-25 20:30:24','2022-05-09 18:39:13','086'),(64,'LJ 062',0,20,450,20,250,10,'2022-03-28 19:26:23','2022-05-09 18:32:55','062'),(65,'LJ 087',0,20,1100,20,0,NULL,'2022-03-28 19:27:26','2022-05-09 18:39:29','087'),(66,'LJ 074',0,20,500,20,170,10,'2022-03-28 19:28:12','2022-05-09 18:36:35','074'),(67,'LJ 096',0,20,400,20,200,27,'2022-03-28 19:33:17','2022-05-09 18:43:35','096'),(69,'LJ 092',0,20,0,20,200,10,'2022-03-28 19:34:45','2022-05-09 18:41:21','092'),(70,'LJ 081',0,20,400,20,0,NULL,'2022-03-28 19:35:40','2022-05-09 18:38:24','081'),(71,'LJ 099',0,20,500,20,300,9,'2022-03-28 19:36:26','2022-05-09 18:43:50','099'),(72,'LJ 069',0,20,600,20,0,NULL,'2022-03-28 19:36:59','2022-05-09 18:34:46','069'),(73,'LJ 066',0,20,0,20,0,NULL,'2022-03-28 19:39:36','2022-05-09 18:34:00','066'),(74,'LJ 091',0,20,600,20,200,10,'2022-03-28 19:40:33','2022-05-09 18:41:00','091'),(75,'LJ 093',0,20,585,20,300,2,'2022-03-28 19:41:28','2022-05-09 18:43:18','093'),(76,'LJ 084',0,20,0,20,400,20,'2022-03-28 19:42:10','2022-05-09 18:38:54','084'),(77,'LJ 070',0,20,0,20,800,9,'2022-03-28 19:43:20','2022-05-09 18:35:01','070'),(78,'LJ 064',0,20,300,20,0,NULL,'2022-03-28 19:43:49','2022-05-09 18:33:33','064'),(79,'LJ 076',0,25,0,25,0,NULL,'2022-03-28 19:44:11','2022-05-09 18:36:53','076'),(80,'LJ 072',0,20,0,20,300,1,'2022-03-28 19:44:49','2022-05-09 18:35:50','072'),(81,'LJ 148',0,30,NULL,NULL,NULL,NULL,'2022-03-28 19:45:29',NULL,'148'),(82,'LJ 134',0,30,NULL,NULL,NULL,NULL,'2022-03-28 19:46:10',NULL,'134'),(83,'LJ 088',0,20,350,20,0,NULL,'2022-03-28 19:47:28','2022-05-09 18:39:52','088'),(84,'LJ 101',0,20,1260,3,NULL,NULL,'2022-03-28 20:36:43',NULL,'101'),(85,'LJ 102',0,20,500,24,NULL,NULL,'2022-03-28 20:38:17',NULL,'102'),(86,'LJ 105',0,20,NULL,NULL,300,10,'2022-03-28 20:39:07',NULL,'105'),(87,'LJ 106',0,20,350,18,NULL,NULL,'2022-03-28 20:39:40',NULL,'106'),(88,'LJ 107',0,20,700,13,NULL,NULL,'2022-03-28 20:39:59',NULL,'107'),(89,'LJ 108',0.36,20,2200,20,0,NULL,'2022-03-28 20:40:25','2022-06-11 12:30:32','108'),(90,'LJ 109',0,20,350,13,NULL,NULL,'2022-03-28 20:40:47',NULL,'109'),(91,'LJ 113',0,20,NULL,NULL,NULL,NULL,'2022-03-28 20:41:41',NULL,'113'),(92,'LJ 114',0,20,400,20,NULL,NULL,'2022-03-28 20:42:01',NULL,'114'),(93,'LJ 117',0,20,440,13,NULL,NULL,'2022-03-28 20:44:54',NULL,'117'),(94,'LJ 118',0,20,500,13,NULL,NULL,'2022-03-28 20:45:16',NULL,'118'),(95,'LJ 119',0,20,1000,13,NULL,NULL,'2022-03-28 20:45:44',NULL,'119'),(96,'LJ 120',0,20,400,18,NULL,NULL,'2022-03-28 20:46:50',NULL,'120'),(97,'LJ 122',0,20,500,6,NULL,NULL,'2022-03-28 20:47:37',NULL,'122'),(98,'LJ 123',0,20,600,18,NULL,NULL,'2022-03-28 20:48:01',NULL,'123'),(99,'LJ 124',0,20,NULL,NULL,150,24,'2022-03-28 20:49:49',NULL,'124'),(100,'LJ 127',0,20,NULL,NULL,150,12,'2022-03-28 20:51:06',NULL,'127'),(101,'LJ 133',0,20,600,20,3,24,'2022-03-28 20:58:21','2022-04-05 19:07:48','133'),(102,'LJ 136',0,20,500,24,NULL,NULL,'2022-03-28 21:14:44',NULL,'136'),(103,'LJ 137',0,20,1100,13,NULL,NULL,'2022-03-28 21:15:08',NULL,'137'),(104,'LJ 138',0,20,NULL,NULL,300,2,'2022-03-28 21:15:34',NULL,'138'),(105,'LJ 139',0,20,1685,27,250,27,'2022-03-28 21:16:35',NULL,'139'),(106,'LJ 141',0,20,370,15,NULL,NULL,'2022-03-28 21:16:55',NULL,'141'),(107,'LJ 142',0,20,600,3,NULL,NULL,'2022-03-28 21:17:20',NULL,'142'),(108,'LJ 144',0,20,2000,1,NULL,NULL,'2022-03-28 21:17:46',NULL,'144'),(109,'LJ 145',0,30,296,17,NULL,NULL,'2022-03-28 21:18:25',NULL,'145'),(110,'LJ 146',0,30,NULL,NULL,NULL,NULL,'2022-03-28 21:18:42',NULL,'146'),(111,'LJ 147',0,20,NULL,NULL,100,2,'2022-03-28 21:19:09',NULL,'147'),(112,'LJ 149',0,30,NULL,NULL,NULL,NULL,'2022-03-28 21:19:33',NULL,'149'),(113,'LJ 150',0,20,NULL,NULL,400,12,'2022-03-28 21:20:56',NULL,'150'),(114,'LJ 044',0,30,0,30,0,NULL,'2022-04-06 19:56:23','2022-05-10 12:57:21','044'),(115,'LJ 030',0,30,0,30,0,NULL,'2022-04-06 19:56:43','2022-05-10 13:00:28','030'),(116,'LJ 046',0,20,550,20,150,2,'2022-04-06 19:59:53','2022-05-10 12:57:30','046'),(117,'LJ 031',0,20,0,20,150,2,'2022-04-06 20:00:36','2022-05-10 13:00:38','031'),(118,'LJ 015',0,20,500,20,0,NULL,'2022-04-06 20:04:11','2022-05-10 12:59:12','015'),(119,'LJ 023',0,20,1012,20,0,NULL,'2022-04-06 20:04:56','2022-05-10 12:59:55','023'),(120,'LJ 059',0,20,0,20,550,15,'2022-04-06 20:05:43','2022-05-10 12:56:06','059'),(121,'LJ 036',0,20,0,20,100,12,'2022-04-06 20:06:30','2022-05-10 12:56:36','036'),(122,'LJ 056',0,20,0,20,400,10,'2022-04-06 20:07:14','2022-05-10 12:58:05','056'),(123,'LJ 020',0,20,0,20,250,24,'2022-04-06 20:07:54','2022-05-10 12:59:31','020'),(124,'LJ 039',0,20,0,20,150,9,'2022-04-06 20:08:40','2022-05-10 12:56:59','039'),(125,'LJ 038',0,20,500,20,0,NULL,'2022-04-06 20:09:26','2022-05-09 18:14:40','038'),(126,'LJ 033',0,20,0,20,100,10,'2022-04-06 20:10:05','2022-05-10 12:56:26','033'),(127,'LJ 057',0,20,0,20,150,20,'2022-04-06 20:10:42','2022-05-10 12:58:19','057'),(128,'LJ 052',0,20,1000,20,0,NULL,'2022-04-06 20:11:12','2022-05-09 18:18:07','052'),(129,'LJ 048',0,20,0,20,0,NULL,'2022-04-06 20:11:58','2022-05-10 12:57:52','048'),(130,'LJ 004',0,20,300,20,0,NULL,'2022-04-06 20:12:43','2022-05-10 12:58:49','004'),(131,'LJ 047',0,20,500,20,0,NULL,'2022-04-06 20:13:47','2022-05-10 12:57:41','047'),(132,'LJ 027',0,20,500,20,0,NULL,'2022-04-06 20:14:44','2022-05-10 13:00:06','027'),(133,'LJ 058',0,20,350,20,150,21,'2022-04-06 20:15:27','2022-05-10 12:58:29','058'),(134,'LJ 037',0,20,600,20,0,NULL,'2022-04-06 20:16:09','2022-05-10 12:56:47','037'),(135,'LJ 040',0,20,500,20,110,6,'2022-04-06 20:16:52','2022-05-10 12:57:09','040'),(136,'LJ 018',0,20,0,20,200,24,'2022-04-06 20:20:02','2022-05-10 12:59:22','018'),(137,'LJ 021',0,20,250,20,0,NULL,'2022-04-06 20:20:40','2022-05-10 12:59:44','021'),(138,'LJ 009',141.6,20,0,20,300,17,'2022-04-06 20:21:13','2022-05-10 14:33:48','009'),(139,'LJ 153',-492.98,20,0,20,0,NULL,'2022-05-03 13:57:08','2022-05-10 12:53:34','153'),(140,'LJ 050',0,20,NULL,NULL,NULL,NULL,'2022-05-09 18:17:51',NULL,'050'),(141,'LJ 075',0,20,400,18,150,1,'2022-05-09 18:47:05',NULL,'075'),(142,'Loja 551',-130,20,0,0,0,NULL,'2022-05-12 16:49:26','2022-07-17 01:53:20','551'),(144,'lj 500',-30,20,NULL,NULL,NULL,NULL,'2022-05-17 12:57:17','2022-06-03 14:06:22','500'),(145,'lj 600',2.7,20,NULL,NULL,NULL,NULL,'2022-05-17 12:57:47','2022-06-14 02:20:03','600'),(147,'lj 900',-10,20,NULL,1,NULL,1,'2022-06-03 15:07:34','2022-06-03 15:14:01','900'),(148,'lj 200',6,20,0,0,0,1,'2022-06-09 14:50:21','2022-06-14 01:49:28','200'),(149,'lj 300',0,20,0,0,0,1,'2022-06-09 14:50:50','2022-06-13 13:57:07','300'),(150,'lj 400',-160,20,0,0,0,1,'2022-06-09 14:51:12','2022-06-13 13:41:20','400'),(151,'Lj teste 552',-6,20,0,0,0,NULL,'2022-06-13 20:26:23','2022-06-30 17:28:48','552'),(152,'Lj Teste 553',30,20,0,0,0,NULL,'2022-06-13 20:27:01','2022-06-30 17:12:48','553'),(153,'lj701',0,20,NULL,NULL,NULL,NULL,'2022-06-15 13:46:25','2022-06-15 13:56:39','701'),(154,'lj 702',-160,20,NULL,NULL,NULL,NULL,'2022-06-15 13:46:55','2022-06-15 13:52:23','702'),(155,'lj 700',6,20,NULL,NULL,NULL,NULL,'2022-06-15 13:49:42','2022-06-15 13:51:20','700'),(156,'ls teste 554',10.5,20,0,0,0,NULL,'2022-06-24 03:19:20','2022-06-30 17:33:47','554'),(157,'lj teste 555',-8,20,0,0,0,NULL,'2022-06-24 03:24:58','2022-07-14 03:39:42','555'),(158,'ls teste 556',-100,20,NULL,NULL,NULL,NULL,'2022-06-30 17:14:45',NULL,'556'),(159,'lj 510',-112.5,20,NULL,NULL,NULL,NULL,'2022-07-20 18:47:27','2022-07-20 18:54:42','510'),(160,'lj 511',50,20,NULL,NULL,NULL,NULL,'2022-07-20 18:47:47',NULL,'511'),(161,'lj 512',-42.5,20,NULL,NULL,NULL,NULL,'2022-07-20 18:48:07','2022-07-20 18:55:03','512');
+/*!40000 ALTER TABLE `loja` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `list`
+--
+
+DROP TABLE IF EXISTS `list`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `list` (
+  `id_store` int(11) NOT NULL,
+  `id_hour` int(11) NOT NULL,
+  `id_lists` int(11) NOT NULL,
+  `date_moviment` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `value` float NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `list_FK` (`id_hour`),
+  KEY `list_FK_1` (`id_store`),
+  KEY `list_FK_2` (`id_lists`),
+  CONSTRAINT `list_FK` FOREIGN KEY (`id_hour`) REFERENCES `hour` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `list_FK_1` FOREIGN KEY (`id_store`) REFERENCES `loja` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `list_FK_2` FOREIGN KEY (`id_lists`) REFERENCES `lists` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=98 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `list`
+--
+
+LOCK TABLES `list` WRITE;
+/*!40000 ALTER TABLE `list` DISABLE KEYS */;
+INSERT INTO `list` VALUES (159,108,93,'2022-07-20 03:00:00','2022-07-20 18:48:42',NULL,94,37.5),(160,108,94,'2022-07-20 03:00:00','2022-07-20 18:48:54',NULL,95,20),(161,108,95,'2022-07-20 03:00:00','2022-07-20 18:49:18',NULL,96,100),(161,108,95,'2022-07-20 03:00:00','2022-07-20 18:49:27',NULL,97,17);
+/*!40000 ALTER TABLE `list` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `lists`
+--
+
+DROP TABLE IF EXISTS `lists`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lists` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_hour` int(11) DEFAULT NULL COMMENT 'descrição da hora',
+  `id_store` int(11) DEFAULT NULL COMMENT 'id da loja',
+  `total_value` float DEFAULT NULL COMMENT 'valor bruto',
+  `comission_value` float DEFAULT NULL,
+  `net_value` float DEFAULT NULL COMMENT 'valor liquido',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `date_moviment` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `hour_FK` (`id_hour`),
+  KEY `lists_FK` (`id_store`),
+  CONSTRAINT `hour_FK` FOREIGN KEY (`id_hour`) REFERENCES `hour` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `lists_FK` FOREIGN KEY (`id_store`) REFERENCES `loja` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=96 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lists`
+--
+
+LOCK TABLES `lists` WRITE;
+/*!40000 ALTER TABLE `lists` DISABLE KEYS */;
+INSERT INTO `lists` VALUES (69,103,142,10,2,8,'2022-06-14 21:02:23',NULL,'2022-06-14 03:00:00'),(70,106,142,30,6,24,'2022-06-15 13:33:01',NULL,'2022-06-15 03:00:00'),(71,106,151,100,20,80,'2022-06-15 13:33:13','2022-06-15 17:35:28','2022-06-15 03:00:00'),(72,106,152,250,50,200,'2022-06-15 13:33:27','2022-06-15 13:33:33','2022-06-15 03:00:00'),(74,106,153,120,24,96,'2022-06-15 13:47:29',NULL,'2022-06-15 03:00:00'),(75,106,154,250,50,200,'2022-06-15 13:47:44',NULL,'2022-06-15 03:00:00'),(76,106,155,30,6,24,'2022-06-15 13:50:26',NULL,'2022-06-15 03:00:00'),(77,106,151,15,3,12,'2022-06-22 03:15:11',NULL,'2022-06-22 03:00:00'),(78,107,142,30,6,24,'2022-06-22 05:43:47',NULL,'2022-06-22 03:00:00'),(79,112,142,30,6,24,'2022-06-24 03:12:15',NULL,'2022-06-24 03:00:00'),(80,112,151,120,24,96,'2022-06-24 03:14:34',NULL,'2022-06-24 03:00:00'),(81,112,152,250,50,200,'2022-06-24 03:19:58',NULL,'2022-06-24 03:00:00'),(82,112,157,100,20,80,'2022-06-24 03:25:31',NULL,'2022-06-24 03:00:00'),(83,113,151,30,6,24,'2022-06-24 19:17:10',NULL,'2022-06-24 03:00:00'),(84,113,152,110,22,88,'2022-06-24 19:33:57','2022-06-24 19:34:51','2022-06-24 03:00:00'),(85,110,142,30,6,24,'2022-06-30 17:15:10',NULL,'2022-06-30 03:00:00'),(86,110,151,120,24,96,'2022-06-30 17:15:33',NULL,'2022-06-30 03:00:00'),(87,110,152,250,50,200,'2022-06-30 17:15:58',NULL,'2022-06-30 03:00:00'),(88,110,157,100,20,80,'2022-06-30 17:16:26',NULL,'2022-06-30 03:00:00'),(89,110,158,35,7,28,'2022-06-30 17:16:39',NULL,'2022-06-30 03:00:00'),(91,101,142,10,2,8,'2022-07-04 13:28:13',NULL,'2022-07-04 03:00:00'),(92,100,142,8,1.6,6.4,'2022-07-04 13:31:32',NULL,'2022-07-04 03:00:00'),(93,108,159,37.5,7.5,30,'2022-07-20 18:48:42',NULL,'2022-07-20 03:00:00'),(94,108,160,20,4,16,'2022-07-20 18:48:54',NULL,'2022-07-20 03:00:00'),(95,108,161,117,23.4,93.6,'2022-07-20 18:49:18','2022-07-20 18:49:27','2022-07-20 03:00:00');
+/*!40000 ALTER TABLE `lists` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `mail_queue`
+--
+
+DROP TABLE IF EXISTS `mail_queue`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `mail_queue` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `subject` varchar(255) NOT NULL DEFAULT '',
+  `body` text NOT NULL,
+  `from_email` varchar(255) NOT NULL DEFAULT '',
+  `from_name` varchar(255) NOT NULL DEFAULT '',
+  `recipient_email` varchar(255) NOT NULL DEFAULT '',
+  `recipient_name` varchar(255) NOT NULL DEFAULT '',
+  `sent_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `mail_queue`
+--
+
+LOCK TABLES `mail_queue` WRITE;
+/*!40000 ALTER TABLE `mail_queue` DISABLE KEYS */;
+INSERT INTO `mail_queue` VALUES (1,'Teste de fila de e-mail 1542115115','Este é apenas um teste de envio de email','cursos@upinside.com.br','Robson V. Leite','robsonvleite@gmail.com','Robson V. Leite','2018-11-13 15:30:54','2018-11-13 15:18:35','2018-11-13 15:30:54'),(2,'Teste de fila de e-mail 1542115178','Este é apenas um teste de envio de email','cursos@upinside.com.br','Robson V. Leite','robsonvleite@gmail.com','Robson V. Leite','2018-11-13 15:31:00','2018-11-13 15:19:38','2018-11-13 15:31:00'),(3,'Teste de fila de e-mail 1542115185','Este é apenas um teste de envio de email','cursos@upinside.com.br','Robson V. Leite','robsonvleite@gmail.com','Robson V. Leite','2018-11-13 15:31:06','2018-11-13 15:19:45','2018-11-13 15:31:06');
+/*!40000 ALTER TABLE `mail_queue` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2022-08-01 14:58:55
