@@ -32,10 +32,10 @@ class App extends Controller
     public function __construct()
     {
         parent::__construct(__DIR__ . "/../../themes/" . CONF_VIEW_APP . "/");
-        if (!$this->user = Auth::user()) {
-            $this->message->warning("Efetue login para acessar o APP.")->flash();
-            redirect("/entrar");
-        }
+//        if (!$this->user = Auth::user()) {
+//            $this->message->warning("Efetue login para acessar o APP.")->flash();
+//            redirect("/entrar");
+//        }
         // RESETA O STATUS DE FECHAMENTO DE HORÁRIO NA TABELA HOUR
         (new Hour())->resetStatus();
     }
@@ -355,7 +355,7 @@ class App extends Controller
     }
 
     /**
-     *  IT UPDATES OR CREATES CURRENT COST CENTER OF THE TABLE DEPENDING ON IF HAVE ID OR NOT
+     * IT UPDATES OR CREATES CURRENT COST CENTER OF THE TABLE DEPENDING ON IF HAVE ID OR NOT
      * @param array $data
      * @return void
      */
@@ -916,28 +916,40 @@ class App extends Controller
 
         }
 
-
-        $cashFlow = new CashFlow();
+        // EDIÇÃO
+        if (!empty($data->edit)) {
+            $cashFlow = (new CashFlow())->findById($data->id);
+        } else {
+            $cashFlow = new CashFlow();
+        }
 
         $cashFlow->date_moviment = $data->date_moviment;
-        $cashFlow->id_store = ($data->id_store ?? null);
-        $cashFlow->id_hour = $data->id_hour;
-        $cashFlow->id_cost = ($data->id_cost ?? null);
-        $cashFlow->description = ($data->description ?? null);
-        $cashFlow->value = $data->value;
-        $cashFlow->type = $data->type;
+        $cashFlow->id_store = ($data->id_store ?? $cashFlow->id_store);
+        $cashFlow->id_hour = ($data->id_hour ?? $cashFlow->id_hour);
+        $cashFlow->id_cost = ($data->id_cost ?? $cashFlow->id_cost);
+        $cashFlow->description = ($data->description ?? $cashFlow->description);
+        $cashFlow->value = ($data->value ?? $cashFlow->value);
+        $cashFlow->type = ($data->type ?? $cashFlow->type);
         $cashFlow->id_moviment = null;
+        $cashFlow->last_value = ($data->last_value ?? $cashFlow->last_value);
+
+        // FAZER UM TRATAMENTO ESPECIAL PARA ESSES CARAS CREATE | UPDATE
         $cashFlow->store_expense = (!empty($data->store_expense) ? $data->store_expense : 0);
         $cashFlow->office_expense = (!empty($data->office_expense) ? $data->office_expense : 0);
-        $cashFlow->system = $data->system;
+        if (!empty($cashFlow->id)) {
+            $cashFlow->store_expense = ($data->store_expense ?? $cashFlow->store_expense);
+            $cashFlow->office_expense = ($data->office_expense ?? $cashFlow->office_expense);
+        }
+        $cashFlow->system = ($data->system ?? $cashFlow->system);
 
         if (!$cashFlow->save()) {
-            $this->call(400, 'error', '$cashFlow->message()->render()')->back();
+            $this->call(400, 'error', $cashFlow->message()->render())->back();
             return;
         }
 
         // SE DEU TUDO CERTO
-        $this->call(200, 'success', $this->message->success('Tudo certo, foi lançado com sucesso!')->render(), 'success')
+        $this->call(200, 'success', $this->message->success('Tudo certo, foi lançado com sucesso!')->render(),
+            'success')
             ->back((array)$data);
     }
 
@@ -1115,6 +1127,31 @@ class App extends Controller
         } else {
             echo json_encode([]);
         }
+    }
+
+    public function boxClosing(array $data)
+    {
+        $moviment = new Moviment();
+        $cashFlow = new CashFlow();
+        $date = date_fmt($data['date_moviment'], 'Y-m-d');
+        $movimentArray = $moviment->find("DATE(date_moviment) = DATE('{$date}') AND id_hour = {$data['id_hour']}", null,
+            '
+             sum(paying_now) as payings_now
+            ')->limit(1)->fetch()->payings_now;
+
+        $allNoMachineBilling = $cashFlow->find("DATE(date_moviment) = DATE('{$date}') AND id_hour = {$data['id_hour']} AND type = 1 AND system = 0 ", null,
+            '
+             sum(value) as revenues
+            ')->fetch()->revenues;
+
+        $allExpendOffice = $cashFlow->find("DATE(date_moviment) = DATE('{$date}') AND id_hour = {$data['id_hour']} AND type = 2", null,
+            '
+             sum(value) as expenses
+            ')->fetch()->expenses;
+
+        var_dump($movimentArray, $allNoMachineBilling,$allExpendOffice);die();
+
+
     }
 }
 

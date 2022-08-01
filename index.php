@@ -127,6 +127,10 @@ $route->get('/horario', 'Config:closeHour');
 $route->post('/fechamento-de-horario/{id_hour}', 'Config:closeHour');
 $route->post('/abate-de-lojas-inadimplentes', 'Config:calcStore');
 
+/** RELATÓRIOS */
+$route->group('relatorios');
+$route->post('/fechamento-de-caixa', 'App:boxClosing');
+
 /** LISTS SEARCH */
 $route->group('/consultas');
 $route->post('/filters', 'Query:filters');
